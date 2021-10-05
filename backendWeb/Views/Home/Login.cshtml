@@ -1,0 +1,72 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Login</title>
+    <!--Styles-->
+    @Styles.Render("~/sbAdmin2/css")
+    @Styles.Render("~/sbAdmin2/vendor")
+    <!--Scripts-->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/sbAdmin2/js")
+    @Scripts.Render("~/sbAdmin2/vendor")
+</head>
+<body class="bg-gradient-primary">
+    <div class="container">
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+            <div class="col-xl-10 col-lg-12 col-md-9">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">歡迎回來</h1>
+                                    </div>
+                                    @using (Html.BeginForm(ViewContext.RouteData.GetRequiredString("Action"), ViewContext.RouteData.GetRequiredString("Controller"), new { }, FormMethod.Post, new { @class = "user", @autocomplete = "off", @enctype = "multipart/form-data" }))
+                                    {
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user" name="txtAccount" placeholder="帳號">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-user" name="txtPassword" placeholder="密碼">
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox small">
+                                                <input type="checkbox" class="custom-control-input" id="cbRemeber" name="cbRemeber">
+                                                <label class="custom-control-label" for="cbRemeber">
+                                                    記住我
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <input type="submit" class="btn btn-primary btn-user btn-block" value="登入" />
+                                    }
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="forgot-password.html">Forgot Password?</a>
+                                    </div>
+                                    <div class="text-center">
+                                        <a class="small" href="register.html">Create an Account!</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
