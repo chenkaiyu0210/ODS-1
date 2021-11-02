@@ -20,6 +20,7 @@ namespace fontWebCore.Controllers
 
         public IActionResult Index()
         {
+            // 首頁
             return View();
         }
 
