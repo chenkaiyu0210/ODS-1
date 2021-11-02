@@ -28,6 +28,36 @@ namespace fontWebCore.Controllers
             return View();
         }
 
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        public IActionResult MemberCenter()
+        {
+            return View();
+        }
+
+        public IActionResult Apply()
+        {
+            return View();
+        }
+
+        public IActionResult MemberSetting()
+        {
+            return View();
+        }
+
+        public IActionResult Finish()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

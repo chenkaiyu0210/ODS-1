@@ -1,0 +1,245 @@
+@{
+    ViewData["Title"] = "密碼設定";
+    Layout = "_Layout_login";
+}
+
+<div class="member-setting-page" style="background-color: #fafafa;">
+    <div class="container py-md-5 py-3">
+        @* <div class="row">
+            <div class="col-lg-6">                
+                <h4 class="title">基本資料</h4>
+                <div class="row">
+                    <div class="form-group col-12 col-lg-6">
+                    <label for="customer_name">中文姓名</label>
+                    <input alertMsg="中文姓名" class="form-control" id="customer_name" name="customer_name" placeholder="" required="required" type="text" value="" />
+                    </div>
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="customer_idcard_no">身份證字號</label>
+                        <input alertMsg="身份證字號" class="form-control" id="customer_idcard_no" maxlength="10" minlength="10" name="customer_idcard_no" placeholder="" required="required" type="text" value="A123456789" readonly/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="customer_mobile_phone">行動電話</label>
+                        <input alertMsg="行動電話" class="form-control" id="customer_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="customer_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" required="required" type="text" value="" />
+                    </div>
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="customer_birthdayYY">出生日期</label>
+                        <div class="form-row">
+                            <div class="col-4">
+                                <input alertMsg="出生日期" class="form-control" id="customer_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="customer_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="民國年" required="required" type="text" value="" />
+                            </div>
+                            <div class="col-4">
+                                <input alertMsg="出生日期" class="form-control" id="customer_birthdayMM" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayMM" onkeyup="value=value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="月" required="required" type="text" value="" />
+                            </div>
+                            <div class="col-4">
+                                <input alertMsg="出生日期" class="form-control" id="customer_birthdayDD" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayDD" onkeyup="value=value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="日" required="required" type="text" value="" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 地址 -->
+                <!-- <div class="row">
+                    <div class="form-group col-12">
+                        <label for="">戶籍地址</label>
+                        <div class="form-row">
+                            <input id="customer_resident_postalcode" name="customer_resident_postalcode" type="hidden" value="" />
+                            <div class="col-lg-3 col-6">
+                                <select alertMsg="戶籍地址" class="form-control" id="customer_resident_addcity" name="customer_resident_addcity" required="required"><option value="">縣市別</option>
+                                    <option value="台北市">台北市</option>
+                                    <option value="基隆市">基隆市</option>
+                                    <option value="新北市">新北市</option>
+                                    <option value="連江縣">連江縣</option>
+                                    <option value="宜蘭縣">宜蘭縣</option>
+                                    <option value="新竹市">新竹市</option>
+                                    <option value="新竹縣">新竹縣</option>
+                                    <option value="桃園市">桃園市</option>
+                                    <option value="苗栗縣">苗栗縣</option>
+                                    <option value="台中市">台中市</option>
+                                    <option value="彰化縣">彰化縣</option>
+                                    <option value="南投縣">南投縣</option>
+                                    <option value="嘉義市">嘉義市</option>
+                                    <option value="嘉義縣">嘉義縣</option>
+                                    <option value="雲林縣">雲林縣</option>
+                                    <option value="台南市">台南市</option>
+                                    <option value="高雄市">高雄市</option>
+                                    <option value="澎湖縣">澎湖縣</option>
+                                    <option value="金門縣">金門縣</option>
+                                    <option value="屏東縣">屏東縣</option>
+                                    <option value="台東縣">台東縣</option>
+                                    <option value="花蓮縣">花蓮縣</option>
+                                </select>
+                                
+                            </div>
+                            <div class="col-lg-3 col-6">
+                                <select class="form-control" id="customer_resident_addregion" name="customer_resident_addregion" alertMsg="戶籍地址" required>
+                                    <option>鄉鎮市區</option>
+                                </select>
+                                <input id="h_customer_resident" name="h_customer_resident" type="hidden" value="" />
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <input alertMsg="戶籍地址" class="form-control mt-lg-0 mt-2" id="customer_resident_address" name="customer_resident_address" required="required" type="text" value="" />
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group col-12">
+                        <label for="">通訊地址</label>
+                        <input class="inp-cbx" id="sameAddress" name="customer_mail_identical" type="checkbox" style="display: none;" value="true" />
+                        <label class="cbx" for="sameAddress">
+                            <span>
+                                <svg width="12px" height="10px" viewbox="0 0 12 10">
+                                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>同戶籍地址</span>
+                        </label>
+                        <div class="form-row">
+                            <input id="customer_mail_postalcode" name="customer_mail_postalcode" type="hidden" value="" />
+                            <div class="col-lg-3 col-6">
+                                <select alertMsg="通訊地址" class="form-control" id="customer_mail_addcity" name="customer_mail_addcity" required="required"><option value="">縣市別</option>
+                                    <option value="台北市">台北市</option>
+                                    <option value="基隆市">基隆市</option>
+                                    <option value="新北市">新北市</option>
+                                    <option value="連江縣">連江縣</option>
+                                    <option value="宜蘭縣">宜蘭縣</option>
+                                    <option value="新竹市">新竹市</option>
+                                    <option value="新竹縣">新竹縣</option>
+                                    <option value="桃園市">桃園市</option>
+                                    <option value="苗栗縣">苗栗縣</option>
+                                    <option value="台中市">台中市</option>
+                                    <option value="彰化縣">彰化縣</option>
+                                    <option value="南投縣">南投縣</option>
+                                    <option value="嘉義市">嘉義市</option>
+                                    <option value="嘉義縣">嘉義縣</option>
+                                    <option value="雲林縣">雲林縣</option>
+                                    <option value="台南市">台南市</option>
+                                    <option value="高雄市">高雄市</option>
+                                    <option value="澎湖縣">澎湖縣</option>
+                                    <option value="金門縣">金門縣</option>
+                                    <option value="屏東縣">屏東縣</option>
+                                    <option value="台東縣">台東縣</option>
+                                    <option value="花蓮縣">花蓮縣</option>
+                                </select>
+                                
+                            </div>
+                            <div class="col-lg-3 col-6">
+                                <select class="form-control" id="customer_mail_addregion" name="customer_mail_addregion" alertMsg="通訊地址" required>
+                                    <option>鄉鎮市區</option>
+                                </select>
+                                <input id="h_customer_mail" name="h_customer_mail" type="hidden" value="" />
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <input alertMsg="通訊地址" class="form-control mt-lg-0 mt-2" id="customer_mail_address" name="customer_mail_address" required="required" type="text" value="" />
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+
+            <div class="col-lg-6">
+                <h4 class="title">密碼設定</h4>
+                <div class="row form-group">
+                    <div class="col-lg-4 col-12">
+                        <label for="customer_name">舊密碼</label>
+                        <input alertMsg="密碼" class="form-control" id="password" name="password" placeholder="密碼" required="required" type="password" value="" />
+                    </div>
+                    <div class="col-lg-4 col-12">
+                        <label for="customer_name">新密碼</label>
+                        <input alertMsg="新密碼" class="form-control" id="new_password" name="new_password" placeholder="新密碼" required="required" type="password" value="" />
+                    </div>
+                    <div class="col-lg-4 col-12">
+                        <label for="customer_name">確認密碼</label>
+                        <input alertMsg="確定密碼" class="form-control" id="confirm_password" name="confirm_password" placeholder="確定密碼" required="required" type="password" value="" />
+                    </div>
+                </div>
+            </div>
+        </div> *@
+        
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <h4 class="title">基本資料</h4>
+                <div class="row">
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="customer_name">中文姓名</label>
+                        <input alertMsg="中文姓名" class="form-control" id="customer_name" name="customer_name" placeholder="" required="required" type="text" value="" />
+                    </div>
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="customer_idcard_no">身份證字號</label>
+                        <input alertMsg="身份證字號" class="form-control" id="customer_idcard_no" maxlength="10" minlength="10" name="customer_idcard_no" placeholder="" required="required" type="text" value="A123456789" readonly/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="customer_name">電子郵件</label>
+                        <input alertMsg="電子郵件" class="form-control" id="customer_email" name="customer_email" placeholder="E-mail" required="required" type="email" value="" />
+                    </div>
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="customer_birthdayYY">出生日期</label>
+                        <div class="form-row">
+                            <div class="col-4">
+                                <input alertMsg="出生日期" class="form-control" id="customer_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="customer_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="民國年" required="required" type="text" value="" />
+                            </div>
+                            <div class="col-4">
+                                <input alertMsg="出生日期" class="form-control" id="customer_birthdayMM" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayMM" onkeyup="value=value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="月" required="required" type="text" value="" />
+                            </div>
+                            <div class="col-4">
+                                <input alertMsg="出生日期" class="form-control" id="customer_birthdayDD" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayDD" onkeyup="value=value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="日" required="required" type="text" value="" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h4 class="title">手機號碼修改</h4>
+                <div class="row">
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="customer_mobile_phone">行動電話</label>
+                        <input alertMsg="行動電話" class="form-control" id="customer_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="customer_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" required="required" type="text" value="" />
+                        @* <div class="form-row">
+                            <div class="col-8">
+                                <input alertMsg="行動電話" class="form-control" id="customer_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="customer_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" required="required" type="text" value="" />
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-opposite w-100">驗證碼</button>
+                            </div>
+                        </div> *@
+                    </div>
+                    <div class="form-group col-12 col-lg-6">
+                        <label for="customer_idcard_no">簡訊驗證碼</label>
+                        <div class="form-row">
+                            <div class="col-7">
+                                <input alertMsg="簡訊驗證碼" class="form-control" id="customer_mobile_no" inputmode="numeric" maxlength="10" minlength="10" name="customer_mobile_no" required="required" type="text" value="" />
+                            </div>
+                            <div class="col-5">
+                                <button class="btn btn-opposite w-100">發送驗證碼</button>
+                            </div>
+                        </div>
+                        @* <input alertMsg="簡訊驗證碼" class="form-control" id="customer_mobile_no" maxlength="10" minlength="10" name="customer_mobile_no" placeholder="簡訊驗證碼" required="required" type="text" value="" /> *@
+                    </div>
+                </div>
+                <h4 class="title">密碼設定</h4>
+                <div class="row form-group">
+                    <div class="col-lg-4 col-12">
+                        <label for="customer_name">舊密碼</label>
+                        <input alertMsg="密碼" class="form-control" id="password" name="password" placeholder="密碼" required="required" type="password" value="" />
+                    </div>
+                    <div class="col-lg-4 col-12">
+                        <label for="customer_name">新密碼</label>
+                        <input alertMsg="新密碼" class="form-control" id="new_password" name="new_password" placeholder="新密碼" required="required" type="password" value="" />
+                    </div>
+                    <div class="col-lg-4 col-12">
+                        <label for="customer_name">確認密碼</label>
+                        <input alertMsg="確定密碼" class="form-control" id="confirm_password" name="confirm_password" placeholder="確定密碼" required="required" type="password" value="" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-center pt-3">
+            <button type="button" class="btn btn-opposite-outline rounded-pill py-2 px-4" >更新資料</button>
+            @* <button type="button" class="btn btn-opposite" >申請資金</button> *@
+        </div>
+    </div>
+</div>

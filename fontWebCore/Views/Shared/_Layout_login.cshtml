@@ -14,15 +14,15 @@
     @* <link rel="stylesheet" href="~/css/fontawesome.css" /> *@
     <link rel="stylesheet" href="~/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/style.css" />
-
+   
     <script src="~/js/jquery-3.3.1.min.js"></script>
     <script src="~/js/owl.carousel.js"></script>
     <script src="~/js/bootstrap.js"></script>
-    
-    
+
 </head>
 <body>
-    <!-- Top Menu 1 -->
+
+<!-- Top Menu 1 -->
 <section class="top-menu-1">
 	<div class="top-hd">
 		<div class="container">
@@ -39,8 +39,7 @@
       <li><a class="text-white d-block d-lg-none" href="tel:0916-544-389">0916-544-389</a></li>
 		</div>
 		<div class="accounts col-sm-6 col-4 pr-0">
-				<li class="top_li1"><a href="/Home/Login">登入</a></li>
-				<li class="top_li2"><a href="/Home/Register">註冊</a></li>
+				<li class="top_li1"><a href="/Home/Index">登出</a></li>
 		</div>
 		
 	</header>
@@ -50,10 +49,8 @@
 <!-- //Top Menu 1 -->
 <section class="bootstrap-header">
   <nav class="navbar navbar-expand-md navbar-light py-lg-2 py-2">
-    <div class="container">
-      <!-- <a class="navbar-brand" href="index.html"><span>D-</span>Business</a> -->
-         
-      <a class="navbar-brand" href="/Home/Index">
+    <div class="container">         
+      <a class="navbar-brand" href="/Home/MemberCenter">
         <img src="~/images/logo.svg" alt="岳沐企業" title="岳沐企業" style="height:46px;" />
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -64,19 +61,16 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mx-auto">
           <li class="nav-item">
-            <a class="nav-link" href="/Home/Index#news">最新消息</a>
+            <a class="nav-link" href="/Home/Apply">資金申請</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/Home/Index#service">服務項目</a>
+            <a class="nav-link" href="https://666.yurich.com.tw/" target="_blank">帳務資訊</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/Home/Index#about">公司簡介</a>
+            <a class="nav-link" href="https://9797888.yurich.com.tw/9797888/CustomerService/CustomerServiceLogin" target="_blank">線上櫃台</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/Home/Index#question">常見問題</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/Home/Index#contact">聯絡我們</a>
+            <a class="nav-link" href="/Home/MemberSetting">基本資料修改</a>
           </li>
         </ul>
         <p class="d-none d-lg-block"><a href="tel:0916-544-389">0916-544-389</a></p>
@@ -120,7 +114,7 @@
     </script>
     <!-- /move top -->
 </section>
-<script src="~/js/jquery-3.3.1.min.js"></script>
+
 <script>
   $(function () {
     $('.navbar-toggler').click(function () {
@@ -128,7 +122,18 @@
     })
   });
 </script>
-   
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    @* <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script> *@
+
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

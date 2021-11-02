@@ -1,0 +1,83 @@
+@{
+    ViewData["Title"] = "登入";
+}
+<style>
+    body {
+        font-family: "Open Sans", sans-serif;
+        height: 80vh;
+        @* background: url("https://i.imgur.com/HgflTDf.jpg") 50% fixed; *@
+        background: url("/images/setting.jpg") 50% fixed;
+        background-size: cover;
+    }
+</style>
+
+<div class="wrapper">
+  <form class="login">
+    <p class="title">登入</p>
+    <input type="text" placeholder="身分證字號" autofocus required/>
+    <i class="fa fa-user"></i>
+    <input type="password" placeholder="密碼" required/>
+    <i class="fa fa-key"></i>
+    <div class="row no-gutters align-items-center">
+        <div class="col-6">
+            <input type="text" placeholder="驗證碼" style="width:95%" required/>
+            <i class="fa fa-key" style="left: 10px;"></i>
+        </div>
+        <div class="col-6">
+            <a class="btn btn-opposite text-white w-100" style="padding: 15px 10px; margin-bottom: 10px;">圖片驗證</a>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end">
+        @* <a href="#" class="forget-passport">立即註冊</a> *@
+        <a href="#" class="forget-passport">忘記密碼</a>
+    </div>
+    <p class="login-register">還沒有帳號？<a href="/Home/Register">立即註冊</a></p>
+    <button onclick="location.href='/Home/MemberCenter'">
+      <i class="spinner"></i>
+      <span class="state">登入</span>
+    </button>
+  </form>
+</div>
+
+@* <section class="container py-5">
+    <div class="login-form">
+        <form>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1">
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</section> *@
+
+<script>
+    var working = false;
+    $('.login').on('submit', function(e) {
+        e.preventDefault();
+        if (working) return;
+        working = true;
+        var $this = $(this),
+            $state = $this.find('button > .state');
+        $this.addClass('loading');
+        $state.html('Authenticating');
+        setTimeout(function() {
+            $this.addClass('ok');
+            $state.html('Welcome back!');
+            setTimeout(function() {
+            $state.html('Log in');
+            $this.removeClass('ok loading');
+            working = false;
+            }, 4000);
+        }, 3000);
+    });
+</script>
