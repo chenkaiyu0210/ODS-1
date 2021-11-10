@@ -4,6 +4,7 @@
   --theme-color: #222042;
   --secondary-color: #da8502;
   --opposite-color: #4ba2c9;
+  --hover-color: #387b99;
   --text-color: #585858;
   --title-color: #1A1D2D;
   --white-color: #ffffff;
@@ -37,6 +38,7 @@ body a {
   -o-transition: 0.3s all;
   -ms-transition: 0.3s all;
   text-decoration: none;
+  color: var(--opposite-color);
 }
 
 body a:hover {
@@ -46,6 +48,7 @@ body a:hover {
   -moz-transition: 0.3s all;
   -o-transition: 0.3s all;
   -ms-transition: 0.3s all;
+  color: var(--hover-color);
 }
   
 body a:focus,
@@ -119,6 +122,10 @@ input[type="submit"]:hover {
   -o-transition: 0.3s all;
   -ms-transition: 0.3s all;
 }
+
+.uppercase {
+  text-transform: uppercase;
+}
   
 span.diff {
   color: var(--secondary-color); }
@@ -134,7 +141,7 @@ span.diff {
   border: 0; }
 
 .btn-theme:hover {
-  background: var(--theme-color);
+  background: var(--hover-color);
   outline: none; }
 
 .btn-secondary:focus, .btn-secondary.focus {
@@ -175,8 +182,8 @@ span.diff {
   background: var(--opposite-color); }
 
 .btn-theme2:hover {
-  background: var(--theme-color);
-  border: 2px solid var(--theme-color); }
+  background: var(--hover-color);
+  border: 2px solid var(--hover-color); }
 
 .btn-theme2:focus {
   border-color: none !important; }
@@ -192,8 +199,8 @@ span.diff {
   background: var(--opposite-color); }
 
 .btn-theme3:hover {
-  background: var(--theme-color);
-  border: 2px solid var(--theme-color);
+  background: var(--hover-color);
+  border: 2px solid var(--hover-color);
   color: var(--white-color); }
 
 .btn-theme3:focus {
@@ -360,7 +367,9 @@ h4.sub-title {
   font-weight: 800;
   color: var(--opposite-color);
   font-family: 'Poppins', sans-serif; }
-
+.bootstrap-header p a:hover {
+  color: var(--hover-color);
+}
 .bootstrap-header nav.navbar {
   background-color: var(--white-color); }
 
@@ -437,7 +446,7 @@ h4.sub-title {
   outline: none; }
 
 .bootstrap-header .navbar-toggler:hover {
-  background-color: var(--theme-color); }
+  background-color: var(--hover-color); }
 
 @media (max-width: 767px) {
   .bootstrap-header .navbar-light .navbar-nav .show > .nav-link,
@@ -458,7 +467,7 @@ h4.sub-title {
     top: -5px;
     left: 4%; }
   .bootstrap-header div#navbarSupportedContent {
-    background: var(--theme-color);
+    background: var(--hover-color);
     padding: 10px;
     border-radius: 4px;
     position: relative;
@@ -478,10 +487,26 @@ h4.sub-title {
     top: -5px;
     right: 12px;
     z-index: 1001; }
-  .bootstrap-header p {
-    color: var(--white-color);
-    text-align: left;
-    margin: 0px 10px; } }
+    .bootstrap-header p {
+      color: var(--white-color);
+      text-align: left;
+      margin: 0px 10px; } 
+    .bootstrap-header div#navbarContent {
+      padding: 10px;
+    }
+    .bootstrap-header #navbarContent .navbar-nav{
+      flex-direction: initial;
+    }
+    .bootstrap-header #navbarContent .nav-link {
+      color: var(--text-color);
+    }
+    .scroll {
+      white-space: nowrap;
+      overflow-x: auto; 
+      -webkit-overflow-scrolling: touch;
+    }
+
+}
 
 /* @media (max-width: 767px) {
   .bootstrap-header div#navbarSupportedContent {
@@ -2060,7 +2085,7 @@ h4.sub-title {
   border-radius: 4px;
   transition: all 0.5s ease-out 0s; }
 .footer-29-main #movetop:hover {
-  background: var(--theme-color);
+  background: var(--hover-color);
 }
 .footer-29-main option {
   background: #ffffff;
@@ -3071,7 +3096,7 @@ h4.sub-title {
   text-decoration: none;
 }
 .login a:hover {
-  color: #387b99;
+  color: var(--hover-color);
 }
 .login .forget-passport {
   border-bottom: 1px solid var(--opposite-color);
@@ -3156,15 +3181,11 @@ h4.sub-title {
   background-color: var(--opposite-color);
   border: 2px solid var(--opposite-color);
 }
-/* .btn-opposite,
-.btn-opposite-outline {
-  padding: 0.5em 2em;
-  border-radius: 50px;
-} */
+
 .btn-opposite:hover {
   color: #fff;
-  background-color: #387b99;
-  border: 2px solid #387b99;
+  background-color: var(--hover-color);
+  border: 2px solid var(--hover-color);
 }
 .btn-opposite-outline {
   color: var(--opposite-color);
@@ -3173,8 +3194,8 @@ h4.sub-title {
 }
 .btn-opposite-outline:hover {
   color: #fff;
-  background-color: #387b99;
-  border: 2px solid #387b99;
+  background-color: var(--hover-color);
+  border: 2px solid var(--hover-color);
 }
 .btn-add {
   color: #fff;
@@ -3182,7 +3203,7 @@ h4.sub-title {
 }
 .btn-add:hover{
   color: #fff;
-  background-color: #387b99;
+  background-color: var(--hover-color);
 }
 .btn-add,
 .delete {
@@ -3238,6 +3259,17 @@ h4.sub-title {
 }
 .form-control::placeholder {
   color: rgba(0,0,0,0.2);
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
 /* chechbox */
 .cbx {
@@ -3470,7 +3502,7 @@ input[type="radio"]:checked + .label:after {
   color: #265366;
 }
 .cjk-list {
-  max-width: 300px;
+  max-width: 320px;
   margin: auto;
 }
 .cjk-list li{

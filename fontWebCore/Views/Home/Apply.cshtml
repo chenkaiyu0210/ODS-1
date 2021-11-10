@@ -49,11 +49,11 @@
                                 <div class="form-row align-items-center">
                                     <div class="col-5">
                                         <label class="require-item" for="staging_num">期數</label>
-                                        <input type="text" class="form-control" name="paymentInput[0].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "期數" required/>
+                                        <input type="number" class="form-control" name="paymentInput[0].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "期數" required/>
                                     </div>
                                     <div class="col-lg-6 col-5">
                                         <label class="require-item" for="staging_num_amount">每期總繳金額</label>
-                                        <input type="text" class="form-control" name="paymentInput[0].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "每期總繳金額" required/>
+                                        <input type="number" class="form-control" name="paymentInput[0].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "每期總繳金額" required/>
                                     </div>
                                     <div class="col-1">
                                         <label for="" style="visibility:hidden;">add</label>
@@ -97,19 +97,19 @@
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_idcard_no">身份證字號</label>
-                                <input alertMsg="身份證字號" class="form-control" id="customer_idcard_no" maxlength="10" minlength="10" name="customer_idcard_no" placeholder="" required="required" type="text" value="" />
+                                <input alertMsg="身份證字號" class="form-control" id="customer_idcard_no" maxlength="10" minlength="10" name="customer_idcard_no" placeholder="" required="required" type="text" value="A123456789" readonly/>
                                 
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_mobile_phone">行動電話</label>
-                                <input alertMsg="行動電話" class="form-control" id="customer_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="customer_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" required="required" type="text" value="" />
+                                <input alertMsg="行動電話" class="form-control" id="customer_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="customer_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" required="required" type="text" value="0912345678" />
                                 
                             </div>
                             <div class="form-group col-12">
                                 <label class="require-item" for="customer_birthdayYY">出生日期</label>
                                 <div class="form-row">
                                     <div class="col-4">
-                                        <input alertMsg="出生日期" class="form-control" id="customer_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="customer_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="民國年" required="required" type="text" value="" />
+                                        <input alertMsg="出生日期" class="form-control" id="customer_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="customer_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="民國年" required="required" type="text" value=""/>
                                         
                                     </div>
                                     <div class="col-4">
@@ -151,12 +151,10 @@
                                 <label for="">戶籍電話</label>
                                 <div class="form-row">
                                     <div class="col-4">
-                                        <input class="form-control" id="customer_resident_tel_code" inputmode="tel" maxlength="4" name="customer_resident_tel_code" onkeyup="value = value.replace(/[^-0-9]/g,&#39;&#39;)" placeholder="區碼" type="text" value="" />
-                                        
+                                        <input class="form-control" id="customer_resident_tel_code" inputmode="tel" maxlength="4" name="customer_resident_tel_code" onkeyup="value = value.replace(/[^-0-9]/g,&#39;&#39;)" placeholder="區碼" type="tel" value="" />
                                     </div>
                                     <div class="col-8">
-                                        <input class="form-control" id="customer_resident_tel_num" inputmode="tel" maxlength="8" name="customer_resident_tel_num" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="號碼" type="text" value="" />
-                                        
+                                        <input class="form-control" id="customer_resident_tel_num" inputmode="tel" maxlength="8" name="customer_resident_tel_num" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="號碼" type="tel" value="" />
                                     </div>
                                 </div>
                             </div>
@@ -164,12 +162,10 @@
                                 <label for="">住宅電話</label>
                                 <div class="form-row">
                                     <div class="col-4">
-                                        <input class="form-control" id="customer_mail_tel_code" inputmode="tel" maxlength="4" name="customer_mail_tel_code" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="區碼" type="text" value="" />
-                                        
+                                        <input class="form-control" id="customer_mail_tel_code" inputmode="tel" maxlength="4" name="customer_mail_tel_code" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="區碼" type="tel" value="" />
                                     </div>
                                     <div class="col-8">
-                                        <input class="form-control" id="customer_mail_tel_num" inputmode="tel" maxlength="8" name="customer_mail_tel_num" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="號碼" type="text" value="" />
-                                        
+                                        <input class="form-control" id="customer_mail_tel_num" inputmode="tel" maxlength="8" name="customer_mail_tel_num" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="號碼" type="tel" value="" />
                                     </div>
                                 </div>
                             </div>
@@ -295,45 +291,37 @@
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_company_name">公司名稱</label>
                                 <input alertMsg="公司名稱" class="form-control" id="customer_company_name" name="customer_company_name" placeholder="" required="required" type="text" value="" />
-                                
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_job_type">工作職稱</label>
                                 <input alertMsg="工作職稱" class="form-control" id="customer_job_type" name="customer_job_type" placeholder="" required="required" type="text" value="" />
-                                
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label for="company_year">工作年資</label>
                                 <div class="form-row">
                                     <div class="col">
-                                        <input class="form-control" data-val="true" data-val-number="欄位 customer_work_year 必須是數字。" id="customer_work_year" inputmode="numeric" name="customer_work_year" placeholder="年" type="text" value="" />
-                                        
+                                        <input class="form-control" data-val="true" data-val-number="欄位 customer_work_year 必須是數字。" id="customer_work_year" inputmode="numeric" onkeyup="value=value.replace(/[^0-9]/g,&#39;&#39;)" name="customer_work_year" placeholder="年" type="text" value="" />
                                     </div>
                                     <div class="col">
-                                        <input class="form-control" data-val="true" data-val-number="欄位 customer_work_month 必須是數字。" id="customer_work_month" inputmode="numeric" name="customer_work_month" placeholder="月" type="text" value="" />
-                                        
+                                        <input class="form-control" data-val="true" data-val-number="欄位 customer_work_month 必須是數字。" id="customer_work_month" inputmode="numeric" onkeyup="value=value.replace(/[^0-9]/g,&#39;&#39;)" name="customer_work_month" placeholder="月" type="text" value="" />
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="company_pay">月薪</label>
-                                <input class="form-control" data-val="true" data-val-number="欄位 customer_month_salary 必須是數字。" id="customer_month_salary" inputmode="numeric" name="customer_month_salary" placeholder="" required="required" type="number" value="" />
-                                
+                                <input class="form-control" data-val="true" data-val-number="欄位 customer_month_salary 必須是數字。" id="customer_month_salary" inputmode="numeric" onkeyup="value=value.replace(/[^0-9]/g,&#39;&#39;)" name="customer_month_salary" placeholder="" required="required" type="number" value="" />
                             </div>
                             <div class="form-group col-12">
                                 <label class="require-item" for="">公司電話</label>
                                 <div class="form-row">
                                     <div class="col-3">
-                                        <input alertMsg="公司電話" class="form-control" id="customer_company_tel_code" inputmode="tel" maxlength="4" name="customer_company_tel_code" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="區碼" required="required" type="text" value="" />
-                                        
+                                        <input alertMsg="公司電話" class="form-control" id="customer_company_tel_code" inputmode="tel" maxlength="4" name="customer_company_tel_code" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="區碼" required="required" type="tel" value="" />
                                     </div>
                                     <div class="col-6">
-                                        <input class="form-control" id="customer_company_tel_num" inputmode="tel" maxlength="8" name="customer_company_tel_num" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="號碼" required="required" type="text" value="" />
-                                        
+                                        <input class="form-control" id="customer_company_tel_num" inputmode="tel" maxlength="8" name="customer_company_tel_num" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="號碼" required="required" type="tel" value="" />
                                     </div>
                                     <div class="col-3">
                                         <input class="form-control" id="customer_company_tel_ext" inputmode="tel" name="customer_company_tel_ext" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="分機" type="text" value="" />
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -347,29 +335,27 @@
                         <div class="row">
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="contact_person_name_i">聯絡人姓名</label>
-                                <input alertMsg="聯絡人姓名" class="form-control" id="contact_person_name_i" name="contact_person_name_i" placeholder="" required="required" type="text" value="" />
+                                <input alertMsg="聯絡人姓名" class="form-control" id="contact_person_name_i" name="contact_person_name_i" type="text" value="" placeholder="" required="required"/>
                                 
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="contact_person_relation_i">聯絡人關係</label>
-                                <input alertMsg="聯絡人關係" class="form-control" id="contact_person_relation_i" name="contact_person_relation_i" placeholder="" required="required" type="text" value="" />
+                                <input alertMsg="聯絡人關係" class="form-control" id="contact_person_relation_i" name="contact_person_relation_i" type="text" value="" placeholder="" required="required"/>
                                 
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="contact_person_mobile_phone_i">聯絡人行動電話</label>
-                                <input alertMsg="聯絡人行動電話" class="form-control" id="contact_person_mobile_phone_i" inputmode="tel" maxlength="10" minlength="10" name="contact_person_mobile_phone_i" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="" required="required" type="text" value="" />
+                                <input alertMsg="聯絡人行動電話" class="form-control" id="contact_person_mobile_phone_i" type="text" inputmode="tel" maxlength="10" minlength="10" name="contact_person_mobile_phone_i" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="" required="required"/>
                                 
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label for="">聯絡人住宅電話</label>
                                 <div class="form-row">
                                     <div class="col-4">
-                                        <input class="form-control" id="contact_person_areacode_i" inputmode="tel" maxlength="4" name="contact_person_areacode_i" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="區碼" type="text" value="" />
-                                        
+                                        <input class="form-control" id="contact_person_areacode_i" type="text" inputmode="tel" maxlength="4" maxlength="2" minlength="2" name="contact_person_areacode_i" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="區碼"/>
                                     </div>
                                     <div class="col-8">
-                                        <input class="form-control" id="contact_person_tel_i" inputmode="tel" maxlength="8" name="contact_person_tel_i" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="號碼" type="text" value="" />
-                                        
+                                        <input class="form-control" id="contact_person_tel_i" type="text" inputmode="tel" maxlength="8" maxlength="8" name="contact_person_tel_i" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="號碼"/>
                                     </div>
                                 </div>
                             </div>
@@ -377,13 +363,13 @@
                                 <label for="">聯絡人公司電話</label>
                                 <div class="form-row">
                                     <div class="col-3">
-                                        <input class="form-control" id="contact_person_company_areacode_i" inputmode="tel" maxlength="4" name="contact_person_company_areacode_i" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="區碼" type="text" value="" />
+                                        <input class="form-control" id="contact_person_company_areacode_i" type="text" inputmode="tel" maxlength="4" name="contact_person_company_areacode_i" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="區碼"/>
                                     </div>
                                     <div class="col-6">
-                                        <input class="form-control" id="contact_person_company_tel_i" inputmode="tel" maxlength="8" name="contact_person_company_tel_i" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="號碼" type="text" value="" />
+                                        <input class="form-control" id="contact_person_company_tel_i" type="text" inputmode="tel" maxlength="8" name="contact_person_company_tel_i" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="號碼"/>
                                     </div>
                                     <div class="col-3">
-                                        <input class="form-control" id="contact_person_company_tel_ext_i" inputmode="tel" name="contact_person_company_tel_ext_i" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="分機" type="text" value="" />
+                                        <input class="form-control" id="contact_person_company_tel_ext_i" type="text" inputmode="tel" name="contact_person_company_tel_ext_i" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="分機"/>
                                     </div>
                                 </div>
                             </div>
@@ -397,7 +383,6 @@
                                         <input type="radio" name="guarantor_option" id="guarantor01" class="hidden" value="1" />
                                     <span class="label"></span>有
                                 </label>
-
                                 <label for="guarantor02" class="radio">
                                         <input type="radio" name="guarantor_option" id="guarantor02" class="hidden" value="2" />
                                     <span class="label"></span>無
@@ -414,32 +399,26 @@
                                 <div class="form-group col-lg-6 col-12">
                                     <label for="guarantor_name">保證人姓名</label>
                                     <input class="form-control" id="guarantor_name" name="guarantor_name" placeholder="" type="text" value="" />
-                                    
                                 </div>
                                 <div class="form-group col-lg-6 col-12">
                                     <label for="guarantor_relation">保證人關係</label>
                                     <input class="form-control" id="guarantor_relation" name="guarantor_relation" placeholder="" type="text" value="" />
-                                    
                                 </div>
                                 <div class="form-group col-lg-6 col-12">
                                     <label for="guarantor_idcard_no">保證人身份證字號</label>
                                     <input class="form-control" id="guarantor_idcard_no" maxlength="10" minlength="10" name="guarantor_idcard_no" placeholder="" type="text" value="" />
-                                    
                                 </div>
                                 <div class="form-group col-12">
                                     <label for="guarantor_birthday">保證人出生日期</label>
                                     <div class="form-row">
                                         <div class="col-4">
                                             <input class="form-control" id="guarantor_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="guarantor_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="民國年" type="text" value="" />
-                                            
                                         </div>
                                         <div class="col-4">
                                             <input class="form-control" id="guarantor_birthdayMM" inputmode="numeric" maxlength="2" minlength="1" name="guarantor_birthdayMM" onkeyup="value=value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="月" type="text" value="" />
-                                            
                                         </div>
                                         <div class="col-4">
                                             <input class="form-control" id="guarantor_birthdayDD" inputmode="numeric" maxlength="2" minlength="1" name="guarantor_birthdayDD" onkeyup="value=value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="日" type="text" value="" />
-                                            
                                         </div>
                                     </div>
                                 </div>
@@ -482,20 +461,20 @@
                                 <label for="contact_person_name_i">銀行狀態</label>
                                 <div class="cntr py-1">
                                     <label for="bankStatus01" class="radio">
-                                            <input type="radio" name="customer_creditcard_status" id="bankStatus01" class="hidden" value="1" />
+                                        <input type="radio" name="customer_creditcard_status" id="bankStatus01" class="hidden" value="1" />
                                         <span class="label"></span>沒辦過卡
                                     </label>
                                     <label for="bankStatus02" class="radio">
-                                            <input type="radio" name="customer_creditcard_status" id="bankStatus02" class="hidden" value="2" />
+                                        <input type="radio" name="customer_creditcard_status" id="bankStatus02" class="hidden" value="2" />
                                         <span class="label"></span>無卡自停
                                     </label>
                                     <label for="bankStatus03" class="radio">
-                                            <input type="radio" name="customer_creditcard_status" id="bankStatus03" class="hidden" value="3" />
+                                        <input type="radio" name="customer_creditcard_status" id="bankStatus03" class="hidden" value="3" />
                                         <span class="label"></span>協商繳款中
                                     </label>
                                     <div class="d-flex align-items-center pt-2">
                                         <label for="bankStatus04" class="radio col-md-2 col-3" style="padding: 0;">
-                                                <input type="radio" name="customer_creditcard_status" id="bankStatus04" class="hidden" value="4" />
+                                            <input type="radio" name="customer_creditcard_status" id="bankStatus04" class="hidden" value="4" />
                                             <span class="label"></span>其他
                                         </label>
                                         <input class="form-control col" id="customer_creditcard_status_remark" name="customer_creditcard_status_remark" placeholder="銀行資料狀態說明" type="text" value="" />
@@ -522,16 +501,16 @@
                                 <label for="">卡號</label>
                                 <div class="form-row">
                                     <div class="col-3">
-                                        <input class="form-control inputs" id="card_num_01" inputmode="numeric" maxlength="4" name="card_num_01" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="1234" type="text" value="" />
+                                        <input class="form-control inputs" id="card_num_01" inputmode="numeric" maxlength="4" minlength="4" name="card_num_01" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="1234" type="text" value="" />
                                     </div>
                                     <div class="col-3">
-                                        <input class="form-control inputs" id="card_num_02" inputmode="numeric" maxlength="4" name="card_num_02" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="5678" type="text" value="" />
+                                        <input class="form-control inputs" id="card_num_02" inputmode="numeric" maxlength="4" minlength="4" name="card_num_02" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="5678" type="text" value="" />
                                     </div>
                                     <div class="col-3">
-                                        <input class="form-control inputs" id="card_num_03" inputmode="numeric" maxlength="4" name="card_num_03" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="1234" type="text" value="" />
+                                        <input class="form-control inputs" id="card_num_03" inputmode="numeric" maxlength="4" minlength="4" name="card_num_03" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="1234" type="text" value="" />
                                     </div>
                                     <div class="col-3">
-                                        <input class="form-control inputs" id="card_num_04" inputmode="numeric" maxlength="4" name="card_num_04" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="5678" type="text" value="" />
+                                        <input class="form-control inputs" id="card_num_04" inputmode="numeric" maxlength="4" minlength="4" name="card_num_04" onkeyup="value = value.replace(/[^0-9]/g,&#39;&#39;)" placeholder="5678" type="text" value="" />
                                     </div>
                                 </div>
                                 <script>
@@ -644,8 +623,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-center pt-3">
-                    @* <button type="button" class="btn btn-opposite-outline" >更新資料</button> *@
-                    <button type="button" class="btn btn-opposite rounded-pill py-2 px-4" >申請資金</button>
+                    <button type="button" class="btn btn-opposite rounded-pill py-2 px-4" onclick="location.href='/Home/Finish'">申請資金</button>
                 </div>
                 
                 <script>
@@ -705,8 +683,8 @@
     $(function () {
         $(document).keydown(function (event) {
             switch (event.keyCode) {
-                case 13://enter
-                    return false;
+            case 13://enter
+            return false;
             }
         });
 
@@ -795,52 +773,3 @@
         }
     }
 </script>
-
-<!-- 上傳 -->
-<script>
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var file_type = input.files[0].type;
-            if (file_type != 'image/jpg' && file_type != 'image/jpeg' && file_type != 'image/bmp' && file_type != 'image/png' && file_type != 'application/pdf') {
-                MN.Alert('topCenter', 'error', '非圖檔與PDF檔');
-                $(input).val('');
-                return false;
-            }
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                //$('.image-upload-wrap').hide();
-
-                $(input).parent().parent().find('.image-upload-wrap').hide();
-                $(input).parent().parent().find('.file-upload-image').attr('src', e.target.result);
-                $(input).parent().parent().find('.file-upload-content').show();
-                //$('.file-upload-image').attr('src', e.target.result);
-                //$('.file-upload-content').show();
-                $(input).parent().parent().find('.image-title').html(input.files[0].name);
-
-                //$('.image-title').html(input.files[0].name);
-            };
-
-            reader.readAsDataURL(input.files[0]);
-
-        } else {
-            removeUpload();
-        }
-    }
-
-    function removeUpload(input) {
-        $(input).parent().parent().parent().find('.image-upload-wrap').show();
-        $(input).parent().parent().parent().find('.file-upload-input').val('').replaceWith($(input).parent().parent().parent().find('.file-upload-input').clone());
-        $(input).parent().parent().parent().find('.file-upload-content').hide();
-        //$('.file-upload-input').replaceWith($('.file-upload-input').clone());
-        //$('.file-upload-content').hide();
-        //$('.image-upload-wrap').show();
-    }
-    $('.image-upload-wrap').bind('dragover', function () {
-        $('.image-upload-wrap').addClass('image-dropping');
-    });
-    $('.image-upload-wrap').bind('dragleave', function () {
-        $('.image-upload-wrap').removeClass('image-dropping');
-    });
-</script>
-<!-- //上傳 -->

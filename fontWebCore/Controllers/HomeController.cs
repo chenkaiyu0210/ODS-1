@@ -39,6 +39,11 @@ namespace fontWebCore.Controllers
             return View();
         }
 
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
         public IActionResult MemberCenter()
         {
             return View();
