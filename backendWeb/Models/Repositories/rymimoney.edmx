@@ -1,0 +1,338 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="RYMimoneyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="members">
+          <Key>
+            <PropertyRef Name="customer_id" />
+          </Key>
+          <Property Name="customer_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="customer_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="customer_idcard_no" Type="varchar" MaxLength="10" />
+          <Property Name="customer_email" Type="varchar" MaxLength="200" />
+          <Property Name="customer_birthday" Type="datetime" />
+          <Property Name="customer_mobile_phone" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="100" />
+          <Property Name="salt_key" Type="varchar" MaxLength="10" />
+          <Property Name="register_time" Type="datetime" />
+          <Property Name="sms_verify_code" Type="varchar" MaxLength="6" />
+          <Property Name="sms_is_verify" Type="bit" />
+          <Property Name="is_enable" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="postfile">
+          <Key>
+            <PropertyRef Name="zipcode" />
+            <PropertyRef Name="town_name" />
+          </Key>
+          <Property Name="zipcode" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="city_name" Type="nvarchar" MaxLength="28" Nullable="false" />
+          <Property Name="town_name" Type="nvarchar" MaxLength="28" Nullable="false" />
+          <Property Name="import_time" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="recevieCases">
+          <Key>
+            <PropertyRef Name="recevie_id" />
+          </Key>
+          <Property Name="recevie_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="apply_method" Type="nvarchar" MaxLength="20" />
+          <Property Name="recevie_date" Type="datetime" />
+          <Property Name="recevie_status" Type="varchar" MaxLength="20" />
+          <Property Name="customer_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="customer_idcard_no" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="customer_mobile_phone" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="customer_birthday" Type="datetime" Nullable="false" />
+          <Property Name="customer_resident_tel_code" Type="varchar" MaxLength="5" />
+          <Property Name="customer_resident_tel_num" Type="varchar" MaxLength="10" />
+          <Property Name="customer_mail_tel_code" Type="varchar" MaxLength="5" />
+          <Property Name="customer_mail_tel_num" Type="varchar" MaxLength="10" />
+          <Property Name="customer_resident_postalcode" Type="varchar" MaxLength="5" />
+          <Property Name="customer_resident_addcity" Type="nvarchar" MaxLength="20" />
+          <Property Name="customer_resident_addregion" Type="nvarchar" MaxLength="20" />
+          <Property Name="customer_resident_address" Type="nvarchar" MaxLength="500" />
+          <Property Name="customer_mail_postalcode" Type="varchar" MaxLength="5" />
+          <Property Name="customer_mail_addcity" Type="nvarchar" MaxLength="20" />
+          <Property Name="customer_mail_addregion" Type="nvarchar" MaxLength="20" />
+          <Property Name="customer_mail_address" Type="nvarchar" MaxLength="500" />
+          <Property Name="customer_company_name" Type="nvarchar" MaxLength="20" />
+          <Property Name="customer_job_type" Type="nvarchar" MaxLength="20" />
+          <Property Name="customer_work_year" Type="varchar" MaxLength="5" />
+          <Property Name="customer_work_month" Type="varchar" MaxLength="5" />
+          <Property Name="customer_month_salary" Type="int" />
+          <Property Name="customer_company_tel_code" Type="varchar" MaxLength="5" />
+          <Property Name="customer_company_tel_num" Type="varchar" MaxLength="10" />
+          <Property Name="customer_company_tel_ext" Type="varchar" MaxLength="5" />
+          <Property Name="customer_creditcard_status" Type="nvarchar" MaxLength="20" />
+          <Property Name="customer_creditcard_status_remark" Type="nvarchar" MaxLength="500" />
+          <Property Name="customer_creditcard_bank" Type="nvarchar" MaxLength="20" />
+          <Property Name="customer_creditcard_validdate_month" Type="varchar" MaxLength="2" />
+          <Property Name="customer_creditcard_validdate_year" Type="varchar" MaxLength="4" />
+          <Property Name="card_num_01" Type="varchar" MaxLength="4" />
+          <Property Name="card_num_02" Type="varchar" MaxLength="4" />
+          <Property Name="card_num_03" Type="varchar" MaxLength="4" />
+          <Property Name="card_num_04" Type="varchar" MaxLength="4" />
+          <Property Name="contact_person_name_i" Type="nvarchar" MaxLength="50" />
+          <Property Name="contact_person_relation_i" Type="nvarchar" MaxLength="50" />
+          <Property Name="contact_person_mobile_phone_i" Type="varchar" MaxLength="10" />
+          <Property Name="contact_person_areacode_i" Type="varchar" MaxLength="5" />
+          <Property Name="contact_person_tel_i" Type="varchar" MaxLength="10" />
+          <Property Name="contact_person_company_areacode_i" Type="varchar" MaxLength="5" />
+          <Property Name="contact_person_company_tel_i" Type="varchar" MaxLength="10" />
+          <Property Name="contact_person_company_tel_ext_i" Type="varchar" MaxLength="5" />
+          <Property Name="guarantor_relation" Type="nvarchar" MaxLength="50" />
+          <Property Name="guarantor_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="guarantor_idcard_no" Type="varchar" MaxLength="10" />
+          <Property Name="guarantor_birthday" Type="datetime" />
+          <Property Name="guarantor_mobile_phone" Type="varchar" MaxLength="10" />
+          <Property Name="guarantor_resident_tel_code" Type="varchar" MaxLength="5" />
+          <Property Name="guarantor_resident_tel_num" Type="varchar" MaxLength="10" />
+          <Property Name="guarantor_company_tel_code" Type="varchar" MaxLength="5" />
+          <Property Name="guarantor_company_tel_num" Type="varchar" MaxLength="10" />
+          <Property Name="guarantor_company_tel_ext" Type="varchar" MaxLength="5" />
+          <Property Name="note_time" Type="nvarchar" MaxLength="20" />
+          <Property Name="dealer_branch_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="product_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="staging_amount" Type="int" />
+          <Property Name="num" Type="nvarchar" MaxLength="20" />
+          <Property Name="num_amount" Type="nvarchar" MaxLength="50" />
+          <Property Name="note_remark" Type="nvarchar" MaxLength="500" />
+          <Property Name="is_secret" Type="bit" />
+        </EntityType>
+        <EntityContainer Name="RYMimoneyModelStoreContainer">
+          <EntitySet Name="members" EntityType="Self.members" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="postfile" EntityType="Self.postfile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="recevieCases" EntityType="Self.recevieCases" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RYMimoneyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="RYMimoneyEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="recevieCases" EntityType="RYMimoneyModel.recevieCases" />
+          <EntitySet Name="postfile" EntityType="RYMimoneyModel.postfile" />
+          <EntitySet Name="members" EntityType="RYMimoneyModel.members" />
+        </EntityContainer>
+        <EntityType Name="recevieCases">
+          <Key>
+            <PropertyRef Name="recevie_id" />
+          </Key>
+          <Property Name="recevie_id" Type="Guid" Nullable="false" />
+          <Property Name="apply_method" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="recevie_date" Type="DateTime" Precision="3" />
+          <Property Name="recevie_status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="customer_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="customer_idcard_no" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="customer_mobile_phone" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="customer_birthday" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="customer_resident_tel_code" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="customer_resident_tel_num" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="customer_mail_tel_code" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="customer_mail_tel_num" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="customer_resident_postalcode" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="customer_resident_addcity" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="customer_resident_addregion" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="customer_resident_address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="customer_mail_postalcode" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="customer_mail_addcity" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="customer_mail_addregion" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="customer_mail_address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="customer_company_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="customer_job_type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="customer_work_year" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="customer_work_month" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="customer_month_salary" Type="Int32" />
+          <Property Name="customer_company_tel_code" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="customer_company_tel_num" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="customer_company_tel_ext" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="customer_creditcard_status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="customer_creditcard_status_remark" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="customer_creditcard_bank" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="customer_creditcard_validdate_month" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="customer_creditcard_validdate_year" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="card_num_01" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="card_num_02" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="card_num_03" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="card_num_04" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="contact_person_name_i" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="contact_person_relation_i" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="contact_person_mobile_phone_i" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="contact_person_areacode_i" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="contact_person_tel_i" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="contact_person_company_areacode_i" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="contact_person_company_tel_i" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="contact_person_company_tel_ext_i" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="guarantor_relation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="guarantor_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="guarantor_idcard_no" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guarantor_birthday" Type="DateTime" Precision="3" />
+          <Property Name="guarantor_mobile_phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guarantor_resident_tel_code" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="guarantor_resident_tel_num" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guarantor_company_tel_code" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="guarantor_company_tel_num" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="guarantor_company_tel_ext" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="note_time" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="dealer_branch_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="product_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="staging_amount" Type="Int32" />
+          <Property Name="num" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="num_amount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="note_remark" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="is_secret" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="postfile">
+          <Key>
+            <PropertyRef Name="zipcode" />
+            <PropertyRef Name="town_name" />
+          </Key>
+          <Property Name="zipcode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="city_name" Type="String" Nullable="false" MaxLength="28" FixedLength="false" Unicode="true" />
+          <Property Name="town_name" Type="String" Nullable="false" MaxLength="28" FixedLength="false" Unicode="true" />
+          <Property Name="import_time" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="members">
+          <Key>
+            <PropertyRef Name="customer_id" />
+          </Key>
+          <Property Name="customer_id" Type="Guid" Nullable="false" />
+          <Property Name="customer_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="customer_idcard_no" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="customer_email" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="customer_birthday" Type="DateTime" Precision="3" />
+          <Property Name="customer_mobile_phone" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="salt_key" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="register_time" Type="DateTime" Precision="3" />
+          <Property Name="sms_verify_code" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="sms_is_verify" Type="Boolean" />
+          <Property Name="is_enable" Type="Boolean" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RYMimoneyModelStoreContainer" CdmEntityContainer="RYMimoneyEntities">
+          <EntitySetMapping Name="recevieCases">
+            <EntityTypeMapping TypeName="RYMimoneyModel.recevieCases">
+              <MappingFragment StoreEntitySet="recevieCases">
+                <ScalarProperty Name="is_secret" ColumnName="is_secret" />
+                <ScalarProperty Name="note_remark" ColumnName="note_remark" />
+                <ScalarProperty Name="num_amount" ColumnName="num_amount" />
+                <ScalarProperty Name="num" ColumnName="num" />
+                <ScalarProperty Name="staging_amount" ColumnName="staging_amount" />
+                <ScalarProperty Name="product_name" ColumnName="product_name" />
+                <ScalarProperty Name="dealer_branch_name" ColumnName="dealer_branch_name" />
+                <ScalarProperty Name="note_time" ColumnName="note_time" />
+                <ScalarProperty Name="guarantor_company_tel_ext" ColumnName="guarantor_company_tel_ext" />
+                <ScalarProperty Name="guarantor_company_tel_num" ColumnName="guarantor_company_tel_num" />
+                <ScalarProperty Name="guarantor_company_tel_code" ColumnName="guarantor_company_tel_code" />
+                <ScalarProperty Name="guarantor_resident_tel_num" ColumnName="guarantor_resident_tel_num" />
+                <ScalarProperty Name="guarantor_resident_tel_code" ColumnName="guarantor_resident_tel_code" />
+                <ScalarProperty Name="guarantor_mobile_phone" ColumnName="guarantor_mobile_phone" />
+                <ScalarProperty Name="guarantor_birthday" ColumnName="guarantor_birthday" />
+                <ScalarProperty Name="guarantor_idcard_no" ColumnName="guarantor_idcard_no" />
+                <ScalarProperty Name="guarantor_name" ColumnName="guarantor_name" />
+                <ScalarProperty Name="guarantor_relation" ColumnName="guarantor_relation" />
+                <ScalarProperty Name="contact_person_company_tel_ext_i" ColumnName="contact_person_company_tel_ext_i" />
+                <ScalarProperty Name="contact_person_company_tel_i" ColumnName="contact_person_company_tel_i" />
+                <ScalarProperty Name="contact_person_company_areacode_i" ColumnName="contact_person_company_areacode_i" />
+                <ScalarProperty Name="contact_person_tel_i" ColumnName="contact_person_tel_i" />
+                <ScalarProperty Name="contact_person_areacode_i" ColumnName="contact_person_areacode_i" />
+                <ScalarProperty Name="contact_person_mobile_phone_i" ColumnName="contact_person_mobile_phone_i" />
+                <ScalarProperty Name="contact_person_relation_i" ColumnName="contact_person_relation_i" />
+                <ScalarProperty Name="contact_person_name_i" ColumnName="contact_person_name_i" />
+                <ScalarProperty Name="card_num_04" ColumnName="card_num_04" />
+                <ScalarProperty Name="card_num_03" ColumnName="card_num_03" />
+                <ScalarProperty Name="card_num_02" ColumnName="card_num_02" />
+                <ScalarProperty Name="card_num_01" ColumnName="card_num_01" />
+                <ScalarProperty Name="customer_creditcard_validdate_year" ColumnName="customer_creditcard_validdate_year" />
+                <ScalarProperty Name="customer_creditcard_validdate_month" ColumnName="customer_creditcard_validdate_month" />
+                <ScalarProperty Name="customer_creditcard_bank" ColumnName="customer_creditcard_bank" />
+                <ScalarProperty Name="customer_creditcard_status_remark" ColumnName="customer_creditcard_status_remark" />
+                <ScalarProperty Name="customer_creditcard_status" ColumnName="customer_creditcard_status" />
+                <ScalarProperty Name="customer_company_tel_ext" ColumnName="customer_company_tel_ext" />
+                <ScalarProperty Name="customer_company_tel_num" ColumnName="customer_company_tel_num" />
+                <ScalarProperty Name="customer_company_tel_code" ColumnName="customer_company_tel_code" />
+                <ScalarProperty Name="customer_month_salary" ColumnName="customer_month_salary" />
+                <ScalarProperty Name="customer_work_month" ColumnName="customer_work_month" />
+                <ScalarProperty Name="customer_work_year" ColumnName="customer_work_year" />
+                <ScalarProperty Name="customer_job_type" ColumnName="customer_job_type" />
+                <ScalarProperty Name="customer_company_name" ColumnName="customer_company_name" />
+                <ScalarProperty Name="customer_mail_address" ColumnName="customer_mail_address" />
+                <ScalarProperty Name="customer_mail_addregion" ColumnName="customer_mail_addregion" />
+                <ScalarProperty Name="customer_mail_addcity" ColumnName="customer_mail_addcity" />
+                <ScalarProperty Name="customer_mail_postalcode" ColumnName="customer_mail_postalcode" />
+                <ScalarProperty Name="customer_resident_address" ColumnName="customer_resident_address" />
+                <ScalarProperty Name="customer_resident_addregion" ColumnName="customer_resident_addregion" />
+                <ScalarProperty Name="customer_resident_addcity" ColumnName="customer_resident_addcity" />
+                <ScalarProperty Name="customer_resident_postalcode" ColumnName="customer_resident_postalcode" />
+                <ScalarProperty Name="customer_mail_tel_num" ColumnName="customer_mail_tel_num" />
+                <ScalarProperty Name="customer_mail_tel_code" ColumnName="customer_mail_tel_code" />
+                <ScalarProperty Name="customer_resident_tel_num" ColumnName="customer_resident_tel_num" />
+                <ScalarProperty Name="customer_resident_tel_code" ColumnName="customer_resident_tel_code" />
+                <ScalarProperty Name="customer_birthday" ColumnName="customer_birthday" />
+                <ScalarProperty Name="customer_mobile_phone" ColumnName="customer_mobile_phone" />
+                <ScalarProperty Name="customer_idcard_no" ColumnName="customer_idcard_no" />
+                <ScalarProperty Name="customer_name" ColumnName="customer_name" />
+                <ScalarProperty Name="recevie_status" ColumnName="recevie_status" />
+                <ScalarProperty Name="recevie_date" ColumnName="recevie_date" />
+                <ScalarProperty Name="apply_method" ColumnName="apply_method" />
+                <ScalarProperty Name="recevie_id" ColumnName="recevie_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="postfile">
+            <EntityTypeMapping TypeName="RYMimoneyModel.postfile">
+              <MappingFragment StoreEntitySet="postfile">
+                <ScalarProperty Name="import_time" ColumnName="import_time" />
+                <ScalarProperty Name="town_name" ColumnName="town_name" />
+                <ScalarProperty Name="city_name" ColumnName="city_name" />
+                <ScalarProperty Name="zipcode" ColumnName="zipcode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="members">
+            <EntityTypeMapping TypeName="RYMimoneyModel.members">
+              <MappingFragment StoreEntitySet="members">
+                <ScalarProperty Name="is_enable" ColumnName="is_enable" />
+                <ScalarProperty Name="sms_is_verify" ColumnName="sms_is_verify" />
+                <ScalarProperty Name="sms_verify_code" ColumnName="sms_verify_code" />
+                <ScalarProperty Name="register_time" ColumnName="register_time" />
+                <ScalarProperty Name="salt_key" ColumnName="salt_key" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="customer_mobile_phone" ColumnName="customer_mobile_phone" />
+                <ScalarProperty Name="customer_birthday" ColumnName="customer_birthday" />
+                <ScalarProperty Name="customer_email" ColumnName="customer_email" />
+                <ScalarProperty Name="customer_idcard_no" ColumnName="customer_idcard_no" />
+                <ScalarProperty Name="customer_name" ColumnName="customer_name" />
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

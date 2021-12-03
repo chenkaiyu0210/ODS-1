@@ -1,5 +1,6 @@
 @{
     ViewData["Title"] = "登入";
+    string Id = Guid.NewGuid().ToString();
 }
 <style>
     body {
@@ -12,27 +13,37 @@
 </style>
 
 <div class="wrapper">
-    <form class="login">
+    <form action="@Url.Action("Login", "Home")" class="login" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        @Html.Hidden("captcha_id", Id)
         <p class="title">登入</p>
-        <input type="text" class="uppercase" placeholder="身分證字號" maxlength="10" minlength="10" autofocus required autocomplete="on"/>
+        <input type="text" class="uppercase" name="idcard_no" placeholder="身分證字號" maxlength="10" minlength="10" autofocus required autocomplete="on"/>
         <i class="fa fa-user"></i>
-        <input type="password" placeholder="密碼" required autocomplete="off"/>
+        <input type="password" name="password"  placeholder="密碼" required autocomplete="off"/>
         <i class="fa fa-key"></i>
         <div class="row no-gutters align-items-center">
             <div class="col-6">
-                <input type="text" placeholder="驗證碼" style="width:95%" required autocomplete="off"/>
+                <input type="text" name="captcha_code" placeholder="驗證碼" style="width: 95%" autocomplete="off" />
+                <i class="fa fa-key" style="left: 10px;"></i>                
+            </div>
+            <div class="col-6">
+                <img id="imgCaptcha" class="" style="width: 80%; position: relative; bottom: 4px;" src="@Url.Action("Captcha", "Home", new { id = Id })" />
+                <a href="javascript:void(0);" id="changeImg"><i class="fas fa-undo-alt"></i></a>                
+            </div>
+            @*<div class="col-6">
+                <input type="text" placeholder="驗證碼" style="width:95%" autocomplete="off" />
                 <i class="fa fa-key" style="left: 10px;"></i>
             </div>
             <div class="col-6">
                 <a class="btn btn-opposite text-white w-100" style="padding: 15px 10px; margin-bottom: 10px;">圖片驗證</a>
-            </div>
+            </div>*@
         </div>
         <div class="d-flex justify-content-end">
-            @* <a href="#" class="forget-passport">立即註冊</a> *@
-            <a href="/Home/ForgotPassword" class="forget-passport">忘記密碼</a>
+            @Html.ActionLink("忘記密碼", "ForgotPassword", "Member", null, new { @class = "forget-passport" })
+            @*<a href="/Home/ForgotPassword" class="forget-passport">忘記密碼</a>*@
         </div>
-        <p class="login-register">還沒有帳號？<a href="/Home/Register">立即註冊</a></p>
-        <button onclick="location.href='/Home/MemberCenter'">
+        <p class="login-register">還沒有帳號？@Html.ActionLink("立即註冊", "Register", "Member")@*<a href="/Home/Register">立即註冊</a>*@</p>
+        <button type="submit">
         <i class="spinner"></i>
         <span class="state">登入</span>
         </button>
@@ -42,9 +53,9 @@
 <script>
     var working = false;
     $('.login').on('submit', function(e) {
-        e.preventDefault();
-        if (working) return;
-        working = true;
+        //e.preventDefault();
+        //if (working) return;
+        //working = true;
         var $this = $(this),
             $state = $this.find('button > .state');
         $this.addClass('loading');
@@ -59,4 +70,9 @@
             }, 4000);
         }, 3000);
     });
+    $(function () {
+        $('#changeImg').on('click', function () {           
+            $('#imgCaptcha').prop('src', '@Url.Action("Captcha", "Home")?id=' + $('input[name="captcha_id"]').val() + '&time=' + new Date().getTime());
+        })
+    })
 </script>

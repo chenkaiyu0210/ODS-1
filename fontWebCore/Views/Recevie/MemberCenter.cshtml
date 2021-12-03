@@ -1,0 +1,32 @@
+@model viewModelReceiveCase
+@{
+    ViewData["Title"] = "會員中心";
+    Layout = "_Layout_login";
+}
+<section style="background-color: #fafafa; min-height: 75vh;">
+    <div class="py-sm-5 py-4">
+        <div class="container py-lg-3 py-2">
+            @if (Model != null && Model.recevie_date.HasValue)
+            {
+                <div class="success-page text-center">
+                    <h4>最近一次申辦成功時間</h4>
+                    <h3>@Model.recevie_date.Value.ToString("yyyy/MM/dd HH:mm:ss")</h3>
+                    @{
+                        int reciprocal = 30 - (DateTime.Now - Model.recevie_date.Value).Days;
+                    }
+                    @if (reciprocal > 0)
+                    {
+                        <p>提醒您：尚有 @reciprocal 天可再次提出申辦</p>
+                        <img src="~/images/plan.svg" alt="還未能提出申請" class="img-fluid py-3" style="width:600px">
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="success-page text-center">
+                    <h4>尚未申辦</h4>
+                </div>
+            }
+        </div>
+    </div>
+</section>

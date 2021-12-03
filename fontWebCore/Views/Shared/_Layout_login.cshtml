@@ -9,7 +9,7 @@
     <link href="//fonts.googleapis.com/css?family=Hind&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.0/css/all.css">
     <!-- //web fonts -->
-    
+
     <link rel="stylesheet" href="~/css/owl-carousel.css" />
     @* <link rel="stylesheet" href="~/css/fontawesome.css" /> *@
     <link rel="stylesheet" href="~/css/bootstrap.css" />
@@ -18,6 +18,7 @@
     <script src="~/js/jquery-3.3.1.min.js"></script>
     <script src="~/js/owl.carousel.js"></script>
     <script src="~/js/bootstrap.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
 </head>
 <body>
@@ -39,7 +40,7 @@
       <li><a class="text-white d-block d-lg-none" href="tel:0916-544-389">0916-544-389</a></li>
 		</div>
 		<div class="accounts col-sm-6 col-4 pr-0">
-				<li class="top_li1"><a href="/Home/Index">登出</a></li>
+            <li class="top_li1">@Html.ActionLink("登出", "Logout", "Home", new { @class = "nav-link" })@*<a href="/Home/Index">登出</a>*@</li>
 		</div>
 		
 	</header>
@@ -50,14 +51,15 @@
 <section class="bootstrap-header">
   <nav class="navbar navbar-expand-sm navbar-light py-lg-2 py-2">
     <div class="container">         
-      <a class="navbar-brand" href="/Home/MemberCenter">
+      <a class="navbar-brand" href="@Url.Action("MemberCenter", "Recevie")">
         <img src="~/images/logo.svg" alt="岳沐企業" title="岳沐企業" style="height:46px;" />
       </a>
       
       <div class="navbar scroll" id="navbarContent">
         <ul class="navbar-nav mx-auto">
           <li class="nav-item">
-            <a class="nav-link" href="/Home/Apply">資金申請</a>
+            @Html.ActionLink("資金申請", "Apply", "Recevie", null, new { @class = "nav-link" })
+            @*<a class="nav-link" href="/Home/Apply">資金申請</a>*@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="https://666.yurich.com.tw/" target="_blank">帳務資訊</a>
@@ -66,7 +68,8 @@
             <a class="nav-link" href="https://9797888.yurich.com.tw/9797888/CustomerService/CustomerServiceLogin" target="_blank">線上櫃台</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/Home/MemberSetting">基本資料修改</a>
+            @Html.ActionLink("基本資料修改", "MemberSetting", "Member", null, new { @Class = "nav-link" })
+            @*<a class="nav-link" href="/Home/MemberSetting">基本資料修改</a>*@
           </li>
         </ul>
       </div>
@@ -111,13 +114,16 @@
     </script>
     <!-- /move top -->
 </section>
-
+@Html.Hidden("errMsg", ViewData["errMsg"] == null ? "" : ViewData["errMsg"].ToString())
 <script>
-  $(function () {
-    $('.navbar-toggler').click(function () {
-      $('body').toggleClass('noscroll');
-    })
-  });
+    $(function () {
+        $('.navbar-toggler').click(function () {
+            $('body').toggleClass('noscroll');
+        })
+        if ($('input[name="errMsg"]').val() != '') {
+            alert($('input[name="errMsg"]').val());
+        }
+    });
 </script>
 
     @await RenderSectionAsync("Scripts", required: false)
