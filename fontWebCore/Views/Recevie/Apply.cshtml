@@ -51,28 +51,28 @@
                                 <div class="form-row align-items-center">
                                     @if (Model.paymentInput.Count == 0)
                                     {
-                                        <div class="col-5">
+                                        <div class="col-lg-5 col-4">
                                             <label class="require-item" for="staging_num">期數</label>
                                             <input type="text" class="form-control" name="paymentInput[0].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" required />
                                         </div>
-                                        <div class="col-lg-6 col-5">
+                                        <div class="col-md-6 col-7">
                                             <label class="require-item" for="staging_num_amount">每期總繳金額</label>
                                             <input type="text" class="form-control" name="paymentInput[0].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" required />
                                         </div>
                                         <div class="col-1">
                                             <label for="" style="visibility:hidden;">add</label>
-                                            <button type="button" class="btn btn-info btn-sm" id="addLine"><i class="fas fa-plus"></i></button>
+                                            <button type="button" class="btn btn-add btn-opposite btn-sm" id="addLine"><i class="fas fa-plus"></i></button>
                                         </div>
                                     }
                                     else
                                     {
                                         for (int i = 0; i < Model.paymentInput.Count; i++)
                                         {
-                                            <div class="col-5">
+                                            <div class="col-lg-5 col-4">
                                                 <label class="require-item" for="staging_num">期數</label>
                                                 <input type="text" class="form-control" name="paymentInput[@i].num" placeholder="" inputmode="numeric" value="@Model.paymentInput[i].num" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" required />
                                             </div>
-                                            <div class="col-lg-6 col-5">
+                                            <div class="col-md-6 col-7">
                                                 <label class="require-item" for="staging_num_amount">每期總繳金額</label>
                                                 <input type="text" class="form-control" name="paymentInput[@i].num_amount" placeholder="月付款" inputmode="numeric" value="@Model.paymentInput[i].num_amount" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" required />
                                             </div>
@@ -80,7 +80,7 @@
                                             {
                                                 <div class="col-1">
                                                     <label for="" style="visibility:hidden;">add</label>
-                                                    <button type="button" class="btn btn-info btn-sm" id="addLine"><i class="fas fa-plus"></i></button>
+                                                    <button type="button" class="btn btn-add btn-opposite btn-sm" id="addLine"><i class="fas fa-plus"></i></button>
                                                 </div>
                                             }
                                             else
@@ -91,18 +91,6 @@
                                             }
                                         }
                                     }
-                                    @*<div class="col-5">
-                                        <label class="require-item" for="staging_num">期數</label>
-                                        <input type="number" class="form-control" name="paymentInput[0].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" required />
-                                    </div>
-                                    <div class="col-lg-6 col-5">
-                                        <label class="require-item" for="staging_num_amount">每期總繳金額</label>
-                                        <input type="number" class="form-control" name="paymentInput[0].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" required />
-                                    </div>
-                                    <div class="col-1">
-                                        <label for="" style="visibility:hidden;">add</label>
-                                        <button type="button" class="btn btn-add" id="addLine"><i class="fas fa-plus"></i></button>
-                                    </div>*@
                                 </div>
                             </div>
                             <script>
@@ -110,10 +98,10 @@
                                     var appendItems = $(".add-line").find(".form-row");
                                     var len = appendItems.length;
                                     var addinput = $(`<div class="form-row align-items-center pt-2">
-                                                        <div class="col-5">
+                                                        <div class="col-lg-5 col-4">
                                                             <input type="text" class="form-control" name="paymentInput[`+ len + `].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "期數" required />
                                                         </div>
-                                                        <div class="col-lg-6 col-5">
+                                                        <div class="col-md-6 col-7">
                                                             <input type="text" class="form-control" name="paymentInput[`+ len + `].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "每期總繳金額" required />
                                                         </div>
 
