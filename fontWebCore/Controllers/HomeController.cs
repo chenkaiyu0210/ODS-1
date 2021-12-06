@@ -28,12 +28,14 @@ namespace fontWebCore.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ODSContext _context;
         private readonly ICaptcha _captcha;
+        private readonly settingConifgModel _setting;
 
         public HomeController(IServiceProvider provider)
         {
             _logger = (ILogger<HomeController>)provider.GetService(typeof(ILogger<HomeController>));
             _context = (ODSContext)provider.GetService(typeof(ODSContext));
             _captcha = (ICaptcha)provider.GetService(typeof(ICaptcha));
+            _setting = (settingConifgModel)provider.GetService(typeof(settingConifgModel));
         }
         /// <summary>
         /// 首頁
@@ -124,6 +126,31 @@ namespace fontWebCore.Controllers
             await HttpContext.SignOutAsync();
 
             return RedirectToAction("Index");
+        }
+        /// <summary>
+        /// 聯絡我們
+        /// </summary>
+        [AllowAnonymous,HttpPost]
+        public IActionResult conactUs (viewModelConact model)
+        {
+            try
+            {
+                string _subject = $"聯絡我們:{model.name}";
+                string _body = model.message;
+
+                if (!string.IsNullOrWhiteSpace(model.lineID))
+                {
+                    _subject += "，LINE ID:" + model.lineID;
+                }
+
+                //CommonHelpers.SendMail(_setting.setMail.mailAccount, model.email, _subject, _body, _setting.setMail);
+                CommonHelpers.SendMail("hayabusa731213@gmail.com", model.email, _subject, _body, _setting.setMail);
+                return Json("OK");
+            }
+            catch (Exception ex)
+            {
+                return Json("Err," + ex.Message);                
+            }            
         }
         /// <summary>
         /// 產生驗證碼

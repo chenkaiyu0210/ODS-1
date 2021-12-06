@@ -349,14 +349,15 @@
                 <h3 class="cont-head">聯絡我們</h3>
                 <div class="d-grid align-form-map">
                     <div class="form-inner-cont">                    
-                        <form action="" method="post" class="main-input">
+                        <form action="@Url.Action("conactUs", "Home")" method="post" class="main-input">
+                            @Html.AntiForgeryToken()
                             <div class="top-inputs d-grid">
                                 <input type="text" placeholder="稱呼" name="name" id="name">
                                 <input type="text" name="lineID" placeholder="LINE ID" id="lineID">
                             </div>
                             <input type="text" placeholder="手機號碼" name="phone" id="phone" required="">
                             <input type="email" name="email" placeholder="email" id="email" required="">
-                            <textarea placeholder="問題留言" name="essage" id="message"></textarea>
+                            <textarea placeholder="問題留言" name="message" id="message"></textarea>
                             <div class="text-right">
                                 <button type="submit" class="btn btn-block btn-theme3">送出</button>
                             </div>

@@ -1,7 +1,9 @@
-﻿using System;
+﻿using fontWebCore.Models;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Net.Security;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
@@ -123,17 +125,16 @@ namespace fontWebCore.Common.Function
             }
             return false;
         }
-
         public static string CallMessage(string url, string postData)
         {
             string result = "";
             try
-            {
+            {                
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(url));
                 request.Method = "POST";
                 request.ContentType = "application/x-www-form-urlencoded";
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-                ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(ValidateServerCertificate);
+                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(ValidateServerCertificate);
                 byte[] bs = System.Text.Encoding.UTF8.GetBytes(postData);
                 request.ContentLength = bs.Length;
                 request.GetRequestStream().Write(bs, 0, bs.Length);
@@ -147,6 +148,29 @@ namespace fontWebCore.Common.Function
                 return "false";
             }
             return result;
+        }
+        public static void SendMail(string mailTo ,string mailFrom , string mailSubject , string mailBody, setMailModel model)
+        {
+            using (var message = new MailMessage())
+            {
+                //收件人
+                message.To.Add(new MailAddress(mailTo));
+                //From地址很重要。是郵件顯示來自的郵件地址，也是郵件客戶端中點擊回復按鈕時回復的地址。
+                message.From = new MailAddress(mailFrom);
+                message.Subject = mailSubject;
+                message.Body = mailBody;
+                message.IsBodyHtml = true;
+                //使用using，因為MailMessage實現了IDisposable接口。
+                using (var client = new SmtpClient(model.mailSmtp))
+                {
+                    client.Port = 587;
+                    //gmail帳戶及密碼
+                    //client.Credentials = new NetworkCredential(model.mailUser, model.mailPassword);
+                    client.Credentials = new NetworkCredential("hayabusa731213@gmail.com", "Diano0605");
+                    client.EnableSsl = true;
+                    client.Send(message);
+                }
+            }
         }
         public static bool ValidateServerCertificate(Object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {

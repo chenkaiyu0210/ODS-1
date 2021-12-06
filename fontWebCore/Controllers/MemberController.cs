@@ -3,14 +3,18 @@ using fontWebCore.Common.Function;
 using fontWebCore.Models;
 using fontWebCore.Models.Repositories;
 using fontWebCore.Models.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -105,7 +109,7 @@ namespace fontWebCore.Controllers
             return View(new viewModelMember());
         }
         [AllowAnonymous, HttpPost]
-        public IActionResult Register(viewModelMember model)
+        public async Task<IActionResult> Register(viewModelMember model)
         {
             try
             {
@@ -136,9 +140,26 @@ namespace fontWebCore.Controllers
                     m.is_enable = true;
 
                     _context.members.Update(m);
-
                     _context.SaveChanges();
-                    return RedirectToAction("MemberCenter", "Receive");
+
+
+                    //帳密都輸入正確，ASP.net Core要多寫三行程式碼 
+                    Claim[] claims = new[] { new Claim("memberInfo", JsonConvert.SerializeObject(m)) }; //Key取名"Account"，在登入後的頁面，讀取登入者的帳號會用得到，自己先記在大腦
+                    ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);//Scheme必填
+                    ClaimsPrincipal principal = new ClaimsPrincipal(claimsIdentity);
+
+
+                    //從組態讀取登入逾時設定
+                    //double loginExpireMinute = this.config.GetValue<double>("LoginExpireMinute");
+                    //執行登入，相當於以前的FormsAuthentication.SetAuthCookie()
+                    await HttpContext.SignInAsync(principal,
+                         new AuthenticationProperties()
+                         {
+                             IsPersistent = false, //IsPersistent = false：瀏覽器關閉立馬登出；IsPersistent = true 就變成常見的Remember Me功能
+                                                   //用戶頁面停留太久，逾期時間，在此設定的話會覆蓋Startup.cs裡的逾期設定
+                            /* ExpiresUtc = DateTime.UtcNow.AddMinutes(loginExpireMinute) */
+                         });
+                    return RedirectToAction("MemberCenter", "Recevie");                    
 
                 }
                 else
