@@ -165,8 +165,8 @@ namespace fontWebCore.Common.Function
                 {
                     client.Port = 587;
                     //gmail帳戶及密碼
-                    //client.Credentials = new NetworkCredential(model.mailUser, model.mailPassword);
-                    client.Credentials = new NetworkCredential("hayabusa731213@gmail.com", "Diano0605");
+                    client.Credentials = new NetworkCredential(model.mailAccount, model.mailPassword);
+                    //client.Credentials = new NetworkCredential("hayabusa731213@gmail.com", "mksmugufoertwsyr");
                     client.EnableSsl = true;
                     client.Send(message);
                 }

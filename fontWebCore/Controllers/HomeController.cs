@@ -143,13 +143,14 @@ namespace fontWebCore.Controllers
                     _subject += "，LINE ID:" + model.lineID;
                 }
 
-                //CommonHelpers.SendMail(_setting.setMail.mailAccount, model.email, _subject, _body, _setting.setMail);
-                CommonHelpers.SendMail("hayabusa731213@gmail.com", model.email, _subject, _body, _setting.setMail);
-                return Json("OK");
+                CommonHelpers.SendMail(_setting.setMail.mailAccount, model.email, _subject, _body, _setting.setMail);               
+                ViewData["errMsg"] = "信件已發送。";
+                return View("Index");
             }
             catch (Exception ex)
             {
-                return Json("Err," + ex.Message);                
+                ViewData["errMsg"] = "信件發送錯誤，請洽專人。";
+                return View("Index");
             }            
         }
         /// <summary>
