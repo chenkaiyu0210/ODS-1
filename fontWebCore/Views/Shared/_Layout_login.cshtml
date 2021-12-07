@@ -19,7 +19,7 @@
     <script src="~/js/owl.carousel.js"></script>
     <script src="~/js/bootstrap.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-
+    <script src="~/js/notify.min.js"></script>
 </head>
 <body>
 
@@ -121,7 +121,8 @@
             $('body').toggleClass('noscroll');
         })
         if ($('input[name="errMsg"]').val() != '') {
-            alert($('input[name="errMsg"]').val());
+            $.notify($('input[name="errMsg"]').val(), { className: "Error", position: "top center" });
+            //alert($('input[name="errMsg"]').val());
         }
     });
 </script>

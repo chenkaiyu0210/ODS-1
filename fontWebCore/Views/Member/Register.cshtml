@@ -17,7 +17,7 @@
         <p class="title">會員註冊</p>
         @Html.AntiForgeryToken()
         @Html.HiddenFor(o => o.customer_id)
-        <input type="text" class="uppercase" name="customer_idcard_no" placeholder="身分證字號" maxlength="10" minlength="10" autofocus required autocomplete="on" value="@Model.customer_idcard_no" />
+        <input type="text" class="uppercase" name="customer_idcard_no" placeholder="身分證字號" maxlength="10" minlength="10" autofocus required autocomplete="on" value="@Model.customer_idcard_no" onblur="checkIdcardNo();" />
         <i class="fa fa-user"></i>
         <input type="password" placeholder="設定密碼" name="password" maxlength="6" minlength="6" required autocomplete="off" value="@Model.password" />
         <i class="fa fa-key"></i>
@@ -104,5 +104,19 @@
                 }
             })
         }
+    }
+    function checkIdcardNo() {
+        $.ajax({
+            url: '@Url.Action("checkIdcardNo", "Member")',
+            data: { idcardNo: $('input[name="customer_idcard_no"]').val() },
+            type: "GET",
+            success: function (data) {
+                if (data.code == "1") {
+                    $.notify(data.msg, { className: "Warning", position: "top center" });
+                    //alert(data.msg);
+                    $('input[name="customer_idcard_no"]').val("");
+                }                   
+            }
+        })
     }
 </script>

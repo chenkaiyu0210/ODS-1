@@ -9,7 +9,7 @@
     <link href="//fonts.googleapis.com/css?family=Hind&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.0/css/all.css">
     <!-- //web fonts -->
-    
+
     <link rel="stylesheet" href="~/css/owl-carousel.css" />
     @* <link rel="stylesheet" href="~/css/fontawesome.css" /> *@
     <link rel="stylesheet" href="~/css/bootstrap.css" />
@@ -19,10 +19,11 @@
     <script src="~/js/owl.carousel.js"></script>
     <script src="~/js/bootstrap.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    
+    <script src="~/js/notify.min.js"></script>
 </head>
 <body>
-    <!-- Top Menu 1 -->
+
+<!-- Top Menu 1 -->
 <section class="top-menu-1">
 	<div class="top-hd">
 		<div class="container">
@@ -126,7 +127,8 @@
             $('body').toggleClass('noscroll');
         })
         if ($('input[name="errMsg"]').val() != '') {
-            alert($('input[name="errMsg"]').val());
+            $.notify($('input[name="errMsg"]').val(), { className: "Error", position: "top center" });
+            //alert($('input[name="errMsg"]').val());
         }
     });
 </script>

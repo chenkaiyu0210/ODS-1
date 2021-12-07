@@ -104,9 +104,10 @@ namespace fontWebCore.Controllers
         /// 會員註冊
         /// </summary>
         [AllowAnonymous]
-        public IActionResult Register()
+        public IActionResult Register(string customer_idcard_no)
         {
-            return View(new viewModelMember());
+            ViewData["errMsg"] = this.TransferControllerMsg;
+            return View(new viewModelMember { customer_idcard_no = customer_idcard_no });
         }
         [AllowAnonymous, HttpPost]
         public async Task<IActionResult> Register(viewModelMember model)
@@ -347,6 +348,21 @@ namespace fontWebCore.Controllers
                 return RedirectToAction("Error", "Home");
             }
 
+        }
+        [AllowAnonymous]
+        public IActionResult checkIdcardNo(string idcardNo)
+        {
+            try
+            {
+                members m = _context.members.FromSqlRaw($"select * from members where customer_idcard_no = @idcardNo", new object[] {
+                        new SqlParameter { ParameterName = "idcardNo", Value = idcardNo } }).FirstOrDefault();
+                return Json(m != null ? new { code = "1", msg = "該身分證已有註冊" } : new { code = "0" });
+
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home");
+            }           
         }
     }
 }

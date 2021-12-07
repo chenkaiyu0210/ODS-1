@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace fontWebCore.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ODSContext _context;
@@ -109,10 +109,11 @@ namespace fontWebCore.Controllers
                 }
                 else
                 {
-                    return View();
+                    this.TransferControllerMsg = "請先加入成為會員!";
+                    return RedirectToAction("Register", "Member", new { customer_idcard_no = model.idcard_no });
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return RedirectToAction("Error");
             }

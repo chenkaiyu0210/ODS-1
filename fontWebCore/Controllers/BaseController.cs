@@ -16,6 +16,12 @@ namespace fontWebCore.Controllers
                 return claim != null ? JsonConvert.DeserializeObject<viewModelMember>(claim.Value) : null;
             }
         }
+        
+        public string TransferControllerMsg
+        {            
+            set { TempData["Transfer"] = value; }
+            get { return TempData["Transfer"] != null ? TempData["Transfer"].ToString() : ""; }
+        }
         #endregion
     }
 }
