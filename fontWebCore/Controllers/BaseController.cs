@@ -22,6 +22,14 @@ namespace fontWebCore.Controllers
             set { TempData["Transfer"] = value; }
             get { return TempData["Transfer"] != null ? TempData["Transfer"].ToString() : ""; }
         }
+
+        public System.DateTime TaiwanDateTime
+        {
+            get
+            {
+                return System.TimeZoneInfo.ConvertTimeBySystemTimeZoneId(System.DateTime.Now, "Taipei Standard Time");
+            }
+        }
         #endregion
     }
 }

@@ -12,7 +12,7 @@
                     <h4>最近一次申辦成功時間</h4>
                     <h3>@Model.recevie_date.Value.ToString("yyyy/MM/dd HH:mm:ss")</h3>
                     @{
-                        int reciprocal = 30 - (DateTime.Now - Model.recevie_date.Value).Days;
+                        int reciprocal = 30 - (TimeZoneInfo.ConvertTimeBySystemTimeZoneId(System.DateTime.Now, "Taipei Standard Time") - Model.recevie_date.Value).Days;
                     }
                     @if (reciprocal > 0)
                     {

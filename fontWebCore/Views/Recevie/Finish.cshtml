@@ -9,8 +9,8 @@
       <h4 class="pb-1">我們將在審核完畢後立即與您聯繫</h4>
       <img src="~/images/success.svg" alt="恭喜您已成功提交申請書" class="img-fluid" width="400px">
 
-      <h5 class="pt-4 pb-2">2021/09/08 15:00 已送件<br>
-        請加入<a href="https://liff.line.me/1645278921-kWRPP32q/?accountId=rym-i-money">LINE洽客服人員</a>
+      <h5 class="pt-4 pb-2">@(TimeZoneInfo.ConvertTimeBySystemTimeZoneId(System.DateTime.Now, "Taipei Standard Time").ToString("yyyy/MM/dd HH:mm")) 已送件<br>
+        請加入<a target="_blank" href="https://liff.line.me/1645278921-kWRPP32q/?accountId=rym-i-money">LINE洽客服人員</a>
       </h5>
       <p class="pb-2">( 審核通常在兩個小時內完成，請留意您的手機，若超過平日晚間八點或假日晚間五點，則會隔日通知您。 )</p>
 
@@ -25,7 +25,7 @@
       <h5>「反詐騙 諮詢專線165」電話，提供民眾諮詢</h5>
 
       <div class="d-flex justify-content-center pt-3">
-          <button type="button" class="btn btn-opposite rounded-pill py-2 px-4" onclick="location.href='/Home/MemberCenter'">回首頁</button>
+          <button type="button" class="btn btn-opposite rounded-pill py-2 px-4" onclick="location.href = '@Url.Action("MemberCenter", "Recevie")'">回首頁</button>
       </div>
     </div>
   </div>

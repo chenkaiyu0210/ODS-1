@@ -42,8 +42,17 @@ namespace fontWebCore.Controllers
             members m = _context.members.FromSqlRaw($"select * from members where customer_id = @customer_id", new object[] {
                         new SqlParameter { ParameterName = "customer_id", Value =  this.MemberInfo.customer_id }
                 }).FirstOrDefault();
-
-            return View(CommonHelpers.Migration<members, viewModelMember>(m));
+            viewModelMember item = CommonHelpers.Migration<members, viewModelMember>(m);
+            if (item != null)
+            {               
+                if (item.customer_birthday.HasValue)
+                {
+                    item.customer_birthdayYY = (item.customer_birthday.Value.Year - 1911).ToString();
+                    item.customer_birthdayMM = item.customer_birthday.Value.Month.ToString();
+                    item.customer_birthdayDD = item.customer_birthday.Value.Day.ToString();
+                }
+            }
+            return View(item);
         }
         [HttpPost]
         public IActionResult MemberSetting(viewModelMember model)
@@ -51,10 +60,11 @@ namespace fontWebCore.Controllers
             try
             {
                 members chk = _context.members.FromSqlRaw($"select * from members where customer_id = @customer_id", new object[] {
-                        new SqlParameter { ParameterName = "customer_id", Value =  model.customer_id }
-                }).FirstOrDefault();
-                SHA256Processor sHA256Processor = new SHA256Processor(chk.salt_key);
-                string _pwd = Encoding.UTF8.GetString(sHA256Processor.Encode(Encoding.UTF8.GetBytes(model.password)));
+                        new SqlParameter { ParameterName = "customer_id", Value =  model.customer_id , DbType = System.Data.DbType.Guid }
+                }).AsNoTracking().FirstOrDefault();
+                viewModelMember insertModel = CommonHelpers.Migration<members, viewModelMember>(chk);
+                SHA256Processor sHA256Processor;
+                string _pwd = string.Empty;
                 #region 檢核
                 if (model.customer_mobile_phone != model.last_mobile_phone)
                 {
@@ -65,16 +75,28 @@ namespace fontWebCore.Controllers
                         return View(model);
                     }
                 }
-                if (chk.password != _pwd)
+                if (!string.IsNullOrWhiteSpace(model.new_password))
                 {
-                    ViewData["errMsg"] = "舊密碼不符";
-                    return View(model);
-                }
-                if (model.new_password != model.confirm_password)
-                {
-                    ViewData["errMsg"] = "新密碼與確認密碼不符";
-                    return View(model);
-                }
+                    sHA256Processor = new SHA256Processor(chk.salt_key);
+                    _pwd = Encoding.UTF8.GetString(sHA256Processor.Encode(Encoding.UTF8.GetBytes(model.password)));
+
+                    if (chk.password != _pwd)
+                    {
+                        ViewData["errMsg"] = "舊密碼不符";
+                        return View(model);
+                    }
+                    if (model.new_password != model.confirm_password)
+                    {
+                        ViewData["errMsg"] = "新密碼與確認密碼不符";
+                        return View(model);
+                    }
+                    string _salt = CommonHelpers.GeneratePassword(6);
+                    sHA256Processor = new SHA256Processor(_salt);
+                    _pwd = Encoding.UTF8.GetString(sHA256Processor.Encode(Encoding.UTF8.GetBytes(model.new_password)));
+                    insertModel.salt_key = _salt;
+                    insertModel.password = _pwd;
+                }               
+                
                 int.TryParse(model.customer_birthdayYY, out int yy);
                 int.TryParse(model.customer_birthdayMM, out int mm);
                 int.TryParse(model.customer_birthdayDD, out int dd);
@@ -83,14 +105,13 @@ namespace fontWebCore.Controllers
                     ViewData["errMsg"] = "出生日期錯誤!";
                     return View(model);
                 }
+                insertModel.customer_birthday = BD;
                 #endregion
+                insertModel.customer_email = model.customer_email;
+                insertModel.customer_name = model.customer_name;
 
-                string _salt = CommonHelpers.GeneratePassword(6);
-                _pwd = Encoding.UTF8.GetString(sHA256Processor.Encode(Encoding.UTF8.GetBytes(model.new_password)));
-                model.customer_birthday = BD;
-                model.salt_key = _salt;
-                model.password = _pwd;
-                _context.members.Update(CommonHelpers.Migration<viewModelMember, members>(model));
+
+                _context.members.Update(CommonHelpers.Migration<viewModelMember, members>(insertModel));
                 _context.SaveChanges();
                 ViewData["errMsg"] = "修改完成";
                 return View(model);
@@ -136,7 +157,7 @@ namespace fontWebCore.Controllers
                     m.customer_mobile_phone = model.customer_mobile_phone;                    
                     m.password = _pwd;
                     m.salt_key = _salt;
-                    m.register_time = DateTime.Now;
+                    m.register_time = this.TaiwanDateTime;
                     m.sms_is_verify = true;
                     m.is_enable = true;
 
@@ -245,6 +266,10 @@ namespace fontWebCore.Controllers
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(mobile) && string.IsNullOrWhiteSpace(customer_idcard_no) && string.IsNullOrWhiteSpace(customer_id))
+                {
+                    return Json(new { code = "0", msg = "輸入錯誤" });
+                }
                 string strSql = "select * from members where 1 = 1";
                 object[] parameters;
                 if(!string.IsNullOrWhiteSpace(mobile) && !string.IsNullOrWhiteSpace(customer_idcard_no))
@@ -255,18 +280,18 @@ namespace fontWebCore.Controllers
                         new SqlParameter { ParameterName = "customer_idcard_no", Value = customer_idcard_no }
                     };
                 }
-                else if (!string.IsNullOrWhiteSpace(mobile))
-                {
-                    strSql += "AND customer_mobile_phone = @customer_mobile_phone";
+                else if (!string.IsNullOrWhiteSpace(customer_id))
+                {                    
+                    strSql += "AND customer_id = @customer_id";
                     parameters = new object[] {
-                        new SqlParameter { ParameterName = "customer_mobile_phone", Value = mobile }
+                        new SqlParameter { ParameterName = "customer_id", Value = customer_id }
                     };
                 }
                 else
                 {
-                    strSql += "AND customer_id = @customer_id";
+                    strSql += "AND customer_mobile_phone = @customer_mobile_phone";
                     parameters = new object[] {
-                        new SqlParameter { ParameterName = "customer_id", Value = customer_id }
+                        new SqlParameter { ParameterName = "customer_mobile_phone", Value = mobile }
                     };
                 }
                 members m = _context.members.FromSqlRaw(strSql, parameters).FirstOrDefault();
@@ -281,9 +306,9 @@ namespace fontWebCore.Controllers
                     postDataSb.Append("&DEST=").Append(mobile);
                     postDataSb.Append("&ST=").Append("");
                     string resultString = CommonHelpers.CallMessage(_setting.every8dUrl, postDataSb.ToString());
-
+                    //CreateLog(resultString);
                     m.sms_verify_code = VerificateCode;
-                    m.sms_is_verify = false;
+                    //m.sms_is_verify = false;
                     _context.members.Update(m);
 
                     _context.SaveChanges();
@@ -304,7 +329,7 @@ namespace fontWebCore.Controllers
                     postDataSb.Append("&DEST=").Append(mobile);
                     postDataSb.Append("&ST=").Append("");
                     string resultString = CommonHelpers.CallMessage(_setting.every8dUrl, postDataSb.ToString());
-
+                    //CreateLog(resultString);
                     string _id = Guid.NewGuid().ToString();
                     _context.members.Add(new Models.Repositories.members
                     {
@@ -363,6 +388,17 @@ namespace fontWebCore.Controllers
             {
                 return RedirectToAction("Error", "Home");
             }           
+        }
+
+        public void CreateLog(string msg)
+        {
+            _context.logJson.Add(new logJson
+            {
+                log_id = Guid.NewGuid(),
+                source = "sendSms",
+                request_json = msg,
+                request_time = this.TaiwanDateTime
+            });
         }
     }
 }

@@ -129,23 +129,21 @@ namespace fontWebCore.Common.Function
         {
             string result = "";
             try
-            {                
+            {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(url));
                 request.Method = "POST";
                 request.ContentType = "application/x-www-form-urlencoded";
-                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-                //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(ValidateServerCertificate);
                 byte[] bs = System.Text.Encoding.UTF8.GetBytes(postData);
                 request.ContentLength = bs.Length;
                 request.GetRequestStream().Write(bs, 0, bs.Length);
                 //取得 WebResponse 的物件 然後把回傳的資料讀出
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 StreamReader sr = new StreamReader(response.GetResponseStream());
-                result = sr.ReadToEnd();
+                result = sr.ReadToEnd();                
             }
             catch (Exception ex)
             {
-                return "false";
+                return ex.ToString();
             }
             return result;
         }

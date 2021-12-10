@@ -68,6 +68,7 @@ namespace fontWebCore.Controllers
                     string _pwd = Encoding.UTF8.GetString(sHA256Processor.Encode(Encoding.UTF8.GetBytes(model.password)));
                     if (_pwd != m.password)
                     {
+                        ViewData["errMsg"] = "帳號密碼不符";
                         return View();
                     }
                     else

@@ -28,5 +28,6 @@ namespace backendWeb.Models.Repositories
         public virtual DbSet<recevieCases> recevieCases { get; set; }
         public virtual DbSet<postfile> postfile { get; set; }
         public virtual DbSet<members> members { get; set; }
+        public virtual DbSet<logJson> logJson { get; set; }
     }
 }

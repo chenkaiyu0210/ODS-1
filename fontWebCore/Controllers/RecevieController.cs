@@ -34,7 +34,7 @@ namespace fontWebCore.Controllers
             //        }).FirstOrDefault();
             //if (chk != null)
             //{
-            //    int reciprocal = 30 - (DateTime.Now - chk.recevie_date.Value).Days;
+            //    int reciprocal = 30 - (this.TaiwanDateTime - chk.recevie_date.Value).Days;
             //    if (reciprocal > 0)
             //    {
             //        ViewData["errMsg"] = $"提醒您：尚有{reciprocal}天可再次提出申辦";
@@ -121,15 +121,18 @@ namespace fontWebCore.Controllers
                 #endregion
                 model.recevie_id = Guid.NewGuid();
                 model.recevie_status = "0";
-                model.recevie_date = DateTime.Now;
-
-                //members m = _context.members.FromSqlRaw($"select * from members WHERE customer_idcard_no = '{model.customer_idcard_no}' AND ISNULL(customer_name,'') = '' AND ISNULL(customer_birthday,'') = ''").FirstOrDefault();
-                //if (m != null)
-                //{
-                //    m.customer_name = model.customer_name;
-                //    m.customer_birthday = BD;
-                //    _context.members.Update(m);
-                //}
+                model.recevie_date = this.TaiwanDateTime;
+                
+                members m = _context.members.FromSqlRaw($"select * from members WHERE customer_idcard_no = '{model.customer_idcard_no}' AND ISNULL(customer_name,'') = '' AND ISNULL(customer_birthday,'') = ''").FirstOrDefault();
+                if (m != null)
+                {
+                    if (string.IsNullOrWhiteSpace(m.customer_name) || !m.customer_birthday.HasValue)
+                    {
+                        m.customer_name = model.customer_name;
+                        m.customer_birthday = BD;
+                        _context.members.Update(m);
+                    }
+                }
                 //儲存資料                
                 _context.recevieCases.Add(CommonHelpers.Migration<viewModelReceiveCase, recevieCases>(model));
                 _context.SaveChanges();

@@ -5,6 +5,18 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="RYMimoneyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="logJson">
+          <Key>
+            <PropertyRef Name="log_id" />
+          </Key>
+          <Property Name="log_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="company" Type="varchar" MaxLength="1" />
+          <Property Name="source" Type="nvarchar" MaxLength="50" />
+          <Property Name="request_json" Type="nvarchar(max)" />
+          <Property Name="request_time" Type="datetime" />
+          <Property Name="response_json" Type="nvarchar(max)" />
+          <Property Name="response_time" Type="datetime" />
+        </EntityType>
         <EntityType Name="members">
           <Key>
             <PropertyRef Name="customer_id" />
@@ -101,6 +113,7 @@
           <Property Name="is_secret" Type="bit" />
         </EntityType>
         <EntityContainer Name="RYMimoneyModelStoreContainer">
+          <EntitySet Name="logJson" EntityType="Self.logJson" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="members" EntityType="Self.members" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="postfile" EntityType="Self.postfile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="recevieCases" EntityType="Self.recevieCases" Schema="dbo" store:Type="Tables" />
@@ -113,6 +126,7 @@
           <EntitySet Name="recevieCases" EntityType="RYMimoneyModel.recevieCases" />
           <EntitySet Name="postfile" EntityType="RYMimoneyModel.postfile" />
           <EntitySet Name="members" EntityType="RYMimoneyModel.members" />
+          <EntitySet Name="logJson" EntityType="RYMimoneyModel.logJson" />
         </EntityContainer>
         <EntityType Name="recevieCases">
           <Key>
@@ -208,6 +222,18 @@
           <Property Name="sms_verify_code" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
           <Property Name="sms_is_verify" Type="Boolean" />
           <Property Name="is_enable" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="logJson">
+          <Key>
+            <PropertyRef Name="log_id" />
+          </Key>
+          <Property Name="log_id" Type="Guid" Nullable="false" />
+          <Property Name="company" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="source" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="request_json" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="request_time" Type="DateTime" Precision="3" />
+          <Property Name="response_json" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="response_time" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -309,6 +335,19 @@
                 <ScalarProperty Name="customer_idcard_no" ColumnName="customer_idcard_no" />
                 <ScalarProperty Name="customer_name" ColumnName="customer_name" />
                 <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="logJson">
+            <EntityTypeMapping TypeName="RYMimoneyModel.logJson">
+              <MappingFragment StoreEntitySet="logJson">
+                <ScalarProperty Name="response_time" ColumnName="response_time" />
+                <ScalarProperty Name="response_json" ColumnName="response_json" />
+                <ScalarProperty Name="request_time" ColumnName="request_time" />
+                <ScalarProperty Name="request_json" ColumnName="request_json" />
+                <ScalarProperty Name="source" ColumnName="source" />
+                <ScalarProperty Name="company" ColumnName="company" />
+                <ScalarProperty Name="log_id" ColumnName="log_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

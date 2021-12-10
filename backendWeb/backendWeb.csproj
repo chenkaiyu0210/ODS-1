@@ -146,6 +146,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Repositories\logJson.cs">
+      <DependentUpon>rymimoney.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Repositories\members.cs">
       <DependentUpon>rymimoney.tt</DependentUpon>
     </Compile>
@@ -2057,6 +2060,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\ViewModel\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

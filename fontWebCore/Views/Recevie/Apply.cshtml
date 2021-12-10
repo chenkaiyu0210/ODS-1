@@ -52,12 +52,12 @@
                                     @if (Model.paymentInput.Count == 0)
                                     {
                                         <div class="col-lg-5 col-4">
-                                            <label class="require-item" for="staging_num">期數</label>
-                                            <input type="text" class="form-control" name="paymentInput[0].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" required />
+                                            <label class="" for="staging_num">期數</label>
+                                            <input type="text" class="form-control" name="paymentInput[0].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" />
                                         </div>
                                         <div class="col-md-6 col-7">
-                                            <label class="require-item" for="staging_num_amount">每期總繳金額</label>
-                                            <input type="text" class="form-control" name="paymentInput[0].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" required />
+                                            <label class="" for="staging_num_amount">每期總繳金額</label>
+                                            <input type="text" class="form-control" name="paymentInput[0].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" />
                                         </div>
                                         <div class="col-1">
                                             <label for="" style="visibility:hidden;">add</label>
@@ -69,12 +69,16 @@
                                         for (int i = 0; i < Model.paymentInput.Count; i++)
                                         {
                                             <div class="col-lg-5 col-4">
-                                                <label class="require-item" for="staging_num">期數</label>
-                                                <input type="text" class="form-control" name="paymentInput[@i].num" placeholder="" inputmode="numeric" value="@Model.paymentInput[i].num" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" required />
+                                                @if(i == 0){
+                                                    <label class="" for="staging_num">期數</label>
+                                                }
+                                                <input type="text" class="form-control" name="paymentInput[@i].num" placeholder="" inputmode="numeric" value="@Model.paymentInput[i].num" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" />
                                             </div>
                                             <div class="col-md-6 col-7">
-                                                <label class="require-item" for="staging_num_amount">每期總繳金額</label>
-                                                <input type="text" class="form-control" name="paymentInput[@i].num_amount" placeholder="月付款" inputmode="numeric" value="@Model.paymentInput[i].num_amount" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" required />
+                                                @if(i == 0){
+                                                    <label class="" for="staging_num_amount">每期總繳金額</label>
+                                                }                                                
+                                                <input type="text" class="form-control" name="paymentInput[@i].num_amount" placeholder="月付款" inputmode="numeric" value="@Model.paymentInput[i].num_amount" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" />
                                             </div>
                                             if (i == 0)
                                             {
@@ -99,10 +103,10 @@
                                     var len = appendItems.length;
                                     var addinput = $(`<div class="form-row align-items-center pt-2">
                                                         <div class="col-lg-5 col-4">
-                                                            <input type="text" class="form-control" name="paymentInput[`+ len + `].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "期數" required />
+                                                            <input type="text" class="form-control" name="paymentInput[`+ len + `].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "期數" />
                                                         </div>
                                                         <div class="col-md-6 col-7">
-                                                            <input type="text" class="form-control" name="paymentInput[`+ len + `].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "每期總繳金額" required />
+                                                            <input type="text" class="form-control" name="paymentInput[`+ len + `].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "每期總繳金額" />
                                                         </div>
 
                                                         <div class="col-1">
@@ -124,8 +128,14 @@
                         <div class="row">
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_name">中文姓名</label>
-                                <input alertMsg="中文姓名" class="form-control" id="customer_name" name="customer_name" placeholder="" required="required" type="text" value="@Model.customer_name" />
-                                
+                                @if (string.IsNullOrWhiteSpace(Model.customer_name))
+                                {
+                                    <input alertMsg="中文姓名" class="form-control" id="customer_name" name="customer_name" placeholder="" required="required" type="text" value="" />
+                                }
+                                else
+                                {
+                                    <input alertMsg="中文姓名" class="form-control" id="customer_name" name="customer_name" placeholder="" required="required" type="text" value="@Model.customer_name" readonly />
+                                }
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_idcard_no">身份證字號</label>
@@ -134,25 +144,41 @@
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_mobile_phone">行動電話</label>
-                                <input alertMsg="行動電話" class="form-control" id="customer_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="customer_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,'')" required="required" type="text" value="@Model.customer_mobile_phone" />
+                                <input alertMsg="行動電話" class="form-control" id="customer_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="customer_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,'')" required="required" type="text" value="@Model.customer_mobile_phone" readonly />
                                 
                             </div>
                             <div class="form-group col-12">
                                 <label class="require-item" for="customer_birthdayYY">出生日期</label>
-                                <div class="form-row">
-                                    <div class="col-4">
-                                        <input alertMsg="出生日期" class="form-control" id="customer_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="customer_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="民國年" required="required" type="text" value="@Model.customer_birthdayYY"/>
-                                        
+                                @if (string.IsNullOrWhiteSpace(Model.customer_name))
+                                {
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="customer_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="民國年" required="required" type="text" value="" />
+                                        </div>
+                                        <div class="col-4">
+                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayMM" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayMM" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="月" required="required" type="text" value="" />
+
+                                        </div>
+                                        <div class="col-4">
+                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayDD" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayDD" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="日" required="required" type="text" value="" />
+                                        </div>
                                     </div>
-                                    <div class="col-4">
-                                        <input alertMsg="出生日期" class="form-control" id="customer_birthdayMM" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayMM" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="月" required="required" type="text" value="@Model.customer_birthdayMM" />
-                                        
+                                }
+                                else
+                                {
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="customer_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="民國年" required="required" type="text" value="@Model.customer_birthdayYY" readonly/>
+                                        </div>
+                                        <div class="col-4">
+                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayMM" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayMM" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="月" required="required" type="text" value="@Model.customer_birthdayMM" readonly/>
+
+                                        </div>
+                                        <div class="col-4">
+                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayDD" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayDD" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="日" required="required" type="text" value="@Model.customer_birthdayDD" readonly/>
+                                        </div>
                                     </div>
-                                    <div class="col-4">
-                                        <input alertMsg="出生日期" class="form-control" id="customer_birthdayDD" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayDD" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="日" required="required" type="text" value="@Model.customer_birthdayDD" />
-                                        
-                                    </div>
-                                </div>
+                                }
                             </div>
                             <!-- <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="birthday">出生日期</label>

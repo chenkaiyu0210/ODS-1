@@ -56,7 +56,7 @@ namespace fontWebCore
             services.AddControllersWithViews(options =>
             {
                 //↓和CSRF資安有關，這裡就加入全域驗證範圍Filter的話，待會Controller就不必再加上[AutoValidateAntiforgeryToken]屬性
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());                
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
 
             services.AddMvc(config =>
@@ -69,39 +69,52 @@ namespace fontWebCore
                 .AddSimpleCaptcha(builder =>
                 {
                     builder.UseMemoryStore();
+                    builder.AddConfiguration(options =>
+                    {
+                        //設定驗證碼長度
+                        options.CodeLength = 6;
+                        //設定圖片大小
+                        //options.ImageWidth = 100;
+                        //options.ImageHeight = 36;
+                        //設定是否區分大小寫
+                        options.IgnoreCase = false;
+                        //驗證碼預設的有效期為5分鐘
+                        //options.ExpiryTime = TimeSpan.FromMinutes(5);
+                        options.CodeGenerator = new MyCaptchaCodeGenerator();
+                    });
                 });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();            
-            
-            app.UseRouting();
-
-            // 留意寫Code順序，先執行驗證...
-            app.UseAuthentication();
-            //Controller、Action才能加上 [Authorize] 屬性
-            app.UseAuthorization();
-
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseDeveloperExceptionPage();
         }
+        else
+        {
+            app.UseExceptionHandler("/Home/Error");
+            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            app.UseHsts();
+        }
+        app.UseHttpsRedirection();
+        app.UseStaticFiles();
+
+        app.UseRouting();
+
+        // 留意寫Code順序，先執行驗證...
+        app.UseAuthentication();
+        //Controller、Action才能加上 [Authorize] 屬性
+        app.UseAuthorization();
+
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+        });
     }
+}
 }
