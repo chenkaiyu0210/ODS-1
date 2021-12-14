@@ -26,10 +26,10 @@
             <div class="heading text-center mx-auto">
                 <h3 class="head">最新消息 News</h3>
                 <div class="news-content pt-4">
-                    <a href="#"><p class="ellipsis1" data-toggle="modal" data-target="#newsModal">原車融資最高35萬54期</p></a>
-                    <a href="#"><p class="ellipsis1" data-toggle="modal" data-target="#newsModal">商品借款分期最高33萬50期</p></a>
-                    <a href="#"><p class="ellipsis1" data-toggle="modal" data-target="#newsModal">手續費2.5%起</p></a>
-                    <a href="#"><p class="ellipsis1" data-toggle="modal" data-target="#newsModal">審核最快隔天撥款</p></a>
+                    <a href="#"><p class="ellipsis1" data-toggle="modal" data-target="#newsModal" onclick="showModal();">原車融資最高35萬54期</p></a>
+                    <a href="#"><p class="ellipsis1" data-toggle="modal" data-target="#newsModal" onclick="showModal();">商品借款分期最高33萬50期</p></a>
+                    <a href="#"><p class="ellipsis1" data-toggle="modal" data-target="#newsModal" onclick="showModal();">手續費2.5%起</p></a>
+                    <a href="#"><p class="ellipsis1" data-toggle="modal" data-target="#newsModal" onclick="showModal();">審核最快隔天撥款</p></a>
                 </div>
             </div>
         </div>
@@ -422,7 +422,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div id="newsModalContent" class="modal-body">
                 New Content
             </div>
             <div class="modal-footer">
@@ -432,4 +432,10 @@
     </div>
 </div>
 <!-- //News Modal -->
-
+<script>  
+    function showModal() {
+        var _content = $(event.target).text();
+        $('#newsModalLabel').text(_content);
+        $('#newsModalContent').text(_content);
+    }
+</script>
