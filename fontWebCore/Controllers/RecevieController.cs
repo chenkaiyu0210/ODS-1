@@ -131,11 +131,13 @@ namespace fontWebCore.Controllers
                         m.customer_name = model.customer_name;
                         m.customer_birthday = BD;
                         _context.members.Update(m);
-                    }
+                    }              
                 }
                 //儲存資料                
                 _context.recevieCases.Add(CommonHelpers.Migration<viewModelReceiveCase, recevieCases>(model));
                 _context.SaveChanges();
+                //更新登入資訊
+                //this.MemberInfo = CommonHelpers.Migration<members, viewModelMember>(m);
                 return RedirectToAction("Finish");
             }
             catch (Exception ex)

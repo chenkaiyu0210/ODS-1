@@ -114,6 +114,7 @@ namespace fontWebCore.Controllers
                 _context.members.Update(CommonHelpers.Migration<viewModelMember, members>(insertModel));
                 _context.SaveChanges();
                 ViewData["errMsg"] = "修改完成";
+                this.MemberInfo = insertModel;
                 return View(model);
             }
             catch (Exception ex)
