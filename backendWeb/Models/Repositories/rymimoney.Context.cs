@@ -29,5 +29,8 @@ namespace backendWeb.Models.Repositories
         public virtual DbSet<postfile> postfile { get; set; }
         public virtual DbSet<members> members { get; set; }
         public virtual DbSet<logJson> logJson { get; set; }
+        public virtual DbSet<backendMenu> backendMenu { get; set; }
+        public virtual DbSet<backendUser> backendUser { get; set; }
+        public virtual DbSet<backendRoleGroup> backendRoleGroup { get; set; }
     }
 }

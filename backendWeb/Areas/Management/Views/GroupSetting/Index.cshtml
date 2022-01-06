@@ -1,0 +1,48 @@
+﻿<div class="card mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">查詢</h6>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <div class="row">
+                    <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
+                        <label class="" for="search_role_group_code">角色群組代碼</label>
+                        <input class="form-control" id="search_role_group_code" name="search_role_group_code" placeholder="" type="text" value="" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="row">
+                    <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
+                        <label class="" for="search_role_group_name">角色群組名稱</label>
+                        <input class="form-control" id="search_role_group_name" name="search_role_group_name" placeholder="" type="text" value="" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex .justify-content-start pt-3">
+            <input id="btnSearch" type="button" class="btn btn-info btn-icon-split py-2 px-4" value="查詢" />
+            <input id="btnAdd" type="button" class="btn btn-success btn-icon-split btn-after py-2 px-4" value="新增" onClick="location.href='@Url.Action("Add","GroupSetting", new { Area = "Management" })'" />
+        </div>
+    </div>
+</div>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">列表</h6>
+    </div>
+    <div class="card-body">
+        <div id="dv_table" class=""></div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('#dv_table').load('@Url.Action("Table", "GroupSetting", new { Area = "Management" })');
+
+            $('#btnSearch').click(function () {
+                $('#dataTable').DataTable().ajax.reload()
+            });
+        });
+    </script>
+}

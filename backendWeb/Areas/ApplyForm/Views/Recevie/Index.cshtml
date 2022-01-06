@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<div class="card mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">查詢</h6>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <div class="row">
+                    <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
+                        <label class="" for="product_name">查詢條件1</label>
+                        <input class="form-control" id="product_name" name="product_name" placeholder="" type="text" value="" />
+                    </div>
+                    <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
+                        <label class="" for="product_name">查詢條件3</label>
+                        <input class="form-control" id="product_name" name="product_name" placeholder="" type="text" value="" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="row">
+                    <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
+                        <label class="" for="product_name">查詢條件2</label>
+                        <input class="form-control" id="product_name" name="product_name" placeholder="" type="text" value="" />
+                    </div>
+                    <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
+                        <label class="" for="product_name">查詢條件4</label>
+                        <input class="form-control" id="product_name" name="product_name" placeholder="" type="text" value="" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex .justify-content-start pt-3">
+            <input id="btnSearch" type="button" class="btn btn-info btn-icon-split py-2 px-4" value="查詢" />
+        </div>
+    </div>
+</div>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">列表</h6>
+    </div>
+    <div class="card-body">
+        <div id="dv_table" class=""></div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('#dv_table').load('@Url.Action("Table", "Recevie", new { Area = "ApplyForm" })');
+            //$('#btnSearch').click(function () {
+
+            //})
+        });
+    </script>
+}

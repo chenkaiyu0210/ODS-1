@@ -1,0 +1,59 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+    <thead>
+        <tr>
+            <th>帳號</th>
+            <th>名稱</th>
+            <th>是否啟用</th>
+            <th>功能列</th>
+        </tr>
+    </thead>
+</table>
+
+<script>
+    $(function () {
+        $('#dataTable')
+            .on('preXhr.dt', function (e, settings, data) {
+                $.blockUI({ message: '<h1>資料讀取中...</h1>' });
+            })
+            .on('xhr.dt', function (e, settings, json, xhr) {
+                $.unblockUI();
+            }).DataTable({
+                searching: false,
+                columns: [
+                    { data: "account", orderable: false },
+                    { data: "name", orderable: false },
+                    {
+                        data: "is_enable", orderable: false, render: function (data, type, row, meta) {                            
+                            return data == true ? "已啟用" : "未啟用";
+                        }
+                    },                   
+                    {
+                        data: "account", render: function (data, type, row, meta) {
+                            return data = "<a class='btn btn-success' style='margin: 0 5px 0 5px;' href='@Url.Action("Edit", "UserSetting", new { Area = "Management" })?search_account=" + data + "'>編輯</a>";
+                        }
+                    }
+                ],
+                serverSide: true,
+                ajax: {
+                    method: "POST",
+                    url: "@Url.Action("Table", "UserSetting", new { Area = "Management" })",
+                    data: function (d) {
+                        d.search_account = $("#search_account").val();
+                        //d.search_enable = $("input[name='search_enable']:checked").val();
+                        d.search_name = $("#search_name").val();
+                        //d.daterange = $("#daterange").val();
+                        //d.returncodedesc = $("#returncodedesc").val();
+                    }
+                },
+                oLanguage: dataTableSettings,
+                ordering: false,
+                orderMulti: false
+            });
+    });
+</script>

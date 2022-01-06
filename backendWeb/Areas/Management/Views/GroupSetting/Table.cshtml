@@ -1,0 +1,56 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+    <thead>
+        <tr>
+            <th>角色群組代碼</th>
+            <th>角色群組名稱</th>
+            <th>是否啟用</th>
+            <th>功能列</th>
+        </tr>
+    </thead>
+</table>
+
+<script>
+    $(function () {
+        $('#dataTable')
+            .on('preXhr.dt', function (e, settings, data) {
+                $.blockUI({ message: '<h1>資料讀取中...</h1>' });
+            })
+            .on('xhr.dt', function (e, settings, json, xhr) {
+                $.unblockUI();
+            }).DataTable({
+                searching: false,
+                columns: [
+                    { data: "role_group_code", orderable: false },
+                    { data: "role_group_name", orderable: false },
+                    {
+                        data: "is_enable", orderable: false, render: function (data, type, row, meta) {                            
+                            return data == true ? "已啟用" : "未啟用";
+                        }
+                    },                   
+                    {
+                        data: "role_group_code", render: function (data, type, row, meta) {
+                            return data = "<a class='btn btn-success' style='margin: 0 5px 0 5px;' href='@Url.Action("Edit", "GroupSetting", new { Area = "Management" })?search_role_group_code=" + data + "'>編輯</a>";
+                        }
+                    }
+                ],
+                serverSide: true,
+                ajax: {
+                    method: "POST",
+                    url: "@Url.Action("Table", "GroupSetting", new { Area = "Management" })",
+                    data: function (d) {
+                        d.search_role_group_code = $("#search_role_group_code").val();
+                        d.search_role_group_code = $("#search_role_group_code").val();
+                    }
+                },
+                oLanguage: dataTableSettings,
+                ordering: false,
+                orderMulti: false
+            });
+    });
+</script>

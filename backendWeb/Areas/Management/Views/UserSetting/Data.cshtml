@@ -1,0 +1,97 @@
+﻿@model backendWeb.Models.ViewModel.viewModelBackendUser
+@{
+    string action = ViewContext.RouteData.GetRequiredString("Action");
+}
+
+@*<link href="~/ThirdParty/custom/css/style.css" rel="stylesheet" />*@
+
+<div class="card mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">@(action == "Add" ? "新增" : "修改")</h6>
+    </div>
+    <div class="card-body" style="background-color: #fafafa;">
+        <form action="@Url.Action(action, "UserSetting", new { Area = "Management" })" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="container">
+                <div class=" py-md-5 py-3">
+                    <div id="fillInData" class="d-block">
+                        <div class="row">
+                            <div class="col-md-12 col-12">
+                                <!-- 商品資訊 -->
+                                <h5 class="product-form-title">使用者資訊</h5>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-12">
+                                        <label class="@(action == "Add" ? "require-item" : "")" for="account">帳號</label>
+                                        @if (action == "Add")
+                                        {
+                                            @Html.TextBoxFor(o => o.account, new { @alertMsg = "帳號", @class = "form-control", placeholder = "帳號", @required = "required" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(o => o.account, new { @alertMsg = "帳號", @class = "form-control", placeholder = "帳號", @ReadOnly = "ReadOnly" })
+                                        }
+                                    </div>
+                                    <div class="form-group col-lg-6 col-12">
+                                        <label class="require-item" for="name">名稱</label>
+                                        @Html.TextBoxFor(o => o.name, new { @alertMsg = "名稱", @class = "form-control", @placeholder = "名稱", @required = "required" })
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <label class="@(action == "Add" ? "require-item" : "")" for="password">密碼</label>
+                                        @if (action == "Add")
+                                        {
+                                            @Html.TextBox("inputPassword", "", new { @alertMsg = "密碼", @class = "form-control", @placeholder = "密碼", @required = "required" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBox("inputPassword", "", new { @alertMsg = "密碼", @class = "form-control", @placeholder = "密碼" })
+                                        }
+                                    </div>
+                                    <div class="form-group col-lg-6 col-12">
+                                        <label class="" for="name">帳號啟用</label>
+                                        <input class="inp-cbx" id="enableMethod01" name="is_enable" type="checkbox" style="display: none;" value="true" checked="@(Model.is_enable.HasValue ? (Model.is_enable == true? true : false) : true)" />
+                                        <label class="cbx" for="enableMethod01">
+                                            <span>
+                                                <svg width="12px" height="10px" viewbox="0 0 12 10">
+                                                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                                </svg>
+                                            </span> 
+                                        </label>
+                                        @*<div class="cntr py-1">
+                                            <label for="enableMethod01" class="radio">
+                                                <input type="radio" name="is_enable" id="enableMethod01" class="hidden" value="1" checked="@(Model.is_enable.HasValue ? (Model.is_enable == true? true : false) : true)" />
+                                                <span class="label"></span>帳號啟用
+                                            </label>
+                                            <label for="enableMethod02" class="radio">
+                                                <input type="radio" name="is_enable" id="enableMethod02" class="hidden" value="0" checked="@(!Model.is_enable == true? true : false)" />
+                                                <span class="label"></span>帳號停用
+                                            </label>
+                                        </div>*@
+                                    </div>
+                                </div>
+                                <!-- 申請人基本資料 -->
+                                <h5 class="product-form-title">群組資料</h5>
+                                <div class="row">
+                                    <div class="form-group col-lg-12 col-12">
+                                        <label class="require-item" for="customer_name">角色群組</label>
+                                        @Html.DropDownList("dlRoleCodes[]", new MultiSelectList(Model.listRoleGroup, "role_group_code", "role_group_name", Model.listRoleGroupCodes), new { @alertMsg = "角色群組", @class = "form-control", @placeholder = "角色群組", @multiple = "multiple" })
+                                        @Html.HiddenFor(o => o.role_group_codes)
+                                    </div>
+                                    <script>
+                                        $('select[name="dlRoleCodes[]"]').bootstrapDualListbox(duallistboxSetting);
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center pt-3">
+                            <input type="button" class="btn btn-success rounded-pill py-2 px-4" value="上一頁" onClick="location.href='@Url.Action("Index","UserSetting", new { Area = "Management" })'" />
+                            <button type="submit" class="btn btn-opposite btn-after rounded-pill py-2 px-4">@(action == "Add" ? "新增" : "修改")</button>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

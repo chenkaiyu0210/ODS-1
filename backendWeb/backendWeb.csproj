@@ -141,11 +141,32 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\ApplyForm\ApplyFormAreaRegistration.cs" />
+    <Compile Include="Areas\ApplyForm\Controllers\RecevieController.cs" />
+    <Compile Include="Areas\Management\Controllers\GroupSettingController.cs" />
+    <Compile Include="Areas\Management\Controllers\MenuSettingController.cs" />
+    <Compile Include="Areas\Management\Controllers\UserSettingController.cs" />
+    <Compile Include="Areas\Management\ManagementAreaRegistration.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Filter\CustomAuthorizeAttribute.cs" />
     <Compile Include="Filter\LoginFilterAttibute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CommonHelpers.cs" />
+    <Compile Include="Helpers\EncryptionProcessor.cs" />
+    <Compile Include="Helpers\GlobalVariablesHelpers.cs" />
+    <Compile Include="Models\Repositories\backendMenu.cs">
+      <DependentUpon>rymimoney.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Repositories\backendRoleGroup.cs">
+      <DependentUpon>rymimoney.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Repositories\backendUser.cs">
+      <DependentUpon>rymimoney.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Repositories\baseRepository.cs" />
     <Compile Include="Models\Repositories\logJson.cs">
       <DependentUpon>rymimoney.tt</DependentUpon>
     </Compile>
@@ -173,17 +194,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>rymimoney.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\settingConifgModel.cs" />
+    <Compile Include="Models\ViewModel\baseModel.cs" />
+    <Compile Include="Models\ViewModel\viewModelBackendMenu.cs" />
+    <Compile Include="Models\ViewModel\viewModelBackendRoleGroup.cs" />
+    <Compile Include="Models\ViewModel\viewModelBackendUser.cs" />
+    <Compile Include="Models\ViewModel\viewModelRecevieCases.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\InterFace\IBaseCrudService.cs" />
+    <Compile Include="Service\ServiceClass\backendMenuService.cs" />
+    <Compile Include="Service\ServiceClass\backendRoleGroupService.cs" />
+    <Compile Include="Service\ServiceClass\backendUserService.cs" />
+    <Compile Include="Service\ServiceClass\recevieCasesService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
     <Content Include="img\undraw_posting_photo.svg" />
     <Content Include="img\undraw_profile.svg" />
     <Content Include="img\undraw_profile_1.svg" />
@@ -200,8 +227,6 @@
       <DependentUpon>rymimoney.edmx</DependentUpon>
       <LastGenOutput>rymimoney.cs</LastGenOutput>
     </Content>
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="Models\Repositories\rymimoney.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>rymimoney.Designer.cs</LastGenOutput>
@@ -209,17 +234,14 @@
     <Content Include="Models\Repositories\rymimoney.edmx.diagram">
       <DependentUpon>rymimoney.edmx</DependentUpon>
     </Content>
-    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.4.1.js" />
-    <Content Include="Scripts\jquery-3.4.1.min.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Areas\Management\Views\web.config" />
+    <Content Include="Areas\Management\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Management\Views\UserSetting\Index.cshtml" />
+    <Content Include="Areas\Management\Views\MenuSetting\Index.cshtml" />
+    <Content Include="ThirdParty\custom\css\style.css" />
+    <Content Include="ThirdParty\custom\js\misCommon.js" />
+    <Content Include="ThirdParty\custom\js\moment.js" />
+    <Content Include="ThirdParty\notify\notify.min.js" />
     <Content Include="ThirdParty\sbAdmin2\css\sb-admin-2.css" />
     <Content Include="ThirdParty\sbAdmin2\css\sb-admin-2.min.css" />
     <Content Include="ThirdParty\sbAdmin2\js\sb-admin-2.js" />
@@ -238,6 +260,10 @@
     <Content Include="ThirdParty\sbAdmin2\vendor\datatables\dataTables.bootstrap4.min.js" />
     <Content Include="ThirdParty\sbAdmin2\vendor\datatables\jquery.dataTables.js" />
     <Content Include="ThirdParty\sbAdmin2\vendor\datatables\jquery.dataTables.min.js" />
+    <Content Include="ThirdParty\sbAdmin2\vendor\duallistbox\css\bootstrap-duallistbox.css" />
+    <Content Include="ThirdParty\sbAdmin2\vendor\duallistbox\css\bootstrap-duallistbox.min.css" />
+    <Content Include="ThirdParty\sbAdmin2\vendor\duallistbox\js\jquery.bootstrap-duallistbox.js" />
+    <Content Include="ThirdParty\sbAdmin2\vendor\duallistbox\js\jquery.bootstrap-duallistbox.min.js" />
     <Content Include="ThirdParty\sbAdmin2\vendor\fontawesome-free\attribution.js" />
     <Content Include="ThirdParty\sbAdmin2\vendor\fontawesome-free\css\all.css" />
     <Content Include="ThirdParty\sbAdmin2\vendor\fontawesome-free\css\all.min.css" />
@@ -1889,6 +1915,7 @@
     <Content Include="ThirdParty\sbAdmin2\vendor\jquery-easing\jquery.easing.compatibility.js" />
     <Content Include="ThirdParty\sbAdmin2\vendor\jquery-easing\jquery.easing.js" />
     <Content Include="ThirdParty\sbAdmin2\vendor\jquery-easing\jquery.easing.min.js" />
+    <Content Include="ThirdParty\sbAdmin2\vendor\jquery-ui\jquery.blockUI.js" />
     <Content Include="ThirdParty\sbAdmin2\vendor\jquery\jquery.js" />
     <Content Include="ThirdParty\sbAdmin2\vendor\jquery\jquery.min.js" />
     <Content Include="ThirdParty\sbAdmin2\vendor\jquery\jquery.slim.js" />
@@ -2060,20 +2087,27 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\ViewModel\" />
+    <Folder Include="Areas\ApplyForm\Data\" />
+    <Folder Include="Areas\Management\Data\" />
+    <Folder Include="Views\ApplyForm\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Areas\Management\Views\GroupSetting\Index.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\web.config" />
+    <Content Include="Areas\ApplyForm\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\Recevie\Index.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\Recevie\Table.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\Recevie\Edit.cshtml" />
+    <Content Include="Areas\Management\Views\UserSetting\Table.cshtml" />
+    <Content Include="Areas\Management\Views\UserSetting\Data.cshtml" />
+    <Content Include="Areas\Management\Views\GroupSetting\Data.cshtml" />
+    <Content Include="Areas\Management\Views\GroupSetting\Table.cshtml" />
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

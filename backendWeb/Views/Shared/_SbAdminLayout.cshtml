@@ -6,8 +6,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    @Styles.Render("~/sbAdmin2/css")
     @Styles.Render("~/sbAdmin2/vendorCss")
+    @Styles.Render("~/sbAdmin2/css")
+    @Styles.Render("~/sbAdmin2/customerCss")
 
 
     @Scripts.Render("~/bundles/jquery")
@@ -15,6 +16,7 @@
     @Scripts.Render("~/sbAdmin2/js")
     @Scripts.Render("~/sbAdmin2/vendorJs")
 
+    <script src="~/ThirdParty/custom/js/misCommon.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 </head>
 <body id="page-top">
@@ -41,16 +43,16 @@
 
                     <!-- Topbar Search -->
                     @*<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                   aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
+                            <div class="input-group">
+                                <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                       aria-label="Search" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-search fa-sm"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    </form>*@
+                        </form>*@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -60,27 +62,27 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">@(Session["userAccount"] == null ? "" : Session["userAccount"].ToString())</span>
                                 <img class="img-profile rounded-circle"
                                      src="/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                  aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
+                                @*<a class="dropdown-item" href="#">
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Profile
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Settings
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Activity Log
+                                    </a>*@
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -114,31 +116,49 @@
 
     </div>
     <!-- End of Page Wrapper -->
-
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
+    @RenderSection("scripts", required: false)
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">確定登出嗎?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">選擇"確認"您的個人登入訊息將會被清除。</div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
+                    <a class="btn btn-primary" href="@Url.Action("Logout", "Home", new { Area = "" })">確認</a>
                 </div>
             </div>
         </div>
     </div>
+    @Html.Hidden("errMsg", ViewData["errMsg"] == null ? "" : ViewData["errMsg"].ToString())
+    @Html.Hidden("infoMsg", ViewData["infoMsg"] == null ? "" : ViewData["infoMsg"].ToString())
+    @Html.Hidden("warnMsg", ViewData["warnMsg"] == null ? "" : ViewData["warnMsg"].ToString())
+    @Html.Hidden("successMsg", ViewData["successMsg"] == null ? "" : ViewData["successMsg"].ToString())
+    <script>
+        $(function () {
+            if ($('input[name="errMsg"]').val() != '') {
+                $.notify($('input[name="errMsg"]').val(), { className: "error", position: "top center" });
+            }
+            if ($('input[name="infoMsg"]').val() != '') {
+                $.notify($('input[name="infoMsg"]').val(), { className: "info", position: "top center" });
+            }
+            if ($('input[name="warnMsg"]').val() != '') {
+                $.notify($('input[name="warnMsg"]').val(), { className: "warn", position: "top center" });
+            }
+            if ($('input[name="successMsg"]').val() != '') {
+                $.notify($('input[name="successMsg"]').val(), { className: "warn", position: "top center" });
+            }
+        });
+    </script>
 </body>
-
 </html>

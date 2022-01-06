@@ -38,14 +38,18 @@ namespace backendWeb
                         "~/ThirdParty/sbAdmin2/vendor/bootstrap/js/bootstrap.bundle.min.js"));
 
             bundles.Add(new ScriptBundle("~/sbAdmin2/js").Include(
-                     "~/ThirdParty/sbAdmin2/js/sb-admin-2.min.js"));
+                     "~/ThirdParty/sbAdmin2/js/sb-admin-2.min.js",
+                     "~/ThirdParty/notify/notify.min.js"));
 
             bundles.Add(new ScriptBundle("~/sbAdmin2/vendorJs").Include(
                          "~/ThirdParty/sbAdmin2/vendor/chart.js/Chart.min.js",
                          "~/ThirdParty/sbAdmin2/vendor/datatables/jquery.dataTables.min.js",
                          "~/ThirdParty/sbAdmin2/vendor/datatables/dataTables.bootstrap4.min.js",
                          "~/ThirdParty/sbAdmin2/vendor/chart.js/Chart.min.js",
-                         "~/ThirdParty/sbAdmin2/vendor/jquery-easing/jquery.easing.min.js"
+                         "~/ThirdParty/sbAdmin2/vendor/jquery-easing/jquery.easing.min.js",
+                         "~/ThirdParty/sbAdmin2/vendor/jquery-ui/jquery.blockUI.js",
+                         "~/ThirdParty/custom/js/moment.js",
+                         "~/ThirdParty/sbAdmin2/vendor/duallistbox/js/jquery.bootstrap-duallistbox.min.js"
                          ));
 
             //Css
@@ -59,11 +63,13 @@ namespace backendWeb
                     "~/ThirdParty/sbAdmin2/vendor/fontawesome-free/css/regular.min.css",
                     "~/ThirdParty/sbAdmin2/vendor/fontawesome-free/css/solid.min.css",
                     "~/ThirdParty/sbAdmin2/vendor/fontawesome-free/css/svg-with-js.min.css",
-                    "~/ThirdParty/sbAdmin2/vendor/fontawesome-free/css/v4-shims.min.css"
+                    "~/ThirdParty/sbAdmin2/vendor/fontawesome-free/css/v4-shims.min.css",
+                    "~/ThirdParty/sbAdmin2/vendor/duallistbox/css/bootstrap-duallistbox.min.css"
                     ));
 
-
-
+            bundles.Add(new StyleBundle("~/sbAdmin2/customerCss").Include(
+                     "~/ThirdParty/custom/css/style.css"
+                     ));
         }
     }
 }

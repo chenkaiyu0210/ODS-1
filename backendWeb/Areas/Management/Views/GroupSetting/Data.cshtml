@@ -1,0 +1,74 @@
+﻿@model backendWeb.Models.ViewModel.viewModelBackendRoleGroup
+@{
+    string action = ViewContext.RouteData.GetRequiredString("Action");
+}
+
+<div class="card mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">@(action == "Add" ? "新增" : "修改")</h6>
+    </div>
+    <div class="card-body" style="background-color: #fafafa;">
+        <form action="@Url.Action(action, "GroupSetting", new { Area = "Management" })" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="container">
+                <div class=" py-md-5 py-3">
+                    <div id="fillInData" class="d-block">
+                        <div class="row">
+                            <div class="col-md-12 col-12">
+                                <!-- 角色群組資訊 -->
+                                <h5 class="product-form-title">角色群組資訊</h5>
+                                <div class="row">
+                                    <div class="form-group col-lg-6 col-12">
+                                        <label class="@(action == "Add" ? "require-item" : "")" for="account">角色群組代碼</label>
+                                        @if (action == "Add")
+                                        {
+                                            @Html.TextBoxFor(o => o.role_group_code, new { @alertMsg = "帳號", @class = "form-control", placeholder = "帳號", @required = "required" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(o => o.role_group_code, new { @alertMsg = "帳號", @class = "form-control", placeholder = "帳號", @ReadOnly = "ReadOnly" })
+                                        }
+                                    </div>
+                                    <div class="form-group col-lg-6 col-12">
+                                        <label class="require-item" for="name">角色群組名稱</label>
+                                        @Html.TextBoxFor(o => o.role_group_name, new { @alertMsg = "名稱", @class = "form-control", @placeholder = "名稱", @required = "required" })
+                                    </div>
+                                    <div class="form-group col-lg-6 col-12">
+                                        <label class="" for="name">是否啟用</label>
+                                        <input class="inp-cbx" id="enableMethod01" name="is_enable" type="checkbox" style="display: none;" value="true" checked="@(Model.is_enable.HasValue ? (Model.is_enable == true? true : false) : true)" />
+                                        <label class="cbx" for="enableMethod01">
+                                            <span>
+                                                <svg width="12px" height="10px" viewbox="0 0 12 10">
+                                                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                                </svg>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- 選單權限碼資訊 -->
+                                <h5 class="product-form-title">選單權限碼資料</h5>
+                                <div class="row">
+                                    <div class="form-group col-lg-12 col-12">
+                                        <label class="require-item" for="customer_name">選單權限碼</label>
+                                        @Html.DropDownList("dlAuthorizeCodes[]", new MultiSelectList(Model.listAuthorize, "authorize_code", "func_name", Model.listAuthorizeCodes), new { @alertMsg = "角色群組", @class = "form-control", @placeholder = "角色群組", @multiple = "multiple" })
+                                        @Html.HiddenFor(o => o.authorize_codes)
+                                    </div>
+                                    <script>
+                                        $('select[name="dlAuthorizeCodes[]"]').bootstrapDualListbox(duallistboxSetting);
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center pt-3">
+                            <input type="button" class="btn btn-success rounded-pill py-2 px-4" value="上一頁" onClick="location.href='@Url.Action("Index","GroupSetting", new { Area = "Management" })'" />
+                            <button type="submit" class="btn btn-opposite btn-after rounded-pill py-2 px-4">@(action == "Add" ? "新增" : "修改")</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

@@ -57,9 +57,9 @@
                                     <div class="text-center">
                                         <a class="small" href="forgot-password.html">Forgot Password?</a>
                                     </div>
-                                    <div class="text-center">
+                                    @*<div class="text-center">
                                         <a class="small" href="register.html">Create an Account!</a>
-                                    </div>
+                                    </div>*@
                                 </div>
                             </div>
                         </div>
@@ -68,5 +68,26 @@
             </div>
         </div>
     </div>
+    @Html.Hidden("errMsg", ViewData["errMsg"] == null ? "" : ViewData["errMsg"].ToString())
+    @Html.Hidden("infoMsg", ViewData["infoMsg"] == null ? "" : ViewData["infoMsg"].ToString())
+    @Html.Hidden("warnMsg", ViewData["warnMsg"] == null ? "" : ViewData["warnMsg"].ToString())
+    @Html.Hidden("successMsg", ViewData["successMsg"] == null ? "" : ViewData["successMsg"].ToString())
+    <script>
+        $(function () {
+            if ($('input[name="errMsg"]').val() != '') {
+                $.notify($('input[name="errMsg"]').val(), { className: "error", position: "top center" });
+            }
+            if ($('input[name="infoMsg"]').val() != '') {
+                $.notify($('input[name="infoMsg"]').val(), { className: "info", position: "top center" });
+            }
+            if ($('input[name="warnMsg"]').val() != '') {
+                $.notify($('input[name="warnMsg"]').val(), { className: "warn", position: "top center" });
+            }
+            if ($('input[name="successMsg"]').val() != '') {
+                $.notify($('input[name="successMsg"]').val(), { className: "warn", position: "top center" });
+            }
+        });
+    </script>
 </body>
 </html>
+

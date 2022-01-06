@@ -5,6 +5,54 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="RYMimoneyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="backendMenu">
+          <Key>
+            <PropertyRef Name="app_id" />
+            <PropertyRef Name="func_id" />
+          </Key>
+          <Property Name="app_id" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="func_id" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="controller_id" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="view_id" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="func_layer" Type="int" />
+          <Property Name="func_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="func_url" Type="nvarchar" MaxLength="50" />
+          <Property Name="is_display" Type="bit" />
+          <Property Name="sort_order" Type="varchar" MaxLength="20" />
+          <Property Name="parent_func_id" Type="varchar" MaxLength="20" />
+          <Property Name="icon" Type="varchar" MaxLength="20" />
+          <Property Name="authorize_code" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'RYMimoney.dbo.backendRoleGroup' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="backendRoleGroup">
+          <Key>
+            <PropertyRef Name="role_group_code" />
+            <PropertyRef Name="role_group_name" />
+            <PropertyRef Name="authorize_codes" />
+            <PropertyRef Name="create_time" />
+          </Key>
+          <Property Name="role_group_code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="role_group_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="is_enable" Type="bit" />
+          <Property Name="authorize_codes" Type="varchar(max)" Nullable="false" />
+          <Property Name="create_time" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="backendUser">
+          <Key>
+            <PropertyRef Name="account" />
+          </Key>
+          <Property Name="account" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="salt_key" Type="varchar" MaxLength="50" />
+          <Property Name="register_user" Type="varchar" MaxLength="20" />
+          <Property Name="register_time" Type="datetime" />
+          <Property Name="is_enable" Type="bit" />
+          <Property Name="disable_time" Type="datetime" />
+          <Property Name="disable_user" Type="varchar" MaxLength="20" />
+          <Property Name="role_group_codes" Type="varchar(max)" Nullable="false" />
+        </EntityType>
         <EntityType Name="logJson">
           <Key>
             <PropertyRef Name="log_id" />
@@ -113,10 +161,21 @@
           <Property Name="is_secret" Type="bit" />
         </EntityType>
         <EntityContainer Name="RYMimoneyModelStoreContainer">
+          <EntitySet Name="backendMenu" EntityType="Self.backendMenu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="backendUser" EntityType="Self.backendUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="logJson" EntityType="Self.logJson" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="members" EntityType="Self.members" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="postfile" EntityType="Self.postfile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="recevieCases" EntityType="Self.recevieCases" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="backendRoleGroup" EntityType="Self.backendRoleGroup" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [backendRoleGroup].[role_group_code] AS [role_group_code], 
+    [backendRoleGroup].[role_group_name] AS [role_group_name], 
+    [backendRoleGroup].[is_enable] AS [is_enable], 
+    [backendRoleGroup].[authorize_codes] AS [authorize_codes], 
+    [backendRoleGroup].[create_time] AS [create_time]
+    FROM [dbo].[backendRoleGroup] AS [backendRoleGroup]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -127,6 +186,9 @@
           <EntitySet Name="postfile" EntityType="RYMimoneyModel.postfile" />
           <EntitySet Name="members" EntityType="RYMimoneyModel.members" />
           <EntitySet Name="logJson" EntityType="RYMimoneyModel.logJson" />
+          <EntitySet Name="backendMenu" EntityType="RYMimoneyModel.backendMenu" />
+          <EntitySet Name="backendUser" EntityType="RYMimoneyModel.backendUser" />
+          <EntitySet Name="backendRoleGroup" EntityType="RYMimoneyModel.backendRoleGroup" />
         </EntityContainer>
         <EntityType Name="recevieCases">
           <Key>
@@ -234,6 +296,52 @@
           <Property Name="request_time" Type="DateTime" Precision="3" />
           <Property Name="response_json" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="response_time" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="backendMenu">
+          <Key>
+            <PropertyRef Name="app_id" />
+            <PropertyRef Name="func_id" />
+          </Key>
+          <Property Name="app_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="func_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="controller_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="view_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="func_layer" Type="Int32" />
+          <Property Name="func_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="func_url" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="is_display" Type="Boolean" />
+          <Property Name="sort_order" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="parent_func_id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="icon" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="authorize_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="backendUser">
+          <Key>
+            <PropertyRef Name="account" />
+          </Key>
+          <Property Name="account" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="salt_key" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="register_user" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="register_time" Type="DateTime" Precision="3" />
+          <Property Name="is_enable" Type="Boolean" />
+          <Property Name="disable_time" Type="DateTime" Precision="3" />
+          <Property Name="disable_user" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="role_group_codes" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="backendRoleGroup">
+          <Key>
+            <PropertyRef Name="role_group_code" />
+            <PropertyRef Name="role_group_name" />
+            <PropertyRef Name="authorize_codes" />
+            <PropertyRef Name="create_time" />
+          </Key>
+          <Property Name="role_group_code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="role_group_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="is_enable" Type="Boolean" />
+          <Property Name="authorize_codes" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="create_time" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -348,6 +456,51 @@
                 <ScalarProperty Name="source" ColumnName="source" />
                 <ScalarProperty Name="company" ColumnName="company" />
                 <ScalarProperty Name="log_id" ColumnName="log_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="backendMenu">
+            <EntityTypeMapping TypeName="RYMimoneyModel.backendMenu">
+              <MappingFragment StoreEntitySet="backendMenu">
+                <ScalarProperty Name="authorize_code" ColumnName="authorize_code" />
+                <ScalarProperty Name="icon" ColumnName="icon" />
+                <ScalarProperty Name="parent_func_id" ColumnName="parent_func_id" />
+                <ScalarProperty Name="sort_order" ColumnName="sort_order" />
+                <ScalarProperty Name="is_display" ColumnName="is_display" />
+                <ScalarProperty Name="func_url" ColumnName="func_url" />
+                <ScalarProperty Name="func_name" ColumnName="func_name" />
+                <ScalarProperty Name="func_layer" ColumnName="func_layer" />
+                <ScalarProperty Name="view_id" ColumnName="view_id" />
+                <ScalarProperty Name="controller_id" ColumnName="controller_id" />
+                <ScalarProperty Name="func_id" ColumnName="func_id" />
+                <ScalarProperty Name="app_id" ColumnName="app_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="backendUser">
+            <EntityTypeMapping TypeName="RYMimoneyModel.backendUser">
+              <MappingFragment StoreEntitySet="backendUser">
+                <ScalarProperty Name="role_group_codes" ColumnName="role_group_codes" />
+                <ScalarProperty Name="disable_user" ColumnName="disable_user" />
+                <ScalarProperty Name="disable_time" ColumnName="disable_time" />
+                <ScalarProperty Name="is_enable" ColumnName="is_enable" />
+                <ScalarProperty Name="register_time" ColumnName="register_time" />
+                <ScalarProperty Name="register_user" ColumnName="register_user" />
+                <ScalarProperty Name="salt_key" ColumnName="salt_key" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="account" ColumnName="account" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="backendRoleGroup">
+            <EntityTypeMapping TypeName="RYMimoneyModel.backendRoleGroup">
+              <MappingFragment StoreEntitySet="backendRoleGroup">
+                <ScalarProperty Name="create_time" ColumnName="create_time" />
+                <ScalarProperty Name="authorize_codes" ColumnName="authorize_codes" />
+                <ScalarProperty Name="is_enable" ColumnName="is_enable" />
+                <ScalarProperty Name="role_group_name" ColumnName="role_group_name" />
+                <ScalarProperty Name="role_group_code" ColumnName="role_group_code" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
