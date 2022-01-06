@@ -70,6 +70,7 @@ namespace backendWeb
             bundles.Add(new StyleBundle("~/sbAdmin2/customerCss").Include(
                      "~/ThirdParty/custom/css/style.css"
                      ));
+
         }
     }
 }
