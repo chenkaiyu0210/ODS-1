@@ -1,6 +1,10 @@
-﻿
-@*<link href="~/ThirdParty/custom/css/style.css" rel="stylesheet" />*@
-<form action="" method="post" enctype="multipart/form-data">
+﻿@using backendWeb.Models.ViewModel
+@model ViewModelReceiveCases
+@{
+    ViewData["Title"] = "資金申請";    
+}
+
+<form action="@Url.Action("Apply", "Recevie")" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
     <div class="" style="background-color: #fafafa;">
         <div class="container py-md-5 py-3">
@@ -13,15 +17,15 @@
                             <div class="form-group col-12">
                                 <div class="cntr py-1">
                                     <label for="applyMethod01" class="radio">
-                                        <input type="radio" name="apply_method" id="applyMethod01" class="hidden" value="機車分期" checked="" />
+                                        <input type="radio" name="bus_type" id="applyMethod01" class="hidden" value="機車分期" checked="@(Model.bus_type == "機車分期" ? true : false)" />
                                         <span class="label"></span>機車分期
                                     </label>
                                     <label for="applyMethod02" class="radio">
-                                        <input type="radio" name="apply_method" id="applyMethod02" class="hidden" value="申辦借款" checked="" />
+                                        <input type="radio" name="bus_type" id="applyMethod02" class="hidden" value="申辦借款" checked="@(Model.bus_type == "申辦借款" ? true : false)" />
                                         <span class="label"></span>申辦借款
                                     </label>
                                     <label for="applyMethod03" class="radio">
-                                        <input type="radio" name="apply_method" id="applyMethod03" class="hidden" value="借新還舊" checked="" />
+                                        <input type="radio" name="bus_type" id="applyMethod03" class="hidden" value="借新還舊" checked="@(Model.bus_type == "借新還舊" ? true : false)" />
                                         <span class="label"></span>借新還舊
                                     </label>
                                 </div>
@@ -33,30 +37,66 @@
                             </script>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="" for="product_name">商品名稱</label>
-                                <input alertMsg="商品名稱" class="form-control" id="product_name" name="product_name" placeholder="" type="text" value="" />
+                                <input alertMsg="商品名稱" class="form-control" id="product_name" name="product_name" placeholder="" type="text" value="@Model.product_name" />
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="" for="dealer_branch_name">商店名稱</label>
-                                <input alertMsg="商店名稱" class="form-control" id="dealer_branch_name" name="dealer_branch_name" placeholder="" type="text" value="" />
+                                <input alertMsg="商店名稱" class="form-control" id="dealer_branch_name" name="dealer_branch_name" placeholder="" type="text" value="@Model.dealer_branch_name" />
                             </div>
                             <div class="form-group col-12">
                                 <label class="require-item" for="staging_amount">辦理分期金額</label>
-                                <input alertMsg="辦理分期金額" class="form-control" data-val="true" data-val-number="欄位 staging_amount 必須是數字。" id="staging_amount" inputmode="numeric" name="staging_amount" placeholder="" required="required" type="number" value="" />
+                                <input alertMsg="辦理分期金額" class="form-control" data-val="true" data-val-number="欄位 staging_amount 必須是數字。" id="staging_amount" inputmode="numeric" name="staging_amount" placeholder="" required="required" type="number" value="@(Model.staging_amount.HasValue ? Model.staging_amount.Value : "")" />
                             </div>
                             <div class="form-group col-12 add-line">
                                 <div class="form-row align-items-center">
-                                    <div class="col-lg-5 col-4">
-                                        <label class="" for="staging_num">期數</label>
-                                        <input type="text" class="form-control" name="paymentInput[0].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" />
-                                    </div>
-                                    <div class="col-md-6 col-7">
-                                        <label class="" for="staging_num_amount">每期總繳金額</label>
-                                        <input type="text" class="form-control" name="paymentInput[0].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" />
-                                    </div>
-                                    <div class="col-1">
-                                        <label for="" style="visibility:hidden;">add</label>
-                                        <button type="button" class="btn btn-add btn-opposite btn-sm" id="addLine"><i class="fas fa-plus"></i></button>
-                                    </div>
+                                    @if (Model.paymentInput.Count == 0)
+                                    {
+                                        <div class="col-lg-5 col-4">
+                                            <label class="" for="staging_num">期數</label>
+                                            <input type="text" class="form-control" name="paymentInput[0].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" />
+                                        </div>
+                                        <div class="col-md-6 col-7">
+                                            <label class="" for="staging_num_amount">每期總繳金額</label>
+                                            <input type="text" class="form-control" name="paymentInput[0].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" />
+                                        </div>
+                                        <div class="col-1">
+                                            <label for="" style="visibility:hidden;">add</label>
+                                            <button type="button" class="btn btn-add btn-opposite btn-sm" id="addLine"><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        for (int i = 0; i < Model.paymentInput.Count; i++)
+                                        {
+                                            <div class="col-lg-5 col-4">
+                                                @if (i == 0)
+                                                {
+                                                    <label class="" for="staging_num">期數</label>
+                                                }
+                                                <input type="text" class="form-control" name="paymentInput[@i].num" placeholder="" inputmode="numeric" value="@Model.paymentInput[i].num" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" />
+                                            </div>
+                                            <div class="col-md-6 col-7">
+                                                @if (i == 0)
+                                                {
+                                                    <label class="" for="staging_num_amount">每期總繳金額</label>
+                                                }
+                                                <input type="text" class="form-control" name="paymentInput[@i].num_amount" placeholder="月付款" inputmode="numeric" value="@Model.paymentInput[i].num_amount" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" />
+                                            </div>
+                                            if (i == 0)
+                                            {
+                                                <div class="col-1">
+                                                    <label for="" style="visibility:hidden;">add</label>
+                                                    <button type="button" class="btn btn-add btn-opposite btn-sm" id="addLine"><i class="fas fa-plus"></i></button>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-1">
+                                                    <button type="button" class="btn btn-secondary btn-sm delete" onclick="delLine(this)"><i class="fas fa-minus"></i></button>
+                                                </div>
+                                            }
+                                        }
+                                    }
                                 </div>
                             </div>
                             <script>
@@ -64,17 +104,17 @@
                                     var appendItems = $(".add-line").find(".form-row");
                                     var len = appendItems.length;
                                     var addinput = $(`<div class="form-row align-items-center pt-2">
-                                                                                                                <div class="col-lg-5 col-4">
-                                                                                                                    <input type="text" class="form-control" name="paymentInput[`+ len + `].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "期數" />
-                                                                                                                </div>
-                                                                                                                <div class="col-md-6 col-7">
-                                                                                                                    <input type="text" class="form-control" name="paymentInput[`+ len + `].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "每期總繳金額" />
-                                                                                                                </div>
+                                                                                                                                            <div class="col-lg-5 col-4">
+                                                                                                                                                <input type="text" class="form-control" name="paymentInput[`+ len + `].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "期數" />
+                                                                                                                                            </div>
+                                                                                                                                            <div class="col-md-6 col-7">
+                                                                                                                                                <input type="text" class="form-control" name="paymentInput[`+ len + `].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "每期總繳金額" />
+                                                                                                                                            </div>
 
-                                                                                                                <div class="col-1">
-                                                                                                                    <button type="button" class="btn btn-secondary delete" onclick="delLine(this)"><i class="fas fa-minus"></i></button>
-                                                                                                                </div>
-                                                                                                            </div>`);
+                                                                                                                                            <div class="col-1">
+                                                                                                                                                <button type="button" class="btn btn-secondary delete" onclick="delLine(this)"><i class="fas fa-minus"></i></button>
+                                                                                                                                            </div>
+                                                                                                                                        </div>`);
                                     if (appendItems.length < 3) {
                                         $(".add-line").append(addinput);
                                     }
@@ -90,41 +130,91 @@
                         <div class="row">
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_name">中文姓名</label>
-                                <input alertMsg="中文姓名" class="form-control" id="customer_name" name="customer_name" placeholder="" required="required" type="text" value="" />
+                                @if (string.IsNullOrWhiteSpace(Model.customer_name))
+                                {
+                                    <input alertMsg="中文姓名" class="form-control" id="customer_name" name="customer_name" placeholder="" required="required" type="text" value="" />
+                                }
+                                else
+                                {
+                                    <input alertMsg="中文姓名" class="form-control" id="customer_name" name="customer_name" placeholder="" required="required" type="text" value="@Model.customer_name" readonly />
+                                }
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_idcard_no">身份證字號</label>
-                                <input alertMsg="身份證字號" class="form-control" id="customer_idcard_no" maxlength="10" minlength="10" name="customer_idcard_no" placeholder="" required="required" type="text" value="" readonly />
+                                <input alertMsg="身份證字號" class="form-control" id="customer_idcard_no" maxlength="10" minlength="10" name="customer_idcard_no" placeholder="" required="required" type="text" value="@Model.customer_idcard_no" readonly />
 
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_mobile_phone">行動電話</label>
-                                <input alertMsg="行動電話" class="form-control" id="customer_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="customer_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,'')" required="required" type="text" value="" readonly />
+                                <input alertMsg="行動電話" class="form-control" id="customer_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="customer_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,'')" required="required" type="text" value="@Model.customer_mobile_phone" readonly />
+
                             </div>
                             <div class="form-group col-12">
                                 <label class="require-item" for="customer_birthdayYY">出生日期</label>
-                                <div class="form-row">
-                                    <div class="col-4">
-                                        <input alertMsg="出生日期" class="form-control" id="customer_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="customer_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="民國年" required="required" type="text" value="" />
-                                    </div>
-                                    <div class="col-4">
-                                        <input alertMsg="出生日期" class="form-control" id="customer_birthdayMM" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayMM" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="月" required="required" type="text" value="" />
+                                @if (string.IsNullOrWhiteSpace(Model.customer_name))
+                                {
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="customer_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="民國年" required="required" type="text" value="" />
+                                        </div>
+                                        <div class="col-4">
+                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayMM" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayMM" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="月" required="required" type="text" value="" />
 
+                                        </div>
+                                        <div class="col-4">
+                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayDD" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayDD" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="日" required="required" type="text" value="" />
+                                        </div>
                                     </div>
-                                    <div class="col-4">
-                                        <input alertMsg="出生日期" class="form-control" id="customer_birthdayDD" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayDD" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="日" required="required" type="text" value="" />
+                                }
+                                else
+                                {
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="customer_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="民國年" required="required" type="text" value="@Model.customer_birthdayYY" readonly />
+                                        </div>
+                                        <div class="col-4">
+                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayMM" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayMM" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="月" required="required" type="text" value="@Model.customer_birthdayMM" readonly />
+
+                                        </div>
+                                        <div class="col-4">
+                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayDD" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayDD" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="日" required="required" type="text" value="@Model.customer_birthdayDD" readonly />
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <!-- <div class="form-group col-lg-6 col-12">
+                                <label class="require-item" for="birthday">出生日期</label>
+                                <input type="text" class="form-control" id="birthday" name="birthday">
+                            </div> -->
+                            <!-- <div class="form-group col-12">
+                                <label class="require-item" for="birthday">出生日期</label>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <select name="birthdayYY" id="birthYear" class="form-control" onchange="setDays(this,birthMonth,birthDay);">
+                                            <option selected disabled>民國年</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <select name="birthdayMM" id="birthMonth" class="form-control" onchange="setDays(birthYear,this,birthDay);">
+                                            <option selected disabled>月</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <select name="birthdayDD" id="birthDay" class="form-control">
+                                            <option selected="" disabled="">日</option>
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <!-- 電話 -->
                             <div class="form-group col-lg-6 col-12">
                                 <label for="">戶籍電話</label>
                                 <div class="form-row">
                                     <div class="col-4">
-                                        <input class="form-control" id="customer_resident_tel_code" inputmode="tel" maxlength="4" name="customer_resident_tel_code" onkeyup="value = value.replace(/[^-0-9]/g,'')" placeholder="區碼" type="tel" value="" />
+                                        <input class="form-control" id="customer_resident_tel_code" inputmode="tel" maxlength="4" name="customer_resident_tel_code" onkeyup="value = value.replace(/[^-0-9]/g,'')" placeholder="區碼" type="tel" value="@Model.customer_resident_tel_code" />
                                     </div>
                                     <div class="col-8">
-                                        <input class="form-control" id="customer_resident_tel_num" inputmode="tel" maxlength="8" name="customer_resident_tel_num" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" type="tel" value="" />
+                                        <input class="form-control" id="customer_resident_tel_num" inputmode="tel" maxlength="8" name="customer_resident_tel_num" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" type="tel" value="@Model.customer_resident_tel_num" />
                                     </div>
                                 </div>
                             </div>
@@ -132,10 +222,10 @@
                                 <label for="">住宅電話</label>
                                 <div class="form-row">
                                     <div class="col-4">
-                                        <input class="form-control" id="customer_mail_tel_code" inputmode="tel" maxlength="4" name="customer_mail_tel_code" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="區碼" type="tel" value="" />
+                                        <input class="form-control" id="customer_mail_tel_code" inputmode="tel" maxlength="4" name="customer_mail_tel_code" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="區碼" type="tel" value="@Model.customer_mail_tel_code" />
                                     </div>
                                     <div class="col-8">
-                                        <input class="form-control" id="customer_mail_tel_num" inputmode="tel" maxlength="8" name="customer_mail_tel_num" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" type="tel" value="" />
+                                        <input class="form-control" id="customer_mail_tel_num" inputmode="tel" maxlength="8" name="customer_mail_tel_num" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" type="tel" value="@Model.customer_mail_tel_num" />
                                     </div>
                                 </div>
                             </div>
@@ -143,74 +233,51 @@
                             <div class="form-group col-12">
                                 <label class="require-item" for="">戶籍地址</label>
                                 <div class="form-row">
-                                    <input id="customer_resident_postalcode" name="customer_resident_postalcode" type="hidden" value="" />
+                                    <input id="customer_resident_postalcode" name="customer_resident_postalcode" type="hidden" value="@Model.customer_resident_postalcode" />
                                     <div class="col-lg-3 col-6">
-                                        @*@Html.DropDownListFor(o => o.customer_resident_addcity, new SelectList(Model.city_list, "city_name", "city_name"), "縣市別", new { @class = "form-control", @required = "required", @alertMsg = "戶籍地址" })*@
-                                        <select alertMsg="戶籍地址" class="form-control" id="customer_resident_addcity" name="customer_resident_addcity" required="required">
-                                            <option value="">縣市別</option>
-                                            <option value="台北市">台北市</option>
-                                            <option value="基隆市">基隆市</option>
-                                            <option value="新北市">新北市</option>
-                                            <option value="連江縣">連江縣</option>
-                                            <option value="宜蘭縣">宜蘭縣</option>
-                                            <option value="新竹市">新竹市</option>
-                                            <option value="新竹縣">新竹縣</option>
-                                            <option value="桃園市">桃園市</option>
-                                            <option value="苗栗縣">苗栗縣</option>
-                                            <option value="台中市">台中市</option>
-                                            <option value="彰化縣">彰化縣</option>
-                                            <option value="南投縣">南投縣</option>
-                                            <option value="嘉義市">嘉義市</option>
-                                            <option value="嘉義縣">嘉義縣</option>
-                                            <option value="雲林縣">雲林縣</option>
-                                            <option value="台南市">台南市</option>
-                                            <option value="高雄市">高雄市</option>
-                                            <option value="澎湖縣">澎湖縣</option>
-                                            <option value="金門縣">金門縣</option>
-                                            <option value="屏東縣">屏東縣</option>
-                                            <option value="台東縣">台東縣</option>
-                                            <option value="花蓮縣">花蓮縣</option>
-                                        </select>
+                                        @Html.DropDownListFor(o => o.customer_resident_addcity, new SelectList(Model.city_list, "city_name", "city_name"), "縣市別", new { @class = "form-control", @required = "required", @alertMsg = "戶籍地址" })
+                                        @*<select alertMsg="戶籍地址" class="form-control" id="customer_resident_addcity" name="customer_resident_addcity" required="required">
+                                                <option value="">縣市別</option>
+                                                <option value="台北市">台北市</option>
+                                                <option value="基隆市">基隆市</option>
+                                                <option value="新北市">新北市</option>
+                                                <option value="連江縣">連江縣</option>
+                                                <option value="宜蘭縣">宜蘭縣</option>
+                                                <option value="新竹市">新竹市</option>
+                                                <option value="新竹縣">新竹縣</option>
+                                                <option value="桃園市">桃園市</option>
+                                                <option value="苗栗縣">苗栗縣</option>
+                                                <option value="台中市">台中市</option>
+                                                <option value="彰化縣">彰化縣</option>
+                                                <option value="南投縣">南投縣</option>
+                                                <option value="嘉義市">嘉義市</option>
+                                                <option value="嘉義縣">嘉義縣</option>
+                                                <option value="雲林縣">雲林縣</option>
+                                                <option value="台南市">台南市</option>
+                                                <option value="高雄市">高雄市</option>
+                                                <option value="澎湖縣">澎湖縣</option>
+                                                <option value="金門縣">金門縣</option>
+                                                <option value="屏東縣">屏東縣</option>
+                                                <option value="台東縣">台東縣</option>
+                                                <option value="花蓮縣">花蓮縣</option>
+                                            </select>*@
 
                                     </div>
                                     <div class="col-lg-3 col-6">
                                         <select class="form-control" id="customer_resident_addregion" name="customer_resident_addregion" alertMsg="戶籍地址" required>
                                             <option>鄉鎮市區</option>
-                                            <option value="台北市">台北市</option>
-                                            <option value="基隆市">基隆市</option>
-                                            <option value="新北市">新北市</option>
-                                            <option value="連江縣">連江縣</option>
-                                            <option value="宜蘭縣">宜蘭縣</option>
-                                            <option value="新竹市">新竹市</option>
-                                            <option value="新竹縣">新竹縣</option>
-                                            <option value="桃園市">桃園市</option>
-                                            <option value="苗栗縣">苗栗縣</option>
-                                            <option value="台中市">台中市</option>
-                                            <option value="彰化縣">彰化縣</option>
-                                            <option value="南投縣">南投縣</option>
-                                            <option value="嘉義市">嘉義市</option>
-                                            <option value="嘉義縣">嘉義縣</option>
-                                            <option value="雲林縣">雲林縣</option>
-                                            <option value="台南市">台南市</option>
-                                            <option value="高雄市">高雄市</option>
-                                            <option value="澎湖縣">澎湖縣</option>
-                                            <option value="金門縣">金門縣</option>
-                                            <option value="屏東縣">屏東縣</option>
-                                            <option value="台東縣">台東縣</option>
-                                            <option value="花蓮縣">花蓮縣</option>
                                         </select>
-                                        </select>
-                                        @*@Html.Hidden("h_customer_resident", Model.customer_resident_addregion)*@
+                                        @Html.Hidden("h_customer_resident", Model.customer_resident_addregion)
                                     </div>
                                     <div class="col-lg-6 col-12">
-                                        <input alertMsg="戶籍地址" class="form-control mt-lg-0 mt-2" id="customer_resident_address" name="customer_resident_address" required="required" type="text" value="" />
+                                        <input alertMsg="戶籍地址" class="form-control mt-lg-0 mt-2" id="customer_resident_address" name="customer_resident_address" required="required" type="text" value="@Model.customer_resident_address" />
 
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group col-12">
                                 <label class="require-item" for="">通訊地址</label>
-                                <input class="inp-cbx" id="sameAddress" name="customer_mail_identical" type="checkbox" style="display: none;" value="true" />
+                                <input class="inp-cbx" id="sameAddress" name="customer_mail_identical" type="checkbox" style="display: none;" value="true" checked="@(Model.customer_mail_identical.HasValue ? Model.customer_mail_identical.Value : false)" />
                                 <label class="cbx" for="sameAddress">
                                     <span>
                                         <svg width="12px" height="10px" viewbox="0 0 12 10">
@@ -220,65 +287,18 @@
                                     <span>同戶籍地址</span>
                                 </label>
                                 <div class="form-row">
-                                    <input id="customer_mail_postalcode" name="customer_mail_postalcode" type="hidden" value="" />
+                                    <input id="customer_mail_postalcode" name="customer_mail_postalcode" type="hidden" value="@Model.customer_mail_postalcode" />
                                     <div class="col-lg-3 col-6">
-                                        @*@Html.DropDownListFor(o => o.customer_mail_addcity, new SelectList(Model.city_list, "city_name", "city_name"), "縣市別", new { @class = "form-control", @required = "required", @alertMsg = "通訊地址" })*@
-                                        <select alertMsg="通訊地址" class="form-control" id="customer_mail_addcity" name="customer_mail_addcity" required="required">
-                                            <option value="">縣市別</option>
-                                            <option value="台北市">台北市</option>
-                                            <option value="基隆市">基隆市</option>
-                                            <option value="新北市">新北市</option>
-                                            <option value="連江縣">連江縣</option>
-                                            <option value="宜蘭縣">宜蘭縣</option>
-                                            <option value="新竹市">新竹市</option>
-                                            <option value="新竹縣">新竹縣</option>
-                                            <option value="桃園市">桃園市</option>
-                                            <option value="苗栗縣">苗栗縣</option>
-                                            <option value="台中市">台中市</option>
-                                            <option value="彰化縣">彰化縣</option>
-                                            <option value="南投縣">南投縣</option>
-                                            <option value="嘉義市">嘉義市</option>
-                                            <option value="嘉義縣">嘉義縣</option>
-                                            <option value="雲林縣">雲林縣</option>
-                                            <option value="台南市">台南市</option>
-                                            <option value="高雄市">高雄市</option>
-                                            <option value="澎湖縣">澎湖縣</option>
-                                            <option value="金門縣">金門縣</option>
-                                            <option value="屏東縣">屏東縣</option>
-                                            <option value="台東縣">台東縣</option>
-                                            <option value="花蓮縣">花蓮縣</option>
-                                        </select>
+                                        @Html.DropDownListFor(o => o.customer_mail_addcity, new SelectList(Model.city_list, "city_name", "city_name"), "縣市別", new { @class = "form-control", @required = "required", @alertMsg = "通訊地址" })
                                     </div>
                                     <div class="col-lg-3 col-6">
                                         <select class="form-control" id="customer_mail_addregion" name="customer_mail_addregion" alertMsg="通訊地址" required>
                                             <option>鄉鎮市區</option>
-                                            <option value="台北市">台北市</option>
-                                            <option value="基隆市">基隆市</option>
-                                            <option value="新北市">新北市</option>
-                                            <option value="連江縣">連江縣</option>
-                                            <option value="宜蘭縣">宜蘭縣</option>
-                                            <option value="新竹市">新竹市</option>
-                                            <option value="新竹縣">新竹縣</option>
-                                            <option value="桃園市">桃園市</option>
-                                            <option value="苗栗縣">苗栗縣</option>
-                                            <option value="台中市">台中市</option>
-                                            <option value="彰化縣">彰化縣</option>
-                                            <option value="南投縣">南投縣</option>
-                                            <option value="嘉義市">嘉義市</option>
-                                            <option value="嘉義縣">嘉義縣</option>
-                                            <option value="雲林縣">雲林縣</option>
-                                            <option value="台南市">台南市</option>
-                                            <option value="高雄市">高雄市</option>
-                                            <option value="澎湖縣">澎湖縣</option>
-                                            <option value="金門縣">金門縣</option>
-                                            <option value="屏東縣">屏東縣</option>
-                                            <option value="台東縣">台東縣</option>
-                                            <option value="花蓮縣">花蓮縣</option>
                                         </select>
-                                        @*@Html.Hidden("h_customer_mail", Model.customer_mail_addregion)*@
+                                        @Html.Hidden("h_customer_mail", Model.customer_mail_addregion)
                                     </div>
                                     <div class="col-lg-6 col-12">
-                                        <input alertMsg="通訊地址" class="form-control mt-lg-0 mt-2" id="customer_mail_address" name="customer_mail_address" required="required" type="text" value="" />
+                                        <input alertMsg="通訊地址" class="form-control mt-lg-0 mt-2" id="customer_mail_address" name="customer_mail_address" required="required" type="text" value="@Model.customer_mail_address" />
 
                                     </div>
                                 </div>
@@ -308,38 +328,38 @@
                         <div class="row">
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_company_name">公司名稱</label>
-                                <input alertMsg="公司名稱" class="form-control" id="customer_company_name" name="customer_company_name" placeholder="" required="required" type="text" value="" />
+                                <input alertMsg="公司名稱" class="form-control" id="customer_company_name" name="customer_company_name" placeholder="" required="required" type="text" value="@Model.customer_company_name" />
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_job_type">工作職稱</label>
-                                <input alertMsg="工作職稱" class="form-control" id="customer_job_type" name="customer_job_type" placeholder="" required="required" type="text" value="" />
+                                <input alertMsg="工作職稱" class="form-control" id="customer_job_type" name="customer_job_type" placeholder="" required="required" type="text" value="@Model.customer_job_type" />
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label for="company_year">工作年資</label>
                                 <div class="form-row">
                                     <div class="col">
-                                        <input class="form-control" data-val="true" data-val-number="欄位 customer_work_year 必須是數字。" id="customer_work_year" inputmode="numeric" onkeyup="value=value.replace(/[^0-9]/g,'')" name="customer_work_year" placeholder="年" type="text" value="" />
+                                        <input class="form-control" data-val="true" data-val-number="欄位 customer_work_year 必須是數字。" id="customer_work_year" inputmode="numeric" onkeyup="value=value.replace(/[^0-9]/g,'')" name="customer_work_year" placeholder="年" type="text" value="@Model.customer_work_year" />
                                     </div>
                                     <div class="col">
-                                        <input class="form-control" data-val="true" data-val-number="欄位 customer_work_month 必須是數字。" id="customer_work_month" inputmode="numeric" onkeyup="value=value.replace(/[^0-9]/g,'')" name="customer_work_month" placeholder="月" type="text" value="" />
+                                        <input class="form-control" data-val="true" data-val-number="欄位 customer_work_month 必須是數字。" id="customer_work_month" inputmode="numeric" onkeyup="value=value.replace(/[^0-9]/g,'')" name="customer_work_month" placeholder="月" type="text" value="@Model.customer_work_month" />
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="company_pay">月薪</label>
-                                <input class="form-control" data-val="true" data-val-number="欄位 customer_month_salary 必須是數字。" id="customer_month_salary" inputmode="numeric" onkeyup="value=value.replace(/[^0-9]/g,'')" name="customer_month_salary" placeholder="" required="required" type="number" value="" />
+                                <input class="form-control" data-val="true" data-val-number="欄位 customer_month_salary 必須是數字。" id="customer_month_salary" inputmode="numeric" onkeyup="value=value.replace(/[^0-9]/g,'')" name="customer_month_salary" placeholder="" required="required" type="number" value="@Model.customer_month_salary" />
                             </div>
                             <div class="form-group col-12">
                                 <label class="require-item" for="">公司電話</label>
                                 <div class="form-row">
                                     <div class="col-3">
-                                        <input alertMsg="公司電話" class="form-control" id="customer_company_tel_code" inputmode="tel" maxlength="4" name="customer_company_tel_code" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="區碼" required="required" type="tel" value="" />
+                                        <input alertMsg="公司電話" class="form-control" id="customer_company_tel_code" inputmode="tel" maxlength="4" name="customer_company_tel_code" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="區碼" required="required" type="tel" value="@Model.customer_company_tel_code" />
                                     </div>
                                     <div class="col-6">
-                                        <input class="form-control" id="customer_company_tel_num" inputmode="tel" maxlength="8" name="customer_company_tel_num" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" required="required" type="tel" value="" />
+                                        <input class="form-control" id="customer_company_tel_num" inputmode="tel" maxlength="8" name="customer_company_tel_num" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" required="required" type="tel" value="@Model.customer_company_tel_num" />
                                     </div>
                                     <div class="col-3">
-                                        <input class="form-control" id="customer_company_tel_ext" inputmode="tel" name="customer_company_tel_ext" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="分機" type="text" value="" />
+                                        <input class="form-control" id="customer_company_tel_ext" inputmode="tel" name="customer_company_tel_ext" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="分機" type="text" value="@Model.customer_company_tel_ext" />
                                     </div>
                                 </div>
                             </div>
@@ -353,27 +373,27 @@
                         <div class="row">
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="contact_person_name_i">聯絡人姓名</label>
-                                <input alertMsg="聯絡人姓名" class="form-control" id="contact_person_name_i" name="contact_person_name_i" type="text" value="" placeholder="" required="required" />
+                                <input alertMsg="聯絡人姓名" class="form-control" id="contact_person_name_i" name="contact_person_name_i" type="text" value="@Model.contact_person_name_i" placeholder="" required="required" />
 
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="contact_person_relation_i">聯絡人關係</label>
-                                <input alertMsg="聯絡人關係" class="form-control" id="contact_person_relation_i" name="contact_person_relation_i" type="text" value="" placeholder="" required="required" />
+                                <input alertMsg="聯絡人關係" class="form-control" id="contact_person_relation_i" name="contact_person_relation_i" type="text" value="@Model.contact_person_relation_i" placeholder="" required="required" />
 
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="contact_person_mobile_phone_i">聯絡人行動電話</label>
-                                <input alertMsg="聯絡人行動電話" class="form-control" id="contact_person_mobile_phone_i" type="text" inputmode="tel" maxlength="10" minlength="10" name="contact_person_mobile_phone_i" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="" required="required" value="" />
+                                <input alertMsg="聯絡人行動電話" class="form-control" id="contact_person_mobile_phone_i" type="text" inputmode="tel" maxlength="10" minlength="10" name="contact_person_mobile_phone_i" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="" required="required" value="@Model.contact_person_mobile_phone_i" />
 
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label for="">聯絡人住宅電話</label>
                                 <div class="form-row">
                                     <div class="col-4">
-                                        <input class="form-control" id="contact_person_areacode_i" type="text" inputmode="tel" maxlength="4" minlength="2" name="contact_person_areacode_i" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="區碼" value="" />
+                                        <input class="form-control" id="contact_person_areacode_i" type="text" inputmode="tel" maxlength="4" minlength="2" name="contact_person_areacode_i" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="區碼" value="@Model.contact_person_areacode_i" />
                                     </div>
                                     <div class="col-8">
-                                        <input class="form-control" id="contact_person_tel_i" type="text" inputmode="tel" maxlength="8" name="contact_person_tel_i" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" value="" />
+                                        <input class="form-control" id="contact_person_tel_i" type="text" inputmode="tel" maxlength="8" name="contact_person_tel_i" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" value="@Model.contact_person_tel_i" />
                                     </div>
                                 </div>
                             </div>
@@ -381,13 +401,13 @@
                                 <label for="">聯絡人公司電話</label>
                                 <div class="form-row">
                                     <div class="col-3">
-                                        <input class="form-control" id="contact_person_company_areacode_i" type="text" inputmode="tel" maxlength="4" name="contact_person_company_areacode_i" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="區碼" value="" />
+                                        <input class="form-control" id="contact_person_company_areacode_i" type="text" inputmode="tel" maxlength="4" name="contact_person_company_areacode_i" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="區碼" value="@Model.contact_person_company_areacode_i" />
                                     </div>
                                     <div class="col-6">
-                                        <input class="form-control" id="contact_person_company_tel_i" type="text" inputmode="tel" maxlength="8" name="contact_person_company_tel_i" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" value="" />
+                                        <input class="form-control" id="contact_person_company_tel_i" type="text" inputmode="tel" maxlength="8" name="contact_person_company_tel_i" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" value="@Model.contact_person_company_tel_i" />
                                     </div>
                                     <div class="col-3">
-                                        <input class="form-control" id="contact_person_company_tel_ext_i" type="text" inputmode="tel" name="contact_person_company_tel_ext_i" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="分機" value="" />
+                                        <input class="form-control" id="contact_person_company_tel_ext_i" type="text" inputmode="tel" name="contact_person_company_tel_ext_i" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="分機" value="@Model.contact_person_company_tel_ext_i" />
                                     </div>
                                 </div>
                             </div>
@@ -398,11 +418,11 @@
                             <label>有無保證人</label>
                             <div class="cntr">
                                 <label for="guarantor01" class="radio">
-                                    <input type="radio" name="guarantor_option" id="guarantor01" class="hidden" value="1" />
+                                    <input type="radio" name="guarantor_option" id="guarantor01" class="hidden" value="1" checked="@(Model.guarantor_option == "1" ? true : false)" />
                                     <span class="label"></span>有
                                 </label>
                                 <label for="guarantor02" class="radio">
-                                    <input type="radio" name="guarantor_option" id="guarantor02" class="hidden" value="0" />
+                                    <input type="radio" name="guarantor_option" id="guarantor02" class="hidden" value="0" checked="@(Model.guarantor_option == "0" ? true : false)" />
                                     <span class="label"></span>無
                                 </label>
                             </div>
@@ -416,43 +436,43 @@
                             <div class="row pt-2">
                                 <div class="form-group col-lg-6 col-12">
                                     <label for="guarantor_name">保證人姓名</label>
-                                    <input class="form-control" id="guarantor_name" name="guarantor_name" placeholder="" type="text" value="" />
+                                    <input class="form-control" id="guarantor_name" name="guarantor_name" placeholder="" type="text" value="@Model.guarantor_name" />
                                 </div>
                                 <div class="form-group col-lg-6 col-12">
                                     <label for="guarantor_relation">保證人關係</label>
-                                    <input class="form-control" id="guarantor_relation" name="guarantor_relation" placeholder="" type="text" value="" />
+                                    <input class="form-control" id="guarantor_relation" name="guarantor_relation" placeholder="" type="text" value="@Model.guarantor_relation" />
                                 </div>
                                 <div class="form-group col-lg-6 col-12">
                                     <label for="guarantor_idcard_no">保證人身份證字號</label>
-                                    <input class="form-control" id="guarantor_idcard_no" maxlength="10" minlength="10" name="guarantor_idcard_no" placeholder="" type="text" value="" />
+                                    <input class="form-control" id="guarantor_idcard_no" maxlength="10" minlength="10" name="guarantor_idcard_no" placeholder="" type="text" value="@Model.guarantor_idcard_no" />
                                 </div>
                                 <div class="form-group col-12">
                                     <label for="guarantor_birthday">保證人出生日期</label>
                                     <div class="form-row">
                                         <div class="col-4">
-                                            <input class="form-control" id="guarantor_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="guarantor_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="民國年" type="text" value="" />
+                                            <input class="form-control" id="guarantor_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="guarantor_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="民國年" type="text" value="@Model.guarantor_birthdayYY" />
                                         </div>
                                         <div class="col-4">
-                                            <input class="form-control" id="guarantor_birthdayMM" inputmode="numeric" maxlength="2" minlength="1" name="guarantor_birthdayMM" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="月" type="text" value="" />
+                                            <input class="form-control" id="guarantor_birthdayMM" inputmode="numeric" maxlength="2" minlength="1" name="guarantor_birthdayMM" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="月" type="text" value="@Model.guarantor_birthdayMM" />
                                         </div>
                                         <div class="col-4">
-                                            <input class="form-control" id="guarantor_birthdayDD" inputmode="numeric" maxlength="2" minlength="1" name="guarantor_birthdayDD" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="日" type="text" value="" />
+                                            <input class="form-control" id="guarantor_birthdayDD" inputmode="numeric" maxlength="2" minlength="1" name="guarantor_birthdayDD" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="日" type="text" value="@Model.guarantor_birthdayDD" />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-lg-6 col-12">
                                     <label for="guarantor_mobile_phone">保證人行動電話</label>
-                                    <input class="form-control" id="guarantor_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="guarantor_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,'')" type="text" value="" />
+                                    <input class="form-control" id="guarantor_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="guarantor_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,'')" type="text" value="@Model.guarantor_mobile_phone" />
                                 </div>
                                 <div class="form-group col-lg-6 col-12">
                                     <label for="">保證人住宅電話</label>
                                     <div class="form-row">
                                         <div class="col-4">
-                                            <input class="form-control" id="guarantor_resident_tel_code" inputmode="tel" maxlength="4" name="guarantor_resident_tel_code" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="區碼" type="text" value="" />
+                                            <input class="form-control" id="guarantor_resident_tel_code" inputmode="tel" maxlength="4" name="guarantor_resident_tel_code" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="區碼" type="text" value="@Model.guarantor_resident_tel_code" />
                                         </div>
                                         <div class="col-8">
-                                            <input class="form-control" id="guarantor_resident_tel_num" inputmode="tel" maxlength="8" name="guarantor_resident_tel_num" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" type="text" value="" />
+                                            <input class="form-control" id="guarantor_resident_tel_num" inputmode="tel" maxlength="8" name="guarantor_resident_tel_num" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" type="text" value="@Model.guarantor_resident_tel_num" />
                                         </div>
                                     </div>
                                 </div>
@@ -460,13 +480,13 @@
                                     <label for="">保證人公司電話</label>
                                     <div class="form-row">
                                         <div class="col-3">
-                                            <input class="form-control" id="guarantor_company_tel_code" inputmode="tel" maxlength="4" name="guarantor_company_tel_code" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="區碼" type="text" value="" />
+                                            <input class="form-control" id="guarantor_company_tel_code" inputmode="tel" maxlength="4" name="guarantor_company_tel_code" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="區碼" type="text" value="@Model.guarantor_company_tel_code" />
                                         </div>
                                         <div class="col-6">
-                                            <input class="form-control" id="guarantor_company_tel_num" inputmode="tel" maxlength="8" name="guarantor_company_tel_num" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" type="text" value="" />
+                                            <input class="form-control" id="guarantor_company_tel_num" inputmode="tel" maxlength="8" name="guarantor_company_tel_num" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" type="text" value="@Model.guarantor_company_tel_num" />
                                         </div>
                                         <div class="col-3">
-                                            <input class="form-control" id="guarantor_company_tel_ext" inputmode="tel" name="guarantor_company_tel_ext" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="分機" type="text" value="" />
+                                            <input class="form-control" id="guarantor_company_tel_ext" inputmode="tel" name="guarantor_company_tel_ext" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="分機" type="text" value="@Model.guarantor_company_tel_ext" />
                                         </div>
                                     </div>
                                 </div>
@@ -479,39 +499,39 @@
                                 <label for="contact_person_name_i">銀行狀態</label>
                                 <div class="cntr py-1">
                                     <label for="bankStatus01" class="radio">
-                                        <input type="radio" name="customer_creditcard_status" id="bankStatus01" class="hidden" value="沒辦過卡" checked="" />
+                                        <input type="radio" name="customer_creditcard_status" id="bankStatus01" class="hidden" value="沒辦過卡" checked="@(Model.customer_creditcard_status == "沒辦過卡" ? true : false)" />
                                         <span class="label"></span>沒辦過卡
                                     </label>
                                     <label for="bankStatus02" class="radio">
-                                        <input type="radio" name="customer_creditcard_status" id="bankStatus02" class="hidden" value="無卡自停" checked="" />
+                                        <input type="radio" name="customer_creditcard_status" id="bankStatus02" class="hidden" value="無卡自停" checked="@(Model.customer_creditcard_status == "無卡自停" ? true : false)" />
                                         <span class="label"></span>無卡自停
                                     </label>
                                     <label for="bankStatus03" class="radio">
-                                        <input type="radio" name="customer_creditcard_status" id="bankStatus03" class="hidden" value="協商繳款中" checked="" />
+                                        <input type="radio" name="customer_creditcard_status" id="bankStatus03" class="hidden" value="協商繳款中" checked="@(Model.customer_creditcard_status == "協商繳款中" ? true : false)" />
                                         <span class="label"></span>協商繳款中
                                     </label>
                                     <div class="d-flex align-items-center pt-2">
                                         <label for="bankStatus04" class="radio col-md-2 col-3" style="padding: 0;">
-                                            <input type="radio" name="customer_creditcard_status" id="bankStatus04" class="hidden" value="其他" checked="" />
+                                            <input type="radio" name="customer_creditcard_status" id="bankStatus04" class="hidden" value="其他" checked="@(Model.customer_creditcard_status == "其他" ? true : false)" />
                                             <span class="label"></span>其他
                                         </label>
-                                        <input class="form-control col" id="customer_creditcard_status_remark" name="customer_creditcard_status_remark" placeholder="銀行資料狀態說明" type="text" value="" />
+                                        <input class="form-control col" id="customer_creditcard_status_remark" name="customer_creditcard_status_remark" placeholder="銀行資料狀態說明" type="text" value="@Model.customer_creditcard_status_remark" />
                                     </div>
 
                                 </div>
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label for="contact_person_mobile_phone_i">發卡銀行</label>
-                                <input class="form-control" id="customer_creditcard_bank" name="customer_creditcard_bank" placeholder="" type="text" value="" />
+                                <input class="form-control" id="customer_creditcard_bank" name="customer_creditcard_bank" placeholder="" type="text" value="@Model.customer_creditcard_bank" />
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label for="">有效日期</label>
                                 <div class="form-row">
                                     <div class="col-6">
-                                        <input class="form-control" data-val="true" data-val-number="欄位 customer_creditcard_validdate_month 必須是數字。" id="customer_creditcard_validdate_month" inputmode="numeric" maxlength="2" name="customer_creditcard_validdate_month" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="月" type="text" value="" />
+                                        <input class="form-control" data-val="true" data-val-number="欄位 customer_creditcard_validdate_month 必須是數字。" id="customer_creditcard_validdate_month" inputmode="numeric" maxlength="2" name="customer_creditcard_validdate_month" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="月" type="text" value="@Model.customer_creditcard_validdate_month" />
                                     </div>
                                     <div class="col-6">
-                                        <input class="form-control" data-val="true" data-val-number="欄位 customer_creditcard_validdate_year 必須是數字。" id="customer_creditcard_validdate_year" inputmode="numeric" maxlength="2" name="customer_creditcard_validdate_year" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="年" type="text" value="" />
+                                        <input class="form-control" data-val="true" data-val-number="欄位 customer_creditcard_validdate_year 必須是數字。" id="customer_creditcard_validdate_year" inputmode="numeric" maxlength="2" name="customer_creditcard_validdate_year" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="年" type="text" value="@Model.customer_creditcard_validdate_year" />
                                     </div>
                                 </div>
                             </div>
@@ -519,16 +539,16 @@
                                 <label for="">卡號</label>
                                 <div class="form-row">
                                     <div class="col-3">
-                                        <input class="form-control inputs" id="card_num_01" inputmode="numeric" maxlength="4" minlength="4" name="card_num_01" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="1234" type="text" value="" />
+                                        <input class="form-control inputs" id="card_num_01" inputmode="numeric" maxlength="4" minlength="4" name="card_num_01" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="1234" type="text" value="@Model.card_num_01" />
                                     </div>
                                     <div class="col-3">
-                                        <input class="form-control inputs" id="card_num_02" inputmode="numeric" maxlength="4" minlength="4" name="card_num_02" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="5678" type="text" value="" />
+                                        <input class="form-control inputs" id="card_num_02" inputmode="numeric" maxlength="4" minlength="4" name="card_num_02" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="5678" type="text" value="@Model.card_num_02" />
                                     </div>
                                     <div class="col-3">
-                                        <input class="form-control inputs" id="card_num_03" inputmode="numeric" maxlength="4" minlength="4" name="card_num_03" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="1234" type="text" value="" />
+                                        <input class="form-control inputs" id="card_num_03" inputmode="numeric" maxlength="4" minlength="4" name="card_num_03" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="1234" type="text" value="@Model.card_num_03" />
                                     </div>
                                     <div class="col-3">
-                                        <input class="form-control inputs" id="card_num_04" inputmode="numeric" maxlength="4" minlength="4" name="card_num_04" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="5678" type="text" value="" />
+                                        <input class="form-control inputs" id="card_num_04" inputmode="numeric" maxlength="4" minlength="4" name="card_num_04" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="5678" type="text" value="@Model.card_num_04" />
                                     </div>
                                 </div>
                                 <script>
@@ -554,39 +574,54 @@
                                 <label for="rdo">指定照會時間</label>
                                 <div class="cntr">
                                     <label for="contact-time01" class="radio">
-                                        <input type="radio" name="note_time" id="contact-time01" class="hidden" value="none" checked="" />
+                                        <input type="radio" name="note_time" id="contact-time01" class="hidden" value="none" checked="@(Model.note_time == "none" ? true : false)" />
                                         <span class="label"></span>不指定
                                     </label>
                                     <label for="contact-time02" class="radio">
-                                        <input type="radio" name="note_time" id="contact-time02" class="hidden" value="morning" checked="" />
+                                        <input type="radio" name="note_time" id="contact-time02" class="hidden" value="morning" checked="@(Model.note_time == "morning" ? true : false)" />
                                         <span class="label"></span>上午
                                     </label>
                                     <label for="contact-time03" class="radio">
-                                        <input type="radio" name="note_time" id="contact-time03" class="hidden" value="afternoon" checked="" />
+                                        <input type="radio" name="note_time" id="contact-time03" class="hidden" value="afternoon" checked="@(Model.note_time == "afternoon" ? true : false)" />
                                         <span class="label"></span>下午
                                     </label>
                                     <label for="contact-time04" class="radio">
-                                        <input type="radio" name="note_time" id="contact-time04" class="hidden" value="night" checked="" />
+                                        <input type="radio" name="note_time" id="contact-time04" class="hidden" value="night" checked="@(Model.note_time == "night" ? true : false)" />
                                         <span class="label"></span>晚上
                                     </label>
                                 </div>
                             </div>
                             <div class="form-group col-12">
                                 <label for="customer_remark">備註</label>
-                                @*@Html.TextAreaFor(o => o.note_remark, new { @row = "3", @style = "resize: none;", @class = "form-control" })*@
-                                <textarea class="form-control" id="noteRemark" name="note_remark" rows="3" style="resize: none;"></textarea>
+                                @Html.TextAreaFor(o => o.note_remark, new { @row = "3", @style = "resize: none;", @class = "form-control" })
+                                @*<textarea class="form-control" id="noteRemark" name="note_remark" rows="3" style="resize: none;"></textarea>*@
                             </div>
                             <div class="form-group col-12">
                                 <label class="col-form-label">是否保密</label>
                                 <div class="cntr">
-                                    <label for="secret01" class="radio">
-                                        <input type="radio" name="is_secret" id="secret01" class="hidden" value="true" />
-                                        <span class="label"></span>是
-                                    </label>
-                                    <label for="secret02" class="radio">
-                                        <input type="radio" name="is_secret" id="secret02" class="hidden" value="false" />
-                                        <span class="label"></span>否
-                                    </label>
+                                    @if (Model.is_secret.HasValue)
+                                    {
+                                        <label for="secret01" class="radio">
+                                            <input type="radio" name="is_secret" id="secret01" class="hidden" value="true" checked="@(Model.is_secret.Value ? true : false)" />
+                                            <span class="label"></span>是
+                                        </label>
+                                        <label for="secret02" class="radio">
+                                            <input type="radio" name="is_secret" id="secret02" class="hidden" value="false" checked="@(Model.is_secret.Value ? false : true)" />
+                                            <span class="label"></span>否
+                                        </label>
+                                    }
+                                    else
+                                    {
+                                        <label for="secret01" class="radio">
+                                            <input type="radio" name="is_secret" id="secret01" class="hidden" value="true" />
+                                            <span class="label"></span>是
+                                        </label>
+                                        <label for="secret02" class="radio">
+                                            <input type="radio" name="is_secret" id="secret02" class="hidden" value="false" />
+                                            <span class="label"></span>否
+                                        </label>
+                                    }
+
                                 </div>
                                 <p class="remark pt-1">電話聯繫時不會透漏任何申辦資訊喔！請您放心。</p>
                             </div>
@@ -697,3 +732,98 @@
         </div>
     </div>
 </form>
+
+<script>
+    $(function () {
+        $(document).keydown(function (event) {
+            switch (event.keyCode) {
+            case 13://enter
+            return false;
+            }
+        });
+
+        $('#customer_resident_addcity').on('change', function () { if ($('#sameAddress').prop('checked'))samAddressChecked(); getcitycode(this, 'town') });
+        $('#customer_resident_addregion').on('change', function () { if ($('#sameAddress').prop('checked'))samAddressChecked(); getcitycode(this, 'zipcode') });
+        $('#customer_resident_address').on('keyup', function () { if ($('#sameAddress').prop('checked'))samAddressChecked(); })
+        $('#customer_mail_addcity').on('change', function () { getcitycode(this, 'town') });
+        $('#customer_mail_addregion').on('change', function () { getcitycode(this, 'zipcode') });
+        getcitycode($('#customer_resident_addcity'), 'town')
+        getcitycode($('#customer_mail_addcity'), 'town')
+
+        $('input[name="customer_mail_identical"][value=""]').prop('checked', true);
+        samAddressChecked()
+        checkGuarantorOption($('input[type=radio][name=guarantor_option]:checked').val());
+
+        //$('from').submit(function () {
+
+        //});
+    });
+    function getcitycode(obj, query_type) {
+        if (query_type == 'town') {
+            var id = $(obj).attr('id').replace('_addcity', '');
+            var str = '';
+            if ($('#h_' + id).val() != '') {
+                str = $('#h_' + id).val();
+                $('#h_' + id).val('');
+            }
+            $('#' + id + '_postalcode').val('');
+            $('#' + id + '_addregion').find('option').remove();
+            $('#' + id + '_addregion').append($('<option></option>').val('').text('鄉鎮市區'));
+            if ($(obj).val() != '') {
+                $.ajax({
+                    url: '@Url.Action("search_post_code", "Recevie")',
+                    data: { query_type: query_type, city_name: $(obj).val(), town_name: '' },
+                    type: 'GET',
+                    async: false,
+                    success: function (data) {
+                        if (data != null) {
+
+                            for (var i = 0; i < data.town_list.length; i++) {
+                                $('#' + id + '_addregion').append($('<option></option>').val(data.town_list[i].town_name).text(data.town_list[i].town_name));
+                            }
+                        }
+                    }
+                });
+            }
+            $('#' + id + '_addregion').val(str);
+            if (str != '') { getcitycode($('#' + id + '_addregion'), 'zipcode'); }
+        }
+        else {
+            var id = $(obj).attr('id').replace('_addregion', '');
+            if ($(obj).val() != '') {
+                $.ajax({
+
+                    url: '@Url.Action("search_post_code", "Recevie")',
+                    data: { query_type: query_type, city_name: $('#' + id + '_addcity').val(), town_name: $(obj).val() },
+                    type: 'GET',
+                    async: false,
+                    success: function (data) {
+                        if (data != null) {
+                            $('#' + id + '_postalcode').val(data.zipcode);
+                        }
+                    }
+                });
+            }
+        }
+    }
+    function checkGuarantorOption(obj) {
+        if (obj == '1') {
+            $('#guarantorData').attr('class', 'd-block')
+        } else {
+            $('#guarantorData').attr('class', 'd-none')
+        }
+    }
+    function checkApplyMethodOption(obj) {
+        if (obj == '機車分期') {
+            $('#product_name').parent().find('label').attr('class', 'require-item');
+            $('#product_name').attr('required', 'required');
+            $('#dealer_branch_name').parent().find('label').attr('class', 'require-item');
+            $('#dealer_branch_name').attr('required', 'required');
+        } else {
+            $('#product_name').parent().find('label').attr('class', '');
+            $('#product_name').removeAttr('required');
+            $('#dealer_branch_name').parent().find('label').attr('class', '');
+            $('#dealer_branch_name').removeAttr('required');
+        }
+    }
+</script>

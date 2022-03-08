@@ -27,7 +27,7 @@ namespace fontWebCore.Controllers
         public IActionResult Apply()
         {
             #region 進件限制
-            //viewModelReceiveCase chk = _context.recevieCases.FromSqlRaw("select recevie_date from recevieCases WHERE customer_idcard_no = @customer_idcard_no", parameters).OrderByDescending(o => o.recevie_date).Select(
+            //viewModelReceiveCase chk = _context.receiveCases.FromSqlRaw("select recevie_date from receiveCases WHERE customer_idcard_no = @customer_idcard_no", parameters).OrderByDescending(o => o.recevie_date).Select(
             //        o => new viewModelReceiveCase
             //        {
             //            recevie_date = o.recevie_date
@@ -134,7 +134,7 @@ namespace fontWebCore.Controllers
                     }              
                 }
                 //儲存資料                
-                _context.recevieCases.Add(CommonHelpers.Migration<viewModelReceiveCase, recevieCases>(model));
+                _context.receiveCases.Add(CommonHelpers.Migration<viewModelReceiveCase, receiveCases>(model));
                 _context.SaveChanges();
                 //更新登入資訊
                 //this.MemberInfo = CommonHelpers.Migration<members, viewModelMember>(m);
@@ -156,12 +156,12 @@ namespace fontWebCore.Controllers
                 object[] parameters = new object[] {
                         new SqlParameter { ParameterName = "customer_idcard_no", Value = this.MemberInfo.customer_idcard_no },
                 };
-                //viewModelReceiveCase item = _context.recevieCases.FromSqlRaw("select recevie_date from recevieCases WHERE ISNULL(recevie_status,0) <> '0' AND customer_idcard_no = @customer_idcard_no", parameters).OrderByDescending(o=>o.recevie_date).Select(
+                //viewModelReceiveCase item = _context.receiveCases.FromSqlRaw("select recevie_date from receiveCases WHERE ISNULL(recevie_status,0) <> '0' AND customer_idcard_no = @customer_idcard_no", parameters).OrderByDescending(o=>o.recevie_date).Select(
                 //    o => new viewModelReceiveCase
                 //    {
                 //        recevie_date = o.recevie_date
                 //    }).FirstOrDefault();
-                viewModelReceiveCase item = _context.recevieCases.FromSqlRaw("select recevie_date from recevieCases WHERE customer_idcard_no = @customer_idcard_no", parameters).OrderByDescending(o => o.recevie_date).Select(
+                viewModelReceiveCase item = _context.receiveCases.FromSqlRaw("select recevie_date from receiveCases WHERE customer_idcard_no = @customer_idcard_no", parameters).OrderByDescending(o => o.recevie_date).Select(
                     o => new viewModelReceiveCase
                     {
                         recevie_date = o.recevie_date

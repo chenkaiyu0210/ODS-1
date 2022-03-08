@@ -10,17 +10,17 @@ using System.Text;
 
 namespace backendWeb.Service.ServiceClass
 {
-    public class recevieCasesService : IBaseCrudService<viewModelRecevieCases>
+    public class receiveCasesService : IBaseCrudService<ViewModelReceiveCases>
     {
-        public viewModelRecevieCases Delete(viewModelRecevieCases model)
+        public ViewModelReceiveCases Delete(ViewModelReceiveCases model)
         {
             throw new NotImplementedException();
         }
 
-        public IList<viewModelRecevieCases> GetList(viewModelRecevieCases model)
+        public IList<ViewModelReceiveCases> GetList(ViewModelReceiveCases model)
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append("SELECT * FROM recevieCases WHERE 1 = 1" + Environment.NewLine);
+            builder.Append("SELECT * FROM receiveCases WHERE 1 = 1" + Environment.NewLine);
             List<SqlParameter> parameters = new List<SqlParameter>();
             //if (!string.IsNullOrWhiteSpace(model.searchIn_authorize_code))
             //{
@@ -44,15 +44,15 @@ namespace backendWeb.Service.ServiceClass
                 }                
             }
 
-            return new baseRepository<viewModelRecevieCases>(new List<string> { builder.ToString() }, new List<List<SqlParameter>> { parameters }).GetList().ToList();
+            return new baseRepository<ViewModelReceiveCases>(new List<string> { builder.ToString() }, new List<List<SqlParameter>> { parameters }).GetList().ToList();
         }
 
-        public viewModelRecevieCases GetOnly(viewModelRecevieCases model)
+        public ViewModelReceiveCases GetOnly(ViewModelReceiveCases model)
         {
             throw new NotImplementedException();
         }
 
-        public viewModelRecevieCases Save(viewModelRecevieCases model)
+        public ViewModelReceiveCases Save(ViewModelReceiveCases model)
         {
             throw new NotImplementedException();
         }

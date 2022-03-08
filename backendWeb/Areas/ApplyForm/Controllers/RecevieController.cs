@@ -24,15 +24,15 @@ namespace backendWeb.Areas.ApplyForm.Controllers
         [HttpPost]
         public ActionResult Table(int draw, int start, int length)
         {
-            IBaseCrudService<viewModelRecevieCases> crudService = new recevieCasesService();
-            IList<viewModelRecevieCases> list= crudService.GetList(new viewModelRecevieCases { draw = draw, start = start, length = length });
+            IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
+            IList<viewModelReceiveCases> list= crudService.GetList(new viewModelReceiveCases { draw = draw, start = start, length = length });
             var returnObj =
                   new
                   {
                       draw = draw,
                       recordsTotal = 4,
                       recordsFiltered = 4,
-                      data = list == null ? new List<viewModelRecevieCases>() : list//分頁後的資料 
+                      data = list == null ? new List<viewModelReceiveCases>() : list//分頁後的資料 
                   };
             return Json(returnObj);
         }
