@@ -7,11 +7,11 @@ namespace fontWebCore.Models.Repositories
 {
     public class receiveCases
     {
-        public System.Guid recevie_id { get; set; }
+        public System.Guid receive_id { get; set; }
         public string bus_type { get; set; }
         public string promotion { get; set; }
-        public Nullable<System.DateTime> recevie_date { get; set; }
-        public string recevie_status { get; set; }
+        public Nullable<System.DateTime> receive_date { get; set; }
+        public string receive_status { get; set; }
         public string customer_name { get; set; }
         public string customer_idcard_no { get; set; }
         public string customer_mobile_phone { get; set; }

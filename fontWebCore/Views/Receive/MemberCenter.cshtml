@@ -6,13 +6,13 @@
 <section style="background-color: #fafafa; min-height: 75vh;">
     <div class="py-sm-5 py-4">
         <div class="container py-lg-3 py-2">
-            @if (Model != null && Model.recevie_date.HasValue)
+            @if (Model != null && Model.receive_date.HasValue)
             {
                 <div class="success-page text-center">
                     <h4>最近一次申辦成功時間</h4>
-                    <h3>@Model.recevie_date.Value.ToString("yyyy/MM/dd HH:mm:ss")</h3>
+                    <h3>@Model.receive_date.Value.ToString("yyyy/MM/dd HH:mm:ss")</h3>
                     @{
-                        int reciprocal = 30 - (TimeZoneInfo.ConvertTimeBySystemTimeZoneId(System.DateTime.Now, "Taipei Standard Time") - Model.recevie_date.Value).Days;
+                        int reciprocal = 30 - (TimeZoneInfo.ConvertTimeBySystemTimeZoneId(System.DateTime.Now, "Taipei Standard Time") - Model.receive_date.Value).Days;
                     }
                     @if (reciprocal > 0)
                     {

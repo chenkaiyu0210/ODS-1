@@ -153,13 +153,13 @@
         </EntityType>
         <EntityType Name="receiveCases">
           <Key>
-            <PropertyRef Name="recevie_id" />
+            <PropertyRef Name="receive_id" />
           </Key>
-          <Property Name="recevie_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="receive_id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="bus_type" Type="nvarchar" MaxLength="20" />
           <Property Name="promotion" Type="nvarchar" MaxLength="8" />
-          <Property Name="recevie_date" Type="datetime" />
-          <Property Name="recevie_status" Type="varchar" MaxLength="20" />
+          <Property Name="receive_date" Type="datetime" />
+          <Property Name="receive_status" Type="varchar" MaxLength="20" />
           <Property Name="customer_name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="customer_idcard_no" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="customer_mobile_phone" Type="varchar" MaxLength="10" Nullable="false" />
@@ -431,13 +431,13 @@
         </EntityType>
         <EntityType Name="receiveCases">
           <Key>
-            <PropertyRef Name="recevie_id" />
+            <PropertyRef Name="receive_id" />
           </Key>
-          <Property Name="recevie_id" Type="Guid" Nullable="false" />
+          <Property Name="receive_id" Type="Guid" Nullable="false" />
           <Property Name="bus_type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="promotion" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
-          <Property Name="recevie_date" Type="DateTime" Precision="3" />
-          <Property Name="recevie_status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="receive_date" Type="DateTime" Precision="3" />
+          <Property Name="receive_status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="customer_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="customer_idcard_no" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="customer_mobile_phone" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -763,11 +763,11 @@
                 <ScalarProperty Name="customer_mobile_phone" ColumnName="customer_mobile_phone" />
                 <ScalarProperty Name="customer_idcard_no" ColumnName="customer_idcard_no" />
                 <ScalarProperty Name="customer_name" ColumnName="customer_name" />
-                <ScalarProperty Name="recevie_status" ColumnName="recevie_status" />
-                <ScalarProperty Name="recevie_date" ColumnName="recevie_date" />
+                <ScalarProperty Name="receive_status" ColumnName="receive_status" />
+                <ScalarProperty Name="receive_date" ColumnName="receive_date" />
                 <ScalarProperty Name="promotion" ColumnName="promotion" />
                 <ScalarProperty Name="bus_type" ColumnName="bus_type" />
-                <ScalarProperty Name="recevie_id" ColumnName="recevie_id" />
+                <ScalarProperty Name="receive_id" ColumnName="receive_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

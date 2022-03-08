@@ -17,7 +17,7 @@ namespace fontWebCore.Common.Context
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Chinese_Taiwan_Stroke_CI_AS");
             modelBuilder.Entity<members>().HasKey(o => o.customer_id);
-            modelBuilder.Entity<receiveCases>().HasKey(o => o.recevie_id);
+            modelBuilder.Entity<receiveCases>().HasKey(o => o.receive_id);
             modelBuilder.Entity<postfile>().HasKey(o => o.zipcode);
             modelBuilder.Entity<logJson>().HasKey(o => o.log_id);
             //OnModelCreatingPartial(modelBuilder);

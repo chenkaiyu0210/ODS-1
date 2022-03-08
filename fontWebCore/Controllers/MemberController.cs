@@ -182,7 +182,7 @@ namespace fontWebCore.Controllers
                                                    //用戶頁面停留太久，逾期時間，在此設定的話會覆蓋Startup.cs裡的逾期設定
                             /* ExpiresUtc = DateTime.UtcNow.AddMinutes(loginExpireMinute) */
                          });
-                    return RedirectToAction("MemberCenter", "Recevie");                    
+                    return RedirectToAction("MemberCenter", "Receive");                    
 
                 }
                 else

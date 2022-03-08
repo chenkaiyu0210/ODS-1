@@ -32,13 +32,13 @@
                 columns: [
                     { data: "apply_method", orderable: false },                    
                     {
-                        data: "recevie_date", orderable: false, render: function (data, type, row, meta) {
+                        data: "receive_date", orderable: false, render: function (data, type, row, meta) {
                             //if (moment(data).isValid()) { return moment(data).format('YYYY/MM/DD HH:mm:ss'); } else { return ""; }
                             return moment(data).isValid() ? moment(data).format('YYYY/MM/DD HH:mm:ss') : ""
                         }
                     },
                     {
-                        data: "recevie_status", orderable: false, render: function (data, type, row, meta) {
+                        data: "receive_status", orderable: false, render: function (data, type, row, meta) {
                             return data == "1" ? "已送件" : "未送件";
                         }
                     },
@@ -51,15 +51,15 @@
                         }
                     },
                     {
-                        data: "recevie_id", render: function (data, type, row, meta) {
-                            return data = "<a class='btn btn-success' style='margin: 0 5px 0 5px;' href='@Url.Action("Edit", "Recevie", new { Area = "ApplyForm" })?id=" + data + "'>編輯</a>";
+                        data: "receive_id", render: function (data, type, row, meta) {
+                            return data = "<a class='btn btn-success' style='margin: 0 5px 0 5px;' href='@Url.Action("Edit", "Receive", new { Area = "ApplyForm" })?id=" + data + "'>編輯</a>";
                         }
                     }
                 ],
                 serverSide: true,
                 ajax: {
                     method: "POST",
-                    url: "@Url.Action("Table", "Recevie", new { Area = "ApplyForm" })",
+                    url: "@Url.Action("Table", "Receive", new { Area = "ApplyForm" })",
                     data: function (d) {
                         //d.userid = $("#userid").val();
                         //d.userphone = $("#userphone").val();

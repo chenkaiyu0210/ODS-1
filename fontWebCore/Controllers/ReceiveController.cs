@@ -15,26 +15,26 @@ using System.Threading.Tasks;
 
 namespace fontWebCore.Controllers
 {
-    public class RecevieController : BaseController
+    public class ReceiveController : BaseController
     {
-        private readonly ILogger<RecevieController> _logger;
+        private readonly ILogger<ReceiveController> _logger;
         private readonly ODSContext _context;
-        public RecevieController(IServiceProvider provider)
+        public ReceiveController(IServiceProvider provider)
         {
-            _logger = (ILogger<RecevieController>)provider.GetService(typeof(ILogger<RecevieController>));
+            _logger = (ILogger<ReceiveController>)provider.GetService(typeof(ILogger<ReceiveController>));
             _context = (ODSContext)provider.GetService(typeof(ODSContext));
         }
         public IActionResult Apply()
         {
             #region 進件限制
-            //viewModelReceiveCase chk = _context.receiveCases.FromSqlRaw("select recevie_date from receiveCases WHERE customer_idcard_no = @customer_idcard_no", parameters).OrderByDescending(o => o.recevie_date).Select(
+            //viewModelReceiveCase chk = _context.receiveCases.FromSqlRaw("select receive_date from receiveCases WHERE customer_idcard_no = @customer_idcard_no", parameters).OrderByDescending(o => o.receive_date).Select(
             //        o => new viewModelReceiveCase
             //        {
-            //            recevie_date = o.recevie_date
+            //            receive_date = o.receive_date
             //        }).FirstOrDefault();
             //if (chk != null)
             //{
-            //    int reciprocal = 30 - (this.TaiwanDateTime - chk.recevie_date.Value).Days;
+            //    int reciprocal = 30 - (this.TaiwanDateTime - chk.receive_date.Value).Days;
             //    if (reciprocal > 0)
             //    {
             //        ViewData["errMsg"] = $"提醒您：尚有{reciprocal}天可再次提出申辦";
@@ -119,9 +119,9 @@ namespace fontWebCore.Controllers
                     }
                 }
                 #endregion
-                model.recevie_id = Guid.NewGuid();
-                model.recevie_status = "0";
-                model.recevie_date = this.TaiwanDateTime;
+                model.receive_id = Guid.NewGuid();
+                model.receive_status = "0";
+                model.receive_date = this.TaiwanDateTime;
                 
                 members m = _context.members.FromSqlRaw($"select * from members WHERE customer_idcard_no = '{model.customer_idcard_no}' AND ISNULL(customer_name,'') = '' AND ISNULL(customer_birthday,'') = ''").FirstOrDefault();
                 if (m != null)
@@ -156,15 +156,15 @@ namespace fontWebCore.Controllers
                 object[] parameters = new object[] {
                         new SqlParameter { ParameterName = "customer_idcard_no", Value = this.MemberInfo.customer_idcard_no },
                 };
-                //viewModelReceiveCase item = _context.receiveCases.FromSqlRaw("select recevie_date from receiveCases WHERE ISNULL(recevie_status,0) <> '0' AND customer_idcard_no = @customer_idcard_no", parameters).OrderByDescending(o=>o.recevie_date).Select(
+                //viewModelReceiveCase item = _context.receiveCases.FromSqlRaw("select receive_date from receiveCases WHERE ISNULL(receive_status,0) <> '0' AND customer_idcard_no = @customer_idcard_no", parameters).OrderByDescending(o=>o.receive_date).Select(
                 //    o => new viewModelReceiveCase
                 //    {
-                //        recevie_date = o.recevie_date
+                //        receive_date = o.receive_date
                 //    }).FirstOrDefault();
-                viewModelReceiveCase item = _context.receiveCases.FromSqlRaw("select recevie_date from receiveCases WHERE customer_idcard_no = @customer_idcard_no", parameters).OrderByDescending(o => o.recevie_date).Select(
+                viewModelReceiveCase item = _context.receiveCases.FromSqlRaw("select receive_date from receiveCases WHERE customer_idcard_no = @customer_idcard_no", parameters).OrderByDescending(o => o.receive_date).Select(
                     o => new viewModelReceiveCase
                     {
-                        recevie_date = o.recevie_date
+                        receive_date = o.receive_date
                     }).FirstOrDefault();
                 return View(item);
             }

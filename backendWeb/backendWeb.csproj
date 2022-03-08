@@ -142,7 +142,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\ApplyForm\ApplyFormAreaRegistration.cs" />
-    <Compile Include="Areas\ApplyForm\Controllers\RecevieController.cs" />
+    <Compile Include="Areas\ApplyForm\Controllers\ReceiveController.cs" />
     <Compile Include="Areas\Management\Controllers\GroupSettingController.cs" />
     <Compile Include="Areas\Management\Controllers\MenuSettingController.cs" />
     <Compile Include="Areas\Management\Controllers\UserSettingController.cs" />
@@ -221,6 +221,7 @@
     <Compile Include="Service\ServiceClass\backendMenuService.cs" />
     <Compile Include="Service\ServiceClass\backendRoleGroupService.cs" />
     <Compile Include="Service\ServiceClass\backendUserService.cs" />
+    <Compile Include="Service\ServiceClass\postfileService.cs" />
     <Compile Include="Service\ServiceClass\receiveCasesService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -2117,9 +2118,9 @@
     <Content Include="Areas\Management\Views\GroupSetting\Index.cshtml" />
     <Content Include="Areas\ApplyForm\Views\web.config" />
     <Content Include="Areas\ApplyForm\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\ApplyForm\Views\Recevie\Index.cshtml" />
-    <Content Include="Areas\ApplyForm\Views\Recevie\Table.cshtml" />
-    <Content Include="Areas\ApplyForm\Views\Recevie\Edit.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\Receive\Index.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\Receive\Table.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\Receive\Edit.cshtml" />
     <Content Include="Areas\Management\Views\UserSetting\Table.cshtml" />
     <Content Include="Areas\Management\Views\UserSetting\Data.cshtml" />
     <Content Include="Areas\Management\Views\GroupSetting\Data.cshtml" />

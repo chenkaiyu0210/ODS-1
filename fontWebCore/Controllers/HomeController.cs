@@ -104,7 +104,7 @@ namespace fontWebCore.Controllers
                         }
                         else
                         {
-                            return RedirectToAction("MemberCenter", "Recevie"); //到登入後的第一頁，自行決定
+                            return RedirectToAction("MemberCenter", "Receive"); //到登入後的第一頁，自行決定
                         }
                     }
                 }
