@@ -133,7 +133,7 @@ namespace backendWeb.Controllers
             HttpCookie cookie = new HttpCookie("login");
             cookie.Values.Add("user_id", user_id);
             cookie.Values.Add("user_pwd", user_pwd);
-            cookie.Expires = DateTime.Now.AddDays(15);
+            cookie.Expires = this.TaiwanDateTime.AddDays(15);
 
             return cookie;
         }
@@ -142,7 +142,7 @@ namespace backendWeb.Controllers
             HttpCookie cookie = new HttpCookie("login");
             cookie.Values.Add("user_id", "");
             cookie.Values.Add("user_pwd", "");
-            cookie.Expires = DateTime.Now.AddDays(-1);
+            cookie.Expires = this.TaiwanDateTime.AddDays(-1);
 
             return cookie;
         }

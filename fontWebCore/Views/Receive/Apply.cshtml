@@ -684,7 +684,7 @@
                         $('input[required]').each(function (i, o) {
                             if ($(o).val() == '') {
                                 ck = true;
-                                MN.Alert('topCenter', 'error', $(o).attr('alertMsg') + '必填');
+                                $.notify($(o).attr('alertMsg') + '必填', { className: "Error", position: "top center" });        
                                 $(o).focus();
                                 return false;
                             }
@@ -693,7 +693,7 @@
                             if (maxLen != undefined) {
                                 if (maxLen < $(o).val().length) {
                                     ck = true;
-                                    MN.Alert('topCenter', 'error', $(o).attr('alertMsg') + '字數長度不足');
+                                    $.notify($(o).attr('alertMsg') + '字數長度不足', { className: "Error", position: "top center" });                                    
                                     $(o).focus();
                                     return false;
                                 }
@@ -701,7 +701,7 @@
                             if (minLen != undefined) {
                                 if ($(o).val().length < minLen ) {
                                     ck = true;
-                                    MN.Alert('topCenter', 'error', $(o).attr('alertMsg') + '字數長度不足');
+                                    $.notify($(o).attr('alertMsg') + '字數長度不足', { className: "Error", position: "top center" });                                    
                                     $(o).focus();
                                     return false;
                                 }
@@ -712,7 +712,7 @@
                         $('select[required]').each(function (i, o) {
                             if ($(o).val() == '') {
                                 ck = true;
-                                MN.Alert('topCenter', 'error', $(o).attr('alertMsg') + '必填');
+                                $.notify($(o).attr('alertMsg') + '必填', { className: "Error", position: "top center" });                                
                                 $(o).focus();
                                 return false;
                             }

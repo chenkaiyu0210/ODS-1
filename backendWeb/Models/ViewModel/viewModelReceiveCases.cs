@@ -11,6 +11,8 @@ namespace backendWeb.Models.ViewModel
         public string search_receive_id { get; set; }
         #endregion
         public System.Guid receive_id { get; set; }
+        public string examine_no { get; set; }
+        public string loan_no { get; set; }
         public string bus_type { get; set; }
         public string promotion { get; set; }
         public Nullable<System.DateTime> receive_date { get; set; }
@@ -99,19 +101,33 @@ namespace backendWeb.Models.ViewModel
         public string note_remark { get; set; }
         public Nullable<bool> is_secret { get; set; }
         public string commission_target { get; set; }
-
+        public string receive_staff { get; set; }
         #region Other        
         public string customer_birthdayYY { get; set; }
         public string customer_birthdayMM { get; set; }
         public string customer_birthdayDD { get; set; }
+        public string customer_id_issue_dateYY { get; set; }
+        public string customer_id_issue_dateMM { get; set; }
+        public string customer_id_issue_dateDD { get; set; }
         public bool? customer_mail_identical { get; set; }
         public string guarantor_option { get; set; }
         public string guarantor_birthdayYY { get; set; }
         public string guarantor_birthdayMM { get; set; }
         public string guarantor_birthdayDD { get; set; }
+        public IList<FileUpload> FileUploads { get; set; }
         public List<payment> paymentInput { get; set; } = new List<payment>();
         public List<viewModelPostfile> city_list { get; set; }
         public List<viewModelPostfile> town_list { get; set; }
+        public List<viewModelBackendBusType> busType_list { get; set; }
+        public List<viewModelBackendPromotion> promotion_list { get; set; }
+        public List<viewModelBackendSetConfig> edutation_list { get; set; }
+        public List<viewModelBackendSetConfig> idIssue_list { get; set; }
+        public List<viewModelBackendSetConfig> idRcv_list { get; set; }
+        public List<viewModelBackendSetConfig> dwellStatus_list { get; set; }        
+        public List<viewModelBackendProduct> productBrand_list { get; set; }
+        public List<viewModelBackendProduct> productKind_list { get; set; }
+        public List<viewModelBackendBank> bank_list { get; set; }
+        public List<viewModelBackendBankDetail> bankDetail_list { get; set; }
         #endregion
     }
     public class payment

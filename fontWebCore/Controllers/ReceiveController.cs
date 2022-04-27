@@ -120,7 +120,7 @@ namespace fontWebCore.Controllers
                 }
                 #endregion
                 model.receive_id = Guid.NewGuid();
-                model.receive_status = "0";
+                model.receive_status = "前端收件";
                 model.receive_date = this.TaiwanDateTime;
                 
                 members m = _context.members.FromSqlRaw($"select * from members WHERE customer_idcard_no = '{model.customer_idcard_no}' AND ISNULL(customer_name,'') = '' AND ISNULL(customer_birthday,'') = ''").FirstOrDefault();

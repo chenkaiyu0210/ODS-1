@@ -19,11 +19,11 @@ namespace backendWeb
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
-        protected void Application_Error(object sender, EventArgs e)
-        {
-            Response.Redirect("~/Home/Error");
-            Server.ClearError();
-            return;
-        }
+        //protected void Application_Error(object sender, EventArgs e)
+        //{
+        //    Response.Redirect("~/Home/Error");
+        //    Server.ClearError();
+        //    return;
+        //}
     }
 }

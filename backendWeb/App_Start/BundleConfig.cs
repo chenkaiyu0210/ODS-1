@@ -48,6 +48,7 @@ namespace backendWeb
                          "~/ThirdParty/sbAdmin2/vendor/chart.js/Chart.min.js",
                          "~/ThirdParty/sbAdmin2/vendor/jquery-easing/jquery.easing.min.js",
                          "~/ThirdParty/sbAdmin2/vendor/jquery-ui/jquery.blockUI.js",
+                         "~/ThirdParty/sbAdmin2/vendor/jquery-ui/jquery-editable-select/jquery-editable-select.min.js",
                          "~/ThirdParty/custom/js/moment.js",
                          "~/ThirdParty/sbAdmin2/vendor/duallistbox/js/jquery.bootstrap-duallistbox.min.js"
                          ));
@@ -64,7 +65,8 @@ namespace backendWeb
                     "~/ThirdParty/sbAdmin2/vendor/fontawesome-free/css/solid.min.css",
                     "~/ThirdParty/sbAdmin2/vendor/fontawesome-free/css/svg-with-js.min.css",
                     "~/ThirdParty/sbAdmin2/vendor/fontawesome-free/css/v4-shims.min.css",
-                    "~/ThirdParty/sbAdmin2/vendor/duallistbox/css/bootstrap-duallistbox.min.css"
+                    "~/ThirdParty/sbAdmin2/vendor/duallistbox/css/bootstrap-duallistbox.min.css",
+                    "~/ThirdParty/sbAdmin2/vendor/jquery-ui/jquery-editable-select/jquery-editable-select.min.css"
                     ));
 
             bundles.Add(new StyleBundle("~/sbAdmin2/customerCss").Include(

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using backendWeb.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.SqlClient;
@@ -7,7 +8,7 @@ using System.Web;
 
 namespace backendWeb.Models.Repositories
 {
-    public class baseRepository<T> /*where T : class*/
+    public class baseRepository<T> /*where T : class, new()*/
     {
         private List<string> sqlQuery;
         private List<List<SqlParameter>> sqlPar;
@@ -114,6 +115,38 @@ namespace backendWeb.Models.Repositories
                         context.SaveChanges();
 
                         dbContextTransaction.Commit();
+                    }
+                    catch (SqlException ex)
+                    {
+                        Results = 0;
+                        dbContextTransaction.Rollback();
+                        throw ex;
+                    }
+                }
+                return Results;
+            }
+        }
+        /// <summary>
+        /// Insert OR Update
+        /// </summary>
+        /// <returns></returns>
+        public int SaveEntity<TSource, TTarget>(TSource sourceInstance, string behavior) where TSource : class, new ()
+        {
+            int Results = 0;
+            using (var context = new RYMimoneyEntities())
+            {
+                using (var dbContextTransaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        if (behavior == "Create")
+                            context.Entry(CommonHelpers.Migration<TSource, TTarget>(sourceInstance)).State = EntityState.Added;
+                        else
+                            context.Entry(CommonHelpers.Migration<TSource, TTarget>(sourceInstance)).State = EntityState.Modified;
+
+                        context.SaveChanges();
+                        dbContextTransaction.Commit();
+                        Results = 1;
                     }
                     catch (SqlException ex)
                     {

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace backendWeb.Models.ViewModel
 {
-    public class viewModelPostfile
+    public class viewModelPostfile : baseModel
     {
         #region Search
         public string search_city_name { get; set; }

@@ -73,7 +73,23 @@ namespace backendWeb.Service.ServiceClass
 
         public viewModelReceiveCases Save(viewModelReceiveCases model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                // 改用Entity，所以隨便傳入泛型
+                int result = new baseRepository<object>(null).SaveEntity<viewModelReceiveCases,receiveCases>(model, model.saveAction);
+                if (result > 0)
+                {
+                    return new viewModelReceiveCases { replyResult = true };
+                }
+                else
+                {
+                    return new viewModelReceiveCases { replyResult = false, replyMsg = "存檔錯誤" };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new viewModelReceiveCases { replyResult = false, replyMsg = ex.Message };
+            }
         }
     }
 }

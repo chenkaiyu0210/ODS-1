@@ -1,10 +1,10 @@
 ﻿@using backendWeb.Models.ViewModel
 @model viewModelReceiveCases
 @{
-    ViewData["Title"] = "資金申請";    
+    ViewData["Title"] = "資金申請";
 }
 
-<form action="@Url.Action("Apply", "Receive")" method="post" enctype="multipart/form-data">
+<form action="@Url.Action("Edit", "Receive")" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
     <div class="" style="background-color: #fafafa;">
         <div class="container py-md-5 py-3">
@@ -15,37 +15,58 @@
                         <h5 class="product-form-title">商品資訊</h5>
                         <div class="row">
                             <div class="form-group col-12">
-                                <div class="cntr py-1">
-                                    <label for="applyMethod01" class="radio">
-                                        <input type="radio" name="bus_type" id="applyMethod01" class="hidden" value="機車分期" checked="@(Model.bus_type == "機車分期" ? true : false)" />
-                                        <span class="label"></span>機車分期
-                                    </label>
-                                    <label for="applyMethod02" class="radio">
-                                        <input type="radio" name="bus_type" id="applyMethod02" class="hidden" value="申辦借款" checked="@(Model.bus_type == "申辦借款" ? true : false)" />
-                                        <span class="label"></span>申辦借款
-                                    </label>
-                                    <label for="applyMethod03" class="radio">
-                                        <input type="radio" name="bus_type" id="applyMethod03" class="hidden" value="借新還舊" checked="@(Model.bus_type == "借新還舊" ? true : false)" />
-                                        <span class="label"></span>借新還舊
-                                    </label>
-                                </div>
+                                @*<div class="cntr py-1">
+                                        <label for="applyMethod01" class="radio">
+                                            <input type="radio" name="bus_type" id="applyMethod01" class="hidden" value="機車分期" checked="@(Model.bus_type == "機車分期" ? true : false)" />
+                                            <span class="label"></span>機車分期
+                                        </label>
+                                        <label for="applyMethod02" class="radio">
+                                            <input type="radio" name="bus_type" id="applyMethod02" class="hidden" value="申辦借款" checked="@(Model.bus_type == "申辦借款" ? true : false)" />
+                                            <span class="label"></span>申辦借款
+                                        </label>
+                                        <label for="applyMethod03" class="radio">
+                                            <input type="radio" name="bus_type" id="applyMethod03" class="hidden" value="借新還舊" checked="@(Model.bus_type == "借新還舊" ? true : false)" />
+                                            <span class="label"></span>借新還舊
+                                        </label>
+                                    </div>*@
+                                @Html.DropDownListFor(o => o.bus_type, new SelectList(Model.busType_list, "bus_type", "bus_type_name"), new { @class = "form-control", @required = "required", @alertMsg = "業務別" })
                             </div>
                             <script>
-                                $('input[type=radio][name=apply_method]').change(function () {
+                                $('select[name=bus_type]').change(function () {
                                     checkApplyMethodOption(this.value);
+                                    changeProduct(this.value, 'productBrand');
+                                    changePromotion(this.value)
                                 })
                             </script>
-                            <div class="form-group col-lg-6 col-12">
-                                <label class="" for="product_name">商品名稱</label>
-                                <input alertMsg="商品名稱" class="form-control" id="product_name" name="product_name" placeholder="" type="text" value="@Model.product_name" />
+                            <div class="form-group col-12">
+                                <label class="require-item" for="staging_amount">促銷專案</label>
+                                @Html.DropDownListFor(o => o.promotion, new SelectList(Model.promotion_list, "promo_no", "promo_name"), "請選擇", new { @class = "form-control", @required = "required", @alertMsg = "促銷專案" })
                             </div>
+                            <div class="form-group col-lg-6 col-12">
+                                <label class="require-item" for="product_brand">商品品牌</label>
+                                @Html.DropDownListFor(o => o.product_brand, new SelectList(Model.productBrand_list, "product_brand", "product_brand_name"), "請選擇", new { @class = "form-control", @required = "required", @alertMsg = "商品品牌" })
+                            </div>
+                            <div class="form-group col-lg-6 col-12">
+                                <label class="require-item" for="product_kind">商品類別</label>
+                                @Html.DropDownListFor(o => o.product_kind, new SelectList(Model.productKind_list, "product_kind", "product_kind_name"), "請選擇", new { @class = "form-control", @required = "required", @alertMsg = "商品類別" })
+                            </div>
+                            <script>
+                                $('#product_brand').change(function () {
+                                    debugger
+                                    changeProduct(this.value, 'productKind');
+                                })
+                            </script>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="" for="dealer_branch_name">商店名稱</label>
                                 <input alertMsg="商店名稱" class="form-control" id="dealer_branch_name" name="dealer_branch_name" placeholder="" type="text" value="@Model.dealer_branch_name" />
                             </div>
+                            <div class="form-group col-lg-6 col-12">
+                                <label class="" for="product_name">商品名稱</label>
+                                <input alertMsg="商品名稱" class="form-control" id="product_name" name="product_name" placeholder="" type="text" value="@Model.product_name" />
+                            </div>
                             <div class="form-group col-12">
                                 <label class="require-item" for="staging_amount">辦理分期金額</label>
-                                <input alertMsg="辦理分期金額" class="form-control" data-val="true" data-val-number="欄位 staging_amount 必須是數字。" id="staging_amount" inputmode="numeric" name="staging_amount" placeholder="" required="required" type="number" value="@(Model.staging_amount.HasValue ? Model.staging_amount.Value : "")" />
+                                <input alertMsg="辦理分期金額" class="form-control" data-val="true" data-val-number="欄位 staging_amount 必須是數字。" id="staging_amount" inputmode="numeric" name="staging_amount" placeholder="" required="required" type="number" value="@(Model.staging_amount.HasValue ? Model.staging_amount.Value.ToString() : "")" />
                             </div>
                             <div class="form-group col-12 add-line">
                                 <div class="form-row align-items-center">
@@ -104,17 +125,17 @@
                                     var appendItems = $(".add-line").find(".form-row");
                                     var len = appendItems.length;
                                     var addinput = $(`<div class="form-row align-items-center pt-2">
-                                                                                                                                            <div class="col-lg-5 col-4">
-                                                                                                                                                <input type="text" class="form-control" name="paymentInput[`+ len + `].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "期數" />
-                                                                                                                                            </div>
-                                                                                                                                            <div class="col-md-6 col-7">
-                                                                                                                                                <input type="text" class="form-control" name="paymentInput[`+ len + `].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "每期總繳金額" />
-                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="col-lg-5 col-4">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <input type="text" class="form-control" name="paymentInput[`+ len + `].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "期數" />
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="col-md-6 col-7">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <input type="text" class="form-control" name="paymentInput[`+ len + `].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "每期總繳金額" />
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
 
-                                                                                                                                            <div class="col-1">
-                                                                                                                                                <button type="button" class="btn btn-secondary delete" onclick="delLine(this)"><i class="fas fa-minus"></i></button>
-                                                                                                                                            </div>
-                                                                                                                                        </div>`);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="col-1">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <button type="button" class="btn btn-secondary delete" onclick="delLine(this)"><i class="fas fa-minus"></i></button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>`);
                                     if (appendItems.length < 3) {
                                         $(".add-line").append(addinput);
                                     }
@@ -142,16 +163,58 @@
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_idcard_no">身份證字號</label>
                                 <input alertMsg="身份證字號" class="form-control" id="customer_idcard_no" maxlength="10" minlength="10" name="customer_idcard_no" placeholder="" required="required" type="text" value="@Model.customer_idcard_no" readonly />
-
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_mobile_phone">行動電話</label>
                                 <input alertMsg="行動電話" class="form-control" id="customer_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="customer_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,'')" required="required" type="text" value="@Model.customer_mobile_phone" readonly />
-
+                            </div>
+                            <!-- 教育程度 -->
+                            <div class="form-group col-lg-6 col-12">
+                                <label for="customer_edutation_status">教育程度</label>
+                                @Html.DropDownListFor(o => o.customer_edutation_status, new SelectList(Model.edutation_list, "config_code", "config_value"), "請選擇", new { @class = "form-control", @alertMsg = "教育程度" })
+                            </div>
+                            <div class="form-group col-lg-6 col-12">
+                                <label class="require-item" for="customer_id_number_areacode">發證地點</label>
+                                @Html.DropDownListFor(o => o.customer_id_number_areacode, new SelectList(Model.idIssue_list, "config_code", "config_value"), "請選擇", new { @class = "form-control", @required = "required", @alertMsg = "發證地點" })
+                            </div>
+                            <div class="form-group col-lg-6 col-12">
+                                <label class="require-item" for="customer_id_number_status">初補換</label>
+                                @Html.DropDownListFor(o => o.customer_id_number_status, new SelectList(Model.idRcv_list, "config_code", "config_value"), "請選擇", new { @class = "form-control", @required = "required", @alertMsg = "初補換" })
+                            </div>
+                            <div class="form-group col-12">
+                                <label class="require-item" for="customer_birthdayYY">初補換日期</label>
+                                @if (Model.customer_id_issue_date.HasValue)
+                                {
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            <input alertMsg="初補換日期" class="form-control" id="customer_id_issue_dateYY" inputmode="numeric" maxlength="3" minlength="2" name="customer_id_issue_dateYY" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="民國年" required="required" type="text" value="@Model.customer_id_issue_dateYY" />
+                                        </div>
+                                        <div class="col-4">
+                                            <input alertMsg="初補換日期" class="form-control" id="customer_id_issue_dateMM" inputmode="numeric" maxlength="2" minlength="1" name="customer_id_issue_dateMM" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="月" required="required" type="text" value="@Model.customer_id_issue_dateMM" />
+                                        </div>
+                                        <div class="col-4">
+                                            <input alertMsg="初補換日期" class="form-control" id="customer_id_issue_dateDD" inputmode="numeric" maxlength="2" minlength="1" name="customer_id_issue_dateDD" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="日" required="required" type="text" value="@Model.customer_id_issue_dateDD" />
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            <input alertMsg="初補換日期" class="form-control" id="customer_id_issue_dateYY" inputmode="numeric" maxlength="3" minlength="2" name="customer_id_issue_dateYY" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="民國年" required="required" type="text" value="" />
+                                        </div>
+                                        <div class="col-4">
+                                            <input alertMsg="初補換日期" class="form-control" id="customer_id_issue_dateMM" inputmode="numeric" maxlength="2" minlength="1" name="customer_id_issue_dateMM" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="月" required="required" type="text" value="" />
+                                        </div>
+                                        <div class="col-4">
+                                            <input alertMsg="初補換日期" class="form-control" id="customer_id_issue_dateDD" inputmode="numeric" maxlength="2" minlength="1" name="customer_id_issue_dateDD" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="日" required="required" type="text" value="" />
+                                        </div>
+                                    </div>
+                                }
                             </div>
                             <div class="form-group col-12">
                                 <label class="require-item" for="customer_birthdayYY">出生日期</label>
-                                @if (string.IsNullOrWhiteSpace(Model.customer_name))
+                                @if (Model.customer_birthday == DateTime.MinValue)
                                 {
                                     <div class="form-row">
                                         <div class="col-4">
@@ -322,6 +385,58 @@
                                     }
                                 }
                             </script>
+                            <div class="form-group col-12">
+                                <label class="require-item" for="payment_mode">繳款方式</label>
+                                <div class="cntr">
+                                    @if (Model.payment_mode.HasValue)
+                                    {
+                                        <label for="payment_mode01" class="radio">
+                                            <input type="radio" name="payment_mode" id="payment_mode01" class="hidden" value="3" checked="@(Model.payment_mode.Value == 3 ? true : false)" alertMsg="繳款方式" />
+                                            <span class="label"></span>電子繳款單
+                                        </label>
+                                        <label for="payment_mode02" class="radio">
+                                            <input type="radio" name="payment_mode" id="payment_mode02" class="hidden" value="5" checked="@(Model.payment_mode.Value == 5 ? true : false)" alertMsg="繳款方式" />
+                                            <span class="label"></span>簡訊繳款
+                                        </label>
+                                    }
+                                    else
+                                    {
+                                        <label for="payment_mode01" class="radio">
+                                            <input type="radio" name="payment_mode" id="payment_mode01" class="hidden" value="3" alertMsg="繳款方式" required />
+                                            <span class="label"></span>電子繳款單
+                                        </label>
+                                        <label for="payment_mode02" class="radio">
+                                            <input type="radio" name="payment_mode" id="payment_mode02" class="hidden" value="5" alertMsg="繳款方式" required />
+                                            <span class="label"></span>簡訊繳款
+                                        </label>
+                                    }
+                                </div>
+                            </div>
+                            <script>
+                                $('input[type=radio][name=payment_mode]').change(function () {
+                                    checkPaymentMode(this.value);
+                                })
+                            </script>
+                            <div class="form-group col-12">
+                                <label for="customer_email">E-Mail</label>
+                                <input alertMsg="E-Mail" class="form-control" id="customer_email" name="customer_email" placeholder="" type="text" value="@Model.customer_email" />
+                            </div>
+                            <!-- 居住 -->
+                            <div class="form-group col-lg-6 col-12">
+                                <label for="customer_edutation_status">居住狀況</label>
+                                @Html.DropDownListFor(o => o.customer_dwell_status, new SelectList(Model.dwellStatus_list, "config_code", "config_value"), "請選擇", new { @class = "form-control", @alertMsg = "居住狀況" })
+                            </div>
+                            <div class="form-group col-lg-6 col-12">
+                                <label for="">居住時間</label>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <input class="form-control" id="customer_dwell_year" inputmode="tel" maxlength="4" name="customer_dwell_year" onkeyup="value = value.replace(/[^-0-9]/g,'')" placeholder="年" type="tel" value="@Model.customer_dwell_year" />
+                                    </div>
+                                    <div class="col-6">
+                                        <input class="form-control" id="customer_dwell_month" inputmode="tel" maxlength="2" name="customer_dwell_month" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="月" type="tel" value="@Model.customer_dwell_month" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <!-- 職業資料 -->
                         <h5 class="product-form-title">職業資料</h5>
@@ -363,7 +478,85 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- 公司地址 -->
+                            <div class="form-group col-12">
+                                <label for="customer_company_addcity">公司地址</label>
+                                <div class="form-row">
+                                    <input id="customer_company_postalcode" name="customer_company_postalcode" type="hidden" value="@Model.customer_company_postalcode" />
+                                    <div class="col-lg-3 col-6">
+                                        @Html.DropDownListFor(o => o.customer_company_addcity, new SelectList(Model.city_list, "city_name", "city_name"), "縣市別", new { @class = "form-control", @alertMsg = "公司地址" })
+                                    </div>
+                                    <div class="col-lg-3 col-6">
+                                        <select class="form-control" id="customer_company_addregion" name="customer_company_addregion" alertMsg="公司地址">
+                                            <option>鄉鎮市區</option>
+                                        </select>
+                                        @Html.Hidden("h_customer_company", Model.customer_company_addregion)
+                                    </div>
+                                    <div class="col-lg-6 col-12">
+                                        <input alertMsg="公司地址" class="form-control mt-lg-0 mt-2" id="customer_company_address" name="customer_company_address" type="text" value="@Model.customer_company_address" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 撥款資料 -->
+                        <h5 class="product-form-title">撥款資料</h5>
+                        <div class="row">
+                            <div class="form-group col-lg-6 col-12">
+                                <label class="require-item" for="bank_code">撥款帳戶銀行代碼</label>
+                                <select class="form-control" id="bank_code" name="bank_code" alertMsg="撥款帳戶銀行代碼" required>
+                                    @if (string.IsNullOrEmpty(Model.bank_code))
+                                    {
+                                        foreach (viewModelBackendBank d in Model.bank_list)
+                                        {
+                                            <option value="@d.bank_code">@(d.bank_code + "-" + d.bank_name)</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foreach (viewModelBackendBank d in Model.bank_list)
+                                        {
+                                            if (d.bank_code == Model.bank_code)
+                                            {
+                                                <option selected value="@d.bank_code">@(d.bank_code + "-" + d.bank_name)</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@d.bank_code">@(d.bank_code + "-" + d.bank_name)</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-6 col-12">
+                                <label class="require-item" for="bank_detail_code">撥款銀行分行代碼</label>
+                                <select class="form-control" id="bank_detail_code" name="bank_detail_code" alertMsg="撥款銀行分行代碼" required>
+                                    @if (!string.IsNullOrEmpty(Model.bank_code))
+                                    {
+                                        foreach (viewModelBackendBankDetail d in Model.bankDetail_list)
+                                        {
+                                            if (d.fnctr_code == Model.bank_detail_code)
+                                            {
+                                                <option selected value="@d.fnctr_code">@(d.fnctr_code + "-" + d.br_bank_name)</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@d.fnctr_code">@(d.fnctr_code + "-" + d.br_bank_name)</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
 
+                            <div class="form-group col-12">
+                                <label class="require-item" for="account_num">撥款帳號</label>
+                                <input alertMsg="撥款帳號" class="form-control" id="account_num" name="account_num" placeholder="撥款帳號" required="required" type="text" value="@Model.account_num" />
+                            </div>
+                            <script>
+                                $('#bank_code').editableSelect().on('select.editable-select', function (e, li) {
+                                    changeBankDetail(paddingLeft(li.val(), 3));
+                                });
+                                $('#bank_detail_code').editableSelect();
+                            </script>
                         </div>
                     </div>
 
@@ -460,7 +653,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="form-group col-lg-6 col-12">
                                     <label for="guarantor_mobile_phone">保證人行動電話</label>
                                     <input class="form-control" id="guarantor_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="guarantor_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,'')" type="text" value="@Model.guarantor_mobile_phone" />
@@ -475,6 +667,33 @@
                                             <input class="form-control" id="guarantor_resident_tel_num" inputmode="tel" maxlength="8" name="guarantor_resident_tel_num" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" type="text" value="@Model.guarantor_resident_tel_num" />
                                         </div>
                                     </div>
+                                </div>
+                                <!-- 公司地址 -->
+                                <div class="form-group col-12">
+                                    <label for="customer_company_addcity">保證人地址</label>
+                                    <div class="form-row">
+                                        <input id="guarantor_postalcode" name="guarantor_postalcode" type="hidden" value="@Model.guarantor_postalcode" />
+                                        <div class="col-lg-3 col-6">
+                                            @Html.DropDownListFor(o => o.guarantor_addcity, new SelectList(Model.city_list, "city_name", "city_name"), "縣市別", new { @class = "form-control", @alertMsg = "保證人地址" })
+                                        </div>
+                                        <div class="col-lg-3 col-6">
+                                            <select class="form-control" id="guarantor_addregion" name="guarantor_addregion" alertMsg="保證人地址">
+                                                <option>鄉鎮市區</option>
+                                            </select>
+                                            @Html.Hidden("h_guarantor", Model.guarantor_addregion)
+                                        </div>
+                                        <div class="col-lg-6 col-12">
+                                            <input alertMsg="保證人地址" class="form-control mt-lg-0 mt-2" id="guarantor_address" name="guarantor_address" type="text" value="@Model.guarantor_address" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-6 col-12">
+                                    <label for="guarantor_company_name">保證人公司名稱</label>
+                                    <input alertMsg="保證人公司名稱" class="form-control" id="guarantor_company_name" name="guarantor_company_name" placeholder="" type="text" value="@Model.guarantor_company_name" />
+                                </div>
+                                <div class="form-group col-lg-6 col-12">
+                                    <label for="guarantor_job_type">保證人公司職稱</label>
+                                    <input alertMsg="保證人公司名稱" class="form-control" id="guarantor_job_type" name="guarantor_job_type" placeholder="" type="text" value="@Model.guarantor_job_type" />
                                 </div>
                                 <div class="form-group col-12">
                                     <label for="">保證人公司電話</label>
@@ -625,112 +844,112 @@
                                 </div>
                                 <p class="remark pt-1">電話聯繫時不會透漏任何申辦資訊喔！請您放心。</p>
                             </div>
-                        </div>
-                        <!-- 資料上傳 -->
-                        @* <h5 class="product-form-title">資料上傳</h5>
-                            <div class="form-inline">
-                                <div class="file-upload col-lg-6 col-12">
-                                    <label class="require-item" for="">身分證正面</label>
-                                    <div class="image-upload-wrap">
-                                        <input class="file-upload-input" type='file' onchange="readURL(this);" Name="FileUploads[0].File" id="" alertMsg="身分證正面(檔案上傳)" required />
-                                        <div class="drag-text drag-img-idcard01">
-                                        </div>
-                                    </div>
-                                    <div class="file-upload-content">
-                                        <img class="file-upload-image" src="#" alt="" />
-                                        <div class="image-title-wrap">
-                                            <button type="button" onclick="removeUpload(this)" class="remove-image">移除 <span class="image-title">上傳檔案</span></button>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="file-upload col-lg-6 col-12">
-                                    <label class="require-item" for="">身分證反面</label>
-                                    <div class="image-upload-wrap">
-                                        <input class="file-upload-input" type='file' onchange="readURL(this);" Name="FileUploads[1].File" id="" alertMsg="身分證反面(檔案上傳)" required />
-                                        <div class="drag-img-idcard02">
-                                        </div>
-                                    </div>
-                                    <div class="file-upload-content">
-                                        <img class="file-upload-image" src="#" alt="" />
-                                        <div class="image-title-wrap">
-                                            <button type="button" onclick="removeUpload(this)" class="remove-image">移除 <span class="image-title">上傳檔案</span></button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="file-upload col-lg-6 col-12">
-                                    <label for="">存摺封面(有帳號的)</label>
-                                    <div class="image-upload-wrap">
-                                        <input class="file-upload-input" type='file' onchange="readURL(this);" Name="FileUploads[2].File" id="" />
-                                        <div class="drag-img-idcard03">
-                                        </div>
-                                    </div>
-                                    <div class="file-upload-content">
-                                        <img class="file-upload-image" src="#" alt="" />
-                                        <div class="image-title-wrap">
-                                            <button type="button" onclick="removeUpload(this)" class="remove-image">移除 <span class="image-title">上傳檔案</span></button>
-                                        </div>
-                                    </div>
-                                </div><input type="submit" class="btn btn-opposite rounded-pill py-2 px-4" value="申請資金" />
-                            </div> *@
+                            <div class="form-group col-12">
+                                <label class="require-item" for="commission_target">撥佣對象(統編/身分證)</label>
+                                <input alertMsg="撥佣對象" class="form-control" id="commission_target" name="commission_target" required="required" type="text" value="@Model.commission_target" />
+                            </div>
+                        </div>                      
                     </div>
                 </div>
                 <div class="d-flex justify-content-center pt-3">
-                    <button type="submit" class="btn btn-opposite rounded-pill py-2 px-4">申請資金</button>
+                    <button type="button" class="btn btn-opposite rounded-pill py-2 px-4" onclick="next()">上傳檔案</button>
+                </div>
+            </div>
+            <!-- 加分項目上傳 -->
+            <div id="addItem" class="d-none">
+                <h5 class="product-form-title">加分項目上傳</h5>
+                <p>如:勞保卡、聯徵報告(六個月內)、信用卡當期帳單、職業收入證明(所得/薪資證明、扣繳憑單)、近六個月存摺內頁</p>
+                <div class="row">
+                    <div class="file-upload col-md-4 col-12">
+                        <div class="image-upload-wrap">
+                            <input class="file-upload-input" type='file' onchange="readURL(this);" Name="FileUploads[0].File" id="" />
+                            <div class="drag-text drag-img-add">
+                            </div>
+                        </div>
+                        <div class="file-upload-content">
+                            <img class="file-upload-image" src="javascript:void(0)" alt="" />
+                            <div class="image-title-wrap">
+                                <button type="button" onclick="removeUpload(this)" class="remove-image">移除 <span class="image-title">上傳檔案</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="file-upload col-md-4 col-12">
+                        <div class="image-upload-wrap">
+                            <input class="file-upload-input" type='file' onchange="readURL(this);" Name="FileUploads[1].File" id="" />
+                            <div class="drag-img-add">
+                            </div>
+                        </div>
+                        <div class="file-upload-content">
+                            <img class="file-upload-image" src="javascript:void(0)" alt="" />
+                            <div class="image-title-wrap">
+                                <button type="button" onclick="removeUpload(this)" class="remove-image">移除 <span class="image-title">上傳檔案</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="file-upload col-md-4 col-12">
+                        <div class="image-upload-wrap">
+                            <input class="file-upload-input" type='file' onchange="readURL(this);" Name="FileUploads[2].File" id="" />
+                            <div class="drag-img-add">
+                            </div>
+                        </div>
+                        <div class="file-upload-content">
+                            <img class="file-upload-image" src="javascript:void(0)" alt="" />
+                            <div class="image-title-wrap">
+                                <button type="button" onclick="removeUpload(this)" class="remove-image">移除 <span class="image-title">上傳檔案</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="file-upload col-md-4 col-12">
+                        <div class="image-upload-wrap">
+                            <input class="file-upload-input" type='file' onchange="readURL(this);" Name="FileUploads[3].File" id="" />
+                            <div class="drag-img-add">
+                            </div>
+                        </div>
+                        <div class="file-upload-content">
+                            <img class="file-upload-image" src="javascript:void(0)" alt="" />
+                            <div class="image-title-wrap">
+                                <button type="button" onclick="removeUpload(this)" class="remove-image">移除 <span class="image-title">上傳檔案</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="file-upload col-md-4 col-12">
+                        <div class="image-upload-wrap">
+                            <input class="file-upload-input" type='file' onchange="readURL(this);" Name="FileUploads[4].File" id="" />
+                            <div class="drag-img-add">
+                            </div>
+                        </div>
+                        <div class="file-upload-content">
+                            <img class="file-upload-image" src="javascript:void(0)" alt="" />
+                            <div class="image-title-wrap">
+                                <button type="button" onclick="removeUpload(this)" class="remove-image">移除 <span class="image-title">上傳檔案</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="file-upload col-md-4 col-12">
+                        <div class="image-upload-wrap">
+                            <input class="file-upload-input" type='file' onchange="readURL(this);" Name="FileUploads[5].File" id="" />
+                            <div class="drag-img-add">
+                            </div>
+                        </div>
+                        <div class="file-upload-content">
+                            <img class="file-upload-image" src="javascript:void(0)" alt="" />
+                            <div class="image-title-wrap">
+                                <button type="button" onclick="removeUpload(this)" class="remove-image">移除 <span class="image-title">上傳檔案</span></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <script>
-                    function next() {
-                        var ck = false;
-                        $('input[required]').each(function (i, o) {
-                            if ($(o).val() == '') {
-                                ck = true;
-                                MN.Alert('topCenter', 'error', $(o).attr('alertMsg') + '必填');
-                                $(o).focus();
-                                return false;
-                            }
-                            var maxLen = $(o).attr('maxlength');
-                            var minLen = $(o).attr('minlength');
-                            if (maxLen != undefined) {
-                                if (maxLen < $(o).val().length) {
-                                    ck = true;
-                                    MN.Alert('topCenter', 'error', $(o).attr('alertMsg') + '字數長度不足');
-                                    $(o).focus();
-                                    return false;
-                                }
-                            }
-                            if (minLen != undefined) {
-                                if ($(o).val().length < minLen) {
-                                    ck = true;
-                                    MN.Alert('topCenter', 'error', $(o).attr('alertMsg') + '字數長度不足');
-                                    $(o).focus();
-                                    return false;
-                                }
-                            }
-                        })
-                        if (ck)
-                            return false;
-                        $('select[required]').each(function (i, o) {
-                            if ($(o).val() == '') {
-                                ck = true;
-                                MN.Alert('topCenter', 'error', $(o).attr('alertMsg') + '必填');
-                                $(o).focus();
-                                return false;
-                            }
-                        })
-                        if (ck)
-                            return false;
-                        $('#fillInData').attr('class', 'd-none');
-                        $('#addItem').attr('class', 'd-block');
-                        $(".process-wrap").attr('class', 'process-wrap active-step2');
-                        toTop();
-                    }
-                </script>
+                <div class="d-flex justify-content-between pt-3">
+                    <button type="button" class="btn btn-opposite rounded-pill py-2 px-4 serv_bottom" onclick="pre()">回填寫資料</button>
+                    <button type="submit" class="btn btn-opposite rounded-pill py-2 px-4 serv_bottom">提交</button>
+                </div>
             </div>
-
         </div>
     </div>
+    @Html.HiddenFor(o => o.receive_id)
+    @*@Html.HiddenFor(o => o.search_receive_id)*@
 </form>
 
 <script>
@@ -747,17 +966,83 @@
         $('#customer_resident_address').on('keyup', function () { if ($('#sameAddress').prop('checked'))samAddressChecked(); })
         $('#customer_mail_addcity').on('change', function () { getcitycode(this, 'town') });
         $('#customer_mail_addregion').on('change', function () { getcitycode(this, 'zipcode') });
+        $('#customer_company_addcity').on('change', function () { getcitycode(this, 'town') });
+        $('#customer_company_addregion').on('change', function () { getcitycode(this, 'zipcode') });
+        $('#guarantor_addcity').on('change', function () { getcitycode(this, 'town') });
+        $('#guarantor_addregion').on('change', function () { getcitycode(this, 'zipcode') });
         getcitycode($('#customer_resident_addcity'), 'town')
         getcitycode($('#customer_mail_addcity'), 'town')
-
+        getcitycode($('#customer_company_addcity'), 'town')
+        getcitycode($('#guarantor_addcity'), 'town')
         $('input[name="customer_mail_identical"][value=""]').prop('checked', true);
-        samAddressChecked()
+        //samAddressChecked()
         checkGuarantorOption($('input[type=radio][name=guarantor_option]:checked').val());
-
-        //$('from').submit(function () {
-
-        //});
+        checkApplyMethodOption('@Model.bus_type')
+       
     });
+    function toTop() {
+        $('html,body').animate({ scrollTop: 0 }, 333);
+    }
+    function next() {
+        var ck = false;
+        $('input[required]').each(function (i, o) {
+            debugger
+            if ($(o).val() == '') {
+                ck = true;
+                $.notify($(o).attr('alertMsg') + '必填', { className: "Error", position: "top center" });
+                $(o).focus();
+                return false;
+            }
+            if ($(o).attr('type') == 'radio') {
+                if ($('[name="' + $(o).attr('name') + '"]:checked').length == 0) {
+                    ck = true;
+                    $.notify($(o).attr('alertMsg') + '必填', { className: "Error", position: "top center" });
+                    $(o).focus();
+                    return false;
+                }
+            }
+            var maxLen = $(o).attr('maxlength');
+            var minLen = $(o).attr('minlength');
+            if (maxLen != undefined) {
+                if (maxLen < $(o).val().length) {
+                    ck = true;
+                    $.notify($(o).attr('alertMsg') + '字數長度不足', { className: "Error", position: "top center" });
+                    $(o).focus();
+                    return false;
+                }
+            }
+            if (minLen != undefined) {
+                if ($(o).val().length < minLen) {
+                    ck = true;
+                    $.notify($(o).attr('alertMsg') + '字數長度不足', { className: "Error", position: "top center" });
+                    $(o).focus();
+                    return false;
+                }
+            }
+        })
+        if (ck)
+            return false;
+        $('select[required]').each(function (i, o) {
+            if ($(o).val() == '') {
+                ck = true;
+                $.notify($(o).attr('alertMsg') + '必填', { className: "Error", position: "top center" });
+                $(o).focus();
+                return false;
+            }
+        })
+        if (ck)
+            return false;
+        $('#fillInData').attr('class', 'd-none');
+        $('#addItem').attr('class', 'd-block');
+        $(".process-wrap").attr('class', 'process-wrap active-step2');
+        //$('form').submit();
+    }
+    function pre() {
+        $('#fillInData').attr('class', 'd-block');
+        $('#addItem').attr('class', 'd-none');
+        $(".process-wrap").attr('class', 'process-wrap active-step1');
+        toTop();
+    }
     function getcitycode(obj, query_type) {
         if (query_type == 'town') {
             var id = $(obj).attr('id').replace('_addcity', '');
@@ -771,13 +1056,12 @@
             $('#' + id + '_addregion').append($('<option></option>').val('').text('鄉鎮市區'));
             if ($(obj).val() != '') {
                 $.ajax({
-                    url: '@Url.Action("search_post_code", "Receive")',
+                    url: '@Url.Action("searchPostfileCode", "Receive", new { @Area = "ApplyForm" })',
                     data: { query_type: query_type, city_name: $(obj).val(), town_name: '' },
-                    type: 'GET',
+                    type: 'POST',
                     async: false,
                     success: function (data) {
                         if (data != null) {
-
                             for (var i = 0; i < data.town_list.length; i++) {
                                 $('#' + id + '_addregion').append($('<option></option>').val(data.town_list[i].town_name).text(data.town_list[i].town_name));
                             }
@@ -793,9 +1077,9 @@
             if ($(obj).val() != '') {
                 $.ajax({
 
-                    url: '@Url.Action("search_post_code", "Receive")',
+                    url: '@Url.Action("searchPostfileCode", "Receive", new { @Area = "ApplyForm" })',
                     data: { query_type: query_type, city_name: $('#' + id + '_addcity').val(), town_name: $(obj).val() },
-                    type: 'GET',
+                    type: 'POST',
                     async: false,
                     success: function (data) {
                         if (data != null) {
@@ -813,8 +1097,17 @@
             $('#guarantorData').attr('class', 'd-none')
         }
     }
+    function checkPaymentMode(obj) {
+        if (obj == '3') {
+            $('#customer_email').parent().find('label').attr('class', 'require-item');
+            $('#customer_email').attr('required', 'required');
+        } else {
+            $('#customer_email').parent().find('label').attr('class', '');
+            $('#customer_email').removeAttr('required');
+        }
+    }
     function checkApplyMethodOption(obj) {
-        if (obj == '機車分期') {
+        if (obj == 'AA21' || obj == 'AA22' || obj == 'AA23') {
             $('#product_name').parent().find('label').attr('class', 'require-item');
             $('#product_name').attr('required', 'required');
             $('#dealer_branch_name').parent().find('label').attr('class', 'require-item');
@@ -826,4 +1119,128 @@
             $('#dealer_branch_name').removeAttr('required');
         }
     }
+    function changePromotion(obj) {
+        $.ajax({
+                url: '@Url.Action("searchPromotion", "Receive", new { @Area = "ApplyForm" })',
+                data: { search_bus_type: obj },
+                type: 'POST',
+                async: false,
+                success: function (data) {
+                    if (data != null) {
+                        $('#promotion').find('option').remove();
+                        $('#promotion').append("<option value=''>請選擇</option>");
+                        for (var i = 0; i < data.length; i++) {
+                            $('#promotion').append($('<option></option>').val(data[i].promo_no).text(data[i].promo_name));
+                        }
+
+                    }
+                }
+            });
+    }
+    function changeBankDetail(obj) {
+        console.log(obj);
+        $.ajax({
+            url: '@Url.Action("searchBankDetailCode", "Receive", new { @Area = "ApplyForm" })',
+            data: { search_bank_code: obj },
+            type: 'POST',
+            async: false,
+            success: function (data) {
+                if (data != null) {
+                    $('#bank_detail_code').editableSelect('clear').val('');
+                    for (var i = 0; i < data.length; i++) {
+                        $('#bank_detail_code').next().append($('<li></li>').val(paddingLeft(data[i].fnctr_code, 4)).text(data[i].fnctr_code + '-' + data[i].br_bank_name));
+
+                    }
+                    $('#bank_detail_code').editableSelect('filter')
+                }
+            }
+        });
+    }
+    function changeProduct(obj, query_type) {
+        if (query_type == 'productBrand') {
+            $.ajax({
+                url: '@Url.Action("searchProductKind", "Receive", new { @Area = "ApplyForm" })',
+                data: { query_type: query_type, search_bus_type: obj },
+                type: 'POST',
+                async: false,
+                success: function (data) {
+                    if (data != null) {
+                        $('#product_brand').find('option').remove();
+                        $('#product_brand').append("<option value=''>請選擇</option>");
+                        $('#product_kind').find('option').remove();
+                        $('#product_kind').append("<option value=''>請選擇</option>");
+                        for (var i = 0; i < data.length; i++) {
+                            $('#product_brand').append($('<option></option>').val(data[i].product_brand).text(data[i].product_brand_name));
+                        }
+
+                    }
+                }
+            });
+        }
+        else {
+            $.ajax({
+                url: '@Url.Action("searchProductKind", "Receive", new { @Area = "ApplyForm" })',
+                data: { query_type: query_type, search_bus_type: $('#bus_type').val(), search_product_brand: obj },
+                type: 'POST',
+                async: false,
+                success: function (data) {
+                    if (data != null) {
+                        $('#product_kind').find('option').remove();
+                        $('#product_kind').append("<option value=''>請選擇</option>");
+                        for (var i = 0; i < data.length; i++) {
+                            $('#product_kind').append($('<option></option>').val(data[i].product_kind).text(data[i].product_kind_name));
+                        }
+
+                    }
+                }
+            });
+        }
+
+    }
+    //上傳
+    function readURL(input) {
+            if (input.files && input.files[0]) {
+                var file_type = input.files[0].type;
+                if (file_type != 'image/jpg' && file_type != 'image/jpeg' && file_type != 'image/bmp' && file_type != 'image/png' && file_type != 'application/pdf') {
+                    MN.Alert('topCenter', 'error', '非圖檔與PDF檔');
+                    $(input).val('');
+                    return false;
+                }
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    //$('.image-upload-wrap').hide();
+
+                    $(input).parent().parent().find('.image-upload-wrap').hide();
+                    $(input).parent().parent().find('.file-upload-image').attr('src', e.target.result);
+                    $(input).parent().parent().find('.file-upload-content').show();
+                    //$('.file-upload-image').attr('src', e.target.result);
+                    //$('.file-upload-content').show();
+                    $(input).parent().parent().find('.image-title').html(input.files[0].name);
+
+                    //$('.image-title').html(input.files[0].name);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+
+            } else {
+                removeUpload();
+            }
+        }
+
+    function removeUpload(input) {
+        $(input).parent().parent().parent().find('.image-upload-wrap').show();
+        $(input).parent().parent().parent().find('.file-upload-input').val('').replaceWith($(input).parent().parent().parent().find('.file-upload-input').clone());
+        $(input).parent().parent().parent().find('.file-upload-content').hide();
+        //$('.file-upload-input').replaceWith($('.file-upload-input').clone());
+        //$('.file-upload-content').hide();
+        //$('.image-upload-wrap').show();
+    }
+    $('.image-upload-wrap').bind('dragover', function () {
+        $('.image-upload-wrap').addClass('image-dropping');
+    });
+    $('.image-upload-wrap').bind('dragleave', function () {
+        $('.image-upload-wrap').removeClass('image-dropping');
+    });
+    //上傳
 </script>

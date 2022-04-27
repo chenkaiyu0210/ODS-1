@@ -8,6 +8,8 @@ namespace fontWebCore.Models.Repositories
     public class receiveCases
     {
         public System.Guid receive_id { get; set; }
+        public string examine_no { get; set; }
+        public string loan_no { get; set; }
         public string bus_type { get; set; }
         public string promotion { get; set; }
         public Nullable<System.DateTime> receive_date { get; set; }
@@ -96,5 +98,6 @@ namespace fontWebCore.Models.Repositories
         public string note_remark { get; set; }
         public Nullable<bool> is_secret { get; set; }
         public string commission_target { get; set; }
+        public string receive_staff { get; set; }
     }
 }

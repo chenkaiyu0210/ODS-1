@@ -45,6 +45,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotNetZip, Version=1.16.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.16.0\lib\net40\DotNetZip.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -155,8 +158,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CommonHelpers.cs" />
+    <Compile Include="Helpers\CompressHelpers.cs" />
     <Compile Include="Helpers\EncryptionProcessor.cs" />
     <Compile Include="Helpers\GlobalVariablesHelpers.cs" />
+    <Compile Include="Helpers\HttpHelpers.cs" />
+    <Compile Include="Models\ApiModel\apiModelEncryption.cs" />
+    <Compile Include="Models\ApiModel\apiModelReceive.cs" />
+    <Compile Include="Models\ApiModel\responseModel\apiResponseReceive.cs" />
     <Compile Include="Models\Repositories\backendBank.cs">
       <DependentUpon>rymimoney.tt</DependentUpon>
     </Compile>
@@ -167,6 +175,9 @@
       <DependentUpon>rymimoney.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Repositories\backendMenu.cs">
+      <DependentUpon>rymimoney.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Repositories\backendProduct.cs">
       <DependentUpon>rymimoney.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Repositories\backendPromotion.cs">
@@ -211,15 +222,27 @@
     </Compile>
     <Compile Include="Models\settingConifgModel.cs" />
     <Compile Include="Models\ViewModel\baseModel.cs" />
+    <Compile Include="Models\ViewModel\viewModelBackendBank.cs" />
+    <Compile Include="Models\ViewModel\viewModelBackendBankDetail.cs" />
+    <Compile Include="Models\ViewModel\viewModelBackendBusType.cs" />
     <Compile Include="Models\ViewModel\viewModelBackendMenu.cs" />
+    <Compile Include="Models\ViewModel\viewModelBackendProduct.cs" />
+    <Compile Include="Models\ViewModel\viewModelBackendPromotion.cs" />
     <Compile Include="Models\ViewModel\viewModelBackendRoleGroup.cs" />
+    <Compile Include="Models\ViewModel\viewModelBackendSetConfig.cs" />
     <Compile Include="Models\ViewModel\viewModelBackendUser.cs" />
     <Compile Include="Models\ViewModel\viewModelPostfile.cs" />
     <Compile Include="Models\ViewModel\viewModelReceiveCases.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\InterFace\IBaseCrudService.cs" />
+    <Compile Include="Service\ServiceClass\backendBankDetailService.cs" />
+    <Compile Include="Service\ServiceClass\backendBankService.cs" />
+    <Compile Include="Service\ServiceClass\backendBusTypeService.cs" />
     <Compile Include="Service\ServiceClass\backendMenuService.cs" />
+    <Compile Include="Service\ServiceClass\backendProductService.cs" />
+    <Compile Include="Service\ServiceClass\backendPromotionService.cs" />
     <Compile Include="Service\ServiceClass\backendRoleGroupService.cs" />
+    <Compile Include="Service\ServiceClass\backendSetConfigService.cs" />
     <Compile Include="Service\ServiceClass\backendUserService.cs" />
     <Compile Include="Service\ServiceClass\postfileService.cs" />
     <Compile Include="Service\ServiceClass\receiveCasesService.cs" />
@@ -231,6 +254,14 @@
     <Content Include="fonts\webfonts\fa-regular-400.svg" />
     <Content Include="fonts\webfonts\fa-solid-900.svg" />
     <Content Include="Global.asax" />
+    <Content Include="ThirdParty\custom\Image\card-add.png" />
+    <Content Include="ThirdParty\custom\Image\idcard-01.png" />
+    <Content Include="ThirdParty\custom\Image\idcard-02.png" />
+    <Content Include="ThirdParty\custom\Image\idcard-03-2.png" />
+    <Content Include="ThirdParty\custom\Image\idcard-03.png" />
+    <Content Include="ThirdParty\custom\Image\idcard-04.png" />
+    <Content Include="ThirdParty\custom\Image\idcard-05.png" />
+    <Content Include="ThirdParty\custom\Image\img-file-06.png" />
     <Content Include="img\undraw_posting_photo.svg" />
     <Content Include="img\undraw_profile.svg" />
     <Content Include="img\undraw_profile_1.svg" />
@@ -1935,6 +1966,10 @@
     <Content Include="ThirdParty\sbAdmin2\vendor\jquery-easing\jquery.easing.compatibility.js" />
     <Content Include="ThirdParty\sbAdmin2\vendor\jquery-easing\jquery.easing.js" />
     <Content Include="ThirdParty\sbAdmin2\vendor\jquery-easing\jquery.easing.min.js" />
+    <Content Include="ThirdParty\sbAdmin2\vendor\jquery-ui\jquery-editable-select\jquery-editable-select.css" />
+    <Content Include="ThirdParty\sbAdmin2\vendor\jquery-ui\jquery-editable-select\jquery-editable-select.js" />
+    <Content Include="ThirdParty\sbAdmin2\vendor\jquery-ui\jquery-editable-select\jquery-editable-select.min.css" />
+    <Content Include="ThirdParty\sbAdmin2\vendor\jquery-ui\jquery-editable-select\jquery-editable-select.min.js" />
     <Content Include="ThirdParty\sbAdmin2\vendor\jquery-ui\jquery.blockUI.js" />
     <Content Include="ThirdParty\sbAdmin2\vendor\jquery\jquery.js" />
     <Content Include="ThirdParty\sbAdmin2\vendor\jquery\jquery.min.js" />

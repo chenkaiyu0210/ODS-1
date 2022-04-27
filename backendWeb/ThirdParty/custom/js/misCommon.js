@@ -47,6 +47,18 @@ $(function () {
     ///END bind Menu Active
 });
 
+function paddingLeft(str, lenght) {
+    if (str.length >= lenght)
+        return str;
+    else
+        return paddingLeft("0" + str, lenght);
+}
+function paddingRight(str, lenght) {
+    if (str.length >= lenght)
+        return str;
+    else
+        return paddingRight(str + "0", lenght);
+}
 ///DataTable配置  
 var dataTableSettings = { 
     "sProcessing": "正在獲取數據，請稍後...",

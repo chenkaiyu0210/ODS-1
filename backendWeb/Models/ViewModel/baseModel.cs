@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
@@ -38,5 +39,15 @@ namespace backendWeb.Models.ViewModel
         /// 回傳訊息(True/False)
         /// </summary>
         public string replyMsg { get; set; }
+    }
+    public class FileUpload
+    {
+        public string Name { get; set; }
+
+        [Display(Name = "附件上傳"), DataType(DataType.Upload)]
+        public HttpPostedFileBase File { get; set; }
+
+        [Display(Name = "刪除附件")]
+        public bool Delete { get; set; }
     }
 }

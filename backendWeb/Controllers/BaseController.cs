@@ -80,6 +80,13 @@ namespace backendWeb.Controllers
                 ViewData["successMsg"] = value;
             }
         }
+        public System.DateTime TaiwanDateTime
+        {
+            get
+            {
+                return System.TimeZoneInfo.ConvertTimeBySystemTimeZoneId(System.DateTime.Now, "Taipei Standard Time");
+            }
+        }
         #endregion
     }
 }

@@ -1,5 +1,7 @@
 ﻿using backendWeb.Models;
 using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -7,6 +9,7 @@ using System.Net.Mail;
 using System.Net.Security;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace backendWeb.Helpers
@@ -224,7 +227,23 @@ namespace backendWeb.Helpers
             }
             return tTarget;
         }
+        //public static Dictionary<StringBuilder, List<SqlParameter>> BuildSqlStr<TSource>(TSource sourceInstance)
+        //{
+        //    Type type = sourceInstance.GetType();
+        //    PropertyInfo[] properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+        //    PropertyInfo[] array = properties;
+        //    for (int i = 0; i < array.Length; i++)
+        //    {
+        //        PropertyInfo propertyInfo = array[i];
+        //        string name = propertyInfo.Name;
+        //        object value = propertyInfo.GetValue(sourceInstance);
+        //        if(value == null && value == "")
+        //        {
 
+        //        }
+        //    }
+        //    return new Dictionary<StringBuilder, List<SqlParameter>>();
+        //}
     }
     [AttributeUsage(AttributeTargets.Property)]
     public class ObjectMappingAttribute : Attribute

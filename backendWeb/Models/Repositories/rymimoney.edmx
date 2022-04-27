@@ -55,6 +55,21 @@
           <Property Name="icon" Type="varchar" MaxLength="20" />
           <Property Name="authorize_code" Type="varchar" MaxLength="20" />
         </EntityType>
+        <EntityType Name="backendProduct">
+          <Key>
+            <PropertyRef Name="bus_type" />
+            <PropertyRef Name="product_brand" />
+            <PropertyRef Name="product_kind" />
+          </Key>
+          <Property Name="bus_type" Type="nvarchar" MaxLength="8" Nullable="false" />
+          <Property Name="product_brand" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="product_brand_name" Type="nvarchar" MaxLength="1000" />
+          <Property Name="product_kind" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="product_kind_name" Type="nvarchar" MaxLength="1000" />
+          <Property Name="is_enable" Type="bit" />
+          <Property Name="create_time" Type="datetime" />
+          <Property Name="modify_time" Type="datetime" />
+        </EntityType>
         <EntityType Name="backendPromotion">
           <Key>
             <PropertyRef Name="bus_type" />
@@ -156,6 +171,8 @@
             <PropertyRef Name="receive_id" />
           </Key>
           <Property Name="receive_id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="examine_no" Type="varchar" MaxLength="16" />
+          <Property Name="loan_no" Type="varchar" MaxLength="16" />
           <Property Name="bus_type" Type="nvarchar" MaxLength="20" />
           <Property Name="promotion" Type="nvarchar" MaxLength="8" />
           <Property Name="receive_date" Type="datetime" />
@@ -244,12 +261,14 @@
           <Property Name="note_remark" Type="nvarchar" MaxLength="500" />
           <Property Name="is_secret" Type="bit" />
           <Property Name="commission_target" Type="varchar" MaxLength="10" />
+          <Property Name="receive_staff" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityContainer Name="RYMimoneyModelStoreContainer">
           <EntitySet Name="backendBank" EntityType="Self.backendBank" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="backendBankDetail" EntityType="Self.backendBankDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="backendBusType" EntityType="Self.backendBusType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="backendMenu" EntityType="Self.backendMenu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="backendProduct" EntityType="Self.backendProduct" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="backendPromotion" EntityType="Self.backendPromotion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="backendSetConfig" EntityType="Self.backendSetConfig" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="backendUser" EntityType="Self.backendUser" Schema="dbo" store:Type="Tables" />
@@ -283,6 +302,7 @@
           <EntitySet Name="backendBusType" EntityType="RYMimoneyModel.backendBusType" />
           <EntitySet Name="backendPromotion" EntityType="RYMimoneyModel.backendPromotion" />
           <EntitySet Name="backendSetConfig" EntityType="RYMimoneyModel.backendSetConfig" />
+          <EntitySet Name="backendProduct" EntityType="RYMimoneyModel.backendProduct" />
           <EntitySet Name="receiveCases" EntityType="RYMimoneyModel.receiveCases" />
         </EntityContainer>
         <EntityType Name="postfile">
@@ -429,11 +449,28 @@
           <Property Name="create_time" Type="DateTime" Precision="3" />
           <Property Name="modify_time" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="backendProduct">
+          <Key>
+            <PropertyRef Name="bus_type" />
+            <PropertyRef Name="product_brand" />
+            <PropertyRef Name="product_kind" />
+          </Key>
+          <Property Name="bus_type" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="product_brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="product_brand_name" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="product_kind" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="product_kind_name" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="is_enable" Type="Boolean" />
+          <Property Name="create_time" Type="DateTime" Precision="3" />
+          <Property Name="modify_time" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="receiveCases">
           <Key>
             <PropertyRef Name="receive_id" />
           </Key>
           <Property Name="receive_id" Type="Guid" Nullable="false" />
+          <Property Name="examine_no" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
+          <Property Name="loan_no" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
           <Property Name="bus_type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="promotion" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
           <Property Name="receive_date" Type="DateTime" Precision="3" />
@@ -522,6 +559,7 @@
           <Property Name="note_remark" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="is_secret" Type="Boolean" />
           <Property Name="commission_target" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="receive_staff" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -676,9 +714,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="backendProduct">
+            <EntityTypeMapping TypeName="RYMimoneyModel.backendProduct">
+              <MappingFragment StoreEntitySet="backendProduct">
+                <ScalarProperty Name="modify_time" ColumnName="modify_time" />
+                <ScalarProperty Name="create_time" ColumnName="create_time" />
+                <ScalarProperty Name="is_enable" ColumnName="is_enable" />
+                <ScalarProperty Name="product_kind_name" ColumnName="product_kind_name" />
+                <ScalarProperty Name="product_kind" ColumnName="product_kind" />
+                <ScalarProperty Name="product_brand_name" ColumnName="product_brand_name" />
+                <ScalarProperty Name="product_brand" ColumnName="product_brand" />
+                <ScalarProperty Name="bus_type" ColumnName="bus_type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="receiveCases">
             <EntityTypeMapping TypeName="RYMimoneyModel.receiveCases">
               <MappingFragment StoreEntitySet="receiveCases">
+                <ScalarProperty Name="receive_staff" ColumnName="receive_staff" />
                 <ScalarProperty Name="commission_target" ColumnName="commission_target" />
                 <ScalarProperty Name="is_secret" ColumnName="is_secret" />
                 <ScalarProperty Name="note_remark" ColumnName="note_remark" />
@@ -767,6 +820,8 @@
                 <ScalarProperty Name="receive_date" ColumnName="receive_date" />
                 <ScalarProperty Name="promotion" ColumnName="promotion" />
                 <ScalarProperty Name="bus_type" ColumnName="bus_type" />
+                <ScalarProperty Name="loan_no" ColumnName="loan_no" />
+                <ScalarProperty Name="examine_no" ColumnName="examine_no" />
                 <ScalarProperty Name="receive_id" ColumnName="receive_id" />
               </MappingFragment>
             </EntityTypeMapping>
