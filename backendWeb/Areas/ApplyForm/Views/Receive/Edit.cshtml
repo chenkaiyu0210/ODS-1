@@ -54,7 +54,7 @@
                             </div>
                             <script>
                                 $('#product_brand').change(function () {
-                                    debugger
+
                                     changeProduct(this.value, 'productKind');
                                 })
                             </script>
@@ -128,17 +128,17 @@
                                     var appendItems = $(".add-line").find(".form-row");
                                     var len = appendItems.length;
                                     var addinput = $(`
-                                                                                            <div class="form-row align-items-center pt-2">
-                                                                                                <div class="col-lg-5 col-4">
-                                                                                                    <input type="text" class="form-control" name="paymentInput[`+ len + `].num"  inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" />
-                                                                                                </div>
-                                                                                                <div class="col-md-6 col-7">
-                                                                                                    <input type="text" class="form-control" name="paymentInput[`+ len + `].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" />
-                                                                                                </div>
-                                                                                                <div class="col-1">
-                                                                                                    <button type="button" class="btn btn-secondary delete" onclick="delLine(this)"><i class="fas fa-minus"></i></button>
-                                                                                                </div>
-                                                                                            </div>`);
+                                                                                                                        <div class="form-row align-items-center pt-2">
+                                                                                                                            <div class="col-lg-5 col-4">
+                                                                                                                                <input type="text" class="form-control" name="paymentInput[`+ len + `].num"  inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" />
+                                                                                                                            </div>
+                                                                                                                            <div class="col-md-6 col-7">
+                                                                                                                                <input type="text" class="form-control" name="paymentInput[`+ len + `].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" />
+                                                                                                                            </div>
+                                                                                                                            <div class="col-1">
+                                                                                                                                <button type="button" class="btn btn-secondary delete" onclick="delLine(this)"><i class="fas fa-minus"></i></button>
+                                                                                                                            </div>
+                                                                                                                        </div>`);
                                     if (appendItems.length < 3) {
                                         $(".add-line").append(addinput);
                                     }
@@ -556,9 +556,7 @@
                             </div>
                             <script>
                                 $('#bank_code').editableSelect().on('select.editable-select', function (e, li) {
-                                    debugger
-                                    alert(li.text());
-                                    changeBankDetail(li.val());
+                                    changeBankDetail(paddingLeft(li.val().toString(), 3));
                                 });
                                 $('#bank_detail_code').editableSelect();
                             </script>
