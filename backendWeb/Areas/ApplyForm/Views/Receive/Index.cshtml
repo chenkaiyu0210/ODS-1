@@ -1,6 +1,16 @@
-﻿
+﻿@using backendWeb.Models.ViewModel;
 @{
     ViewBag.Title = "Index";
+
+    List<SelectListItem> UserList = TempData["UserList"] as List<SelectListItem>;
+    List<SelectListItem> StatusList = new List<SelectListItem>
+    {   
+        new SelectListItem(){Text="全部", Value=""},
+        new SelectListItem(){Text="AA", Value="AA"},
+        new SelectListItem(){Text="BB", Value="BB"},
+        new SelectListItem(){Text="CC", Value="CC"},
+        new SelectListItem(){Text="DD", Value="DD"}
+    };
 }
 <div class="card mb-4">
     <div class="card-header py-3">
@@ -11,30 +21,39 @@
             <div class="col-md-6 col-12">
                 <div class="row">
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
-                        <label class="" for="product_name">查詢條件1</label>
-                        <input class="form-control" id="product_name" name="product_name" placeholder="" type="text" value="" />
+                        <label class="" for="receive_date">
+                            申請日期
+                        </label>
+                        <input class="form-control" id="receive_date" name="receive_date" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                     </div>
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
-                        <label class="" for="product_name">查詢條件3</label>
-                        <input class="form-control" id="product_name" name="product_name" placeholder="" type="text" value="" />
+                        <label class="" for="customer_idcard_no">
+                            客戶ID
+                        </label>
+                        <input class="form-control" id="customer_idcard_no" name="customer_idcard_no" type="text" />
                     </div>
                 </div>
             </div>
             <div class="col-md-6 col-12">
                 <div class="row">
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
-                        <label class="" for="product_name">查詢條件2</label>
-                        <input class="form-control" id="product_name" name="product_name" placeholder="" type="text" value="" />
+                        <label class="" for="receive_staff">
+                            進件人員
+                        </label>
+                        @Html.DropDownList("receive_staff", UserList, new {@class = "form-control"})
                     </div>
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
-                        <label class="" for="product_name">查詢條件4</label>
-                        <input class="form-control" id="product_name" name="product_name" placeholder="" type="text" value="" />
+                        <label class="" for="receive_status">
+                            案件狀態
+                        </label>
+                        @Html.DropDownList("receive_status", StatusList, new { @class = "form-control" })
                     </div>
                 </div>
             </div>
         </div>
         <div class="d-flex .justify-content-start pt-3">
             <input id="btnSearch" type="button" class="btn btn-info btn-icon-split py-2 px-4" value="查詢" />
+            <a class='btn btn-info btn-icon-split py-2 px-4' style='margin: 0 5px 0 5px;' href='@Url.Action("Create", "Receive", new { Area = "ApplyForm",  })'>新增案件</a>
         </div>
     </div>
 </div>
@@ -49,10 +68,15 @@
 @section scripts{
     <script type="text/javascript">
         $(function () {
-            $('#dv_table').load('@Url.Action("Table", "Receive", new { Area = "ApplyForm" })');
-            //$('#btnSearch').click(function () {
+            GetTable();
+        }); 
 
-            //})
-        });
+        $('#btnSearch').click(function () {
+            GetTable();
+        })
+
+        function GetTable() {
+            $('#dv_table').load('@Url.Action("Table", "Receive", new { Area = "ApplyForm" })');
+        }
     </script>
 }

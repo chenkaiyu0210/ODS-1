@@ -11,5 +11,6 @@ namespace backendWeb.Models.ApiModel
         public string source { get; set; } = "88021796";
         public string encryptEnterCase { get; set; }
         public string version { get; set; }
+        public string transactionId { get; set; }
     }
 }

@@ -2,11 +2,12 @@
 @model viewModelReceiveCases
 @{
     ViewData["Title"] = "資金申請";
+    string action = ViewContext.RouteData.GetRequiredString("Action");
+    string Controller = ViewContext.RouteData.GetRequiredString("Controller");
 }
-
 <form action="@Url.Action("Edit", "Receive")" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
-    <div class="" style="background-color: #fafafa;">
+    <div style="background-color: #fafafa;">
         <div class="container py-md-5 py-3">
             <div id="fillInData" class="d-block">
                 <div class="row">
@@ -16,24 +17,25 @@
                         <div class="row">
                             <div class="form-group col-12">
                                 @*<div class="cntr py-1">
-                                        <label for="applyMethod01" class="radio">
-                                            <input type="radio" name="bus_type" id="applyMethod01" class="hidden" value="機車分期" checked="@(Model.bus_type == "機車分期" ? true : false)" />
-                                            <span class="label"></span>機車分期
-                                        </label>
-                                        <label for="applyMethod02" class="radio">
-                                            <input type="radio" name="bus_type" id="applyMethod02" class="hidden" value="申辦借款" checked="@(Model.bus_type == "申辦借款" ? true : false)" />
-                                            <span class="label"></span>申辦借款
-                                        </label>
-                                        <label for="applyMethod03" class="radio">
-                                            <input type="radio" name="bus_type" id="applyMethod03" class="hidden" value="借新還舊" checked="@(Model.bus_type == "借新還舊" ? true : false)" />
-                                            <span class="label"></span>借新還舊
-                                        </label>
+                                    <label for="applyMethod01" class="radio">
+                                    <input type="radio" name="bus_type" id="applyMethod01" class="hidden" value="機車分期" checked="@(Model.bus_type == "機車分期" ? true : false)" />
+                                    <span class="label"></span>機車分期
+                                    </label>
+                                    <label for="applyMethod02" class="radio">
+                                    <input type="radio" name="bus_type" id="applyMethod02" class="hidden" value="申辦借款" checked="@(Model.bus_type == "申辦借款" ? true : false)" />
+                                    <span class="label"></span>申辦借款
+                                    </label>
+                                    <label for="applyMethod03" class="radio">
+                                    <input type="radio" name="bus_type" id="applyMethod03" class="hidden" value="借新還舊" checked="@(Model.bus_type == "借新還舊" ? true : false)" />
+                                    <span class="label"></span>借新還舊
+                                    </label>
                                     </div>*@
+                                <label class="require-item" for="bus_type">業務別</label>
                                 @Html.DropDownListFor(o => o.bus_type, new SelectList(Model.busType_list, "bus_type", "bus_type_name"), new { @class = "form-control", @required = "required", @alertMsg = "業務別" })
                             </div>
                             <script>
                                 $('select[name=bus_type]').change(function () {
-                                    checkApplyMethodOption(this.value);
+                                    //checkApplyMethodOption(this.value); //商品型號, 商品名稱 改非必填
                                     changeProduct(this.value, 'productBrand');
                                     changePromotion(this.value)
                                 })
@@ -57,33 +59,33 @@
                                 })
                             </script>
                             <div class="form-group col-lg-6 col-12">
-                                <label class="" for="dealer_branch_name">商店名稱</label>
-                                <input alertMsg="商店名稱" class="form-control" id="dealer_branch_name" name="dealer_branch_name" placeholder="" type="text" value="@Model.dealer_branch_name" />
+                                <label for="dealer_branch_name">商品型號 </label>
+                                <input alertMsg="商品型號" class="form-control" id="dealer_branch_name" name="dealer_branch_name" type="text" value="@Model.dealer_branch_name" />
                             </div>
                             <div class="form-group col-lg-6 col-12">
-                                <label class="" for="product_name">商品名稱</label>
-                                <input alertMsg="商品名稱" class="form-control" id="product_name" name="product_name" placeholder="" type="text" value="@Model.product_name" />
+                                <label for="product_name">商品名稱</label>
+                                <input alertMsg="商品名稱" class="form-control" id="product_name" name="product_name" type="text" value="@Model.product_name" />
                             </div>
                             <div class="form-group col-12">
                                 <label class="require-item" for="staging_amount">辦理分期金額</label>
-                                <input alertMsg="辦理分期金額" class="form-control" data-val="true" data-val-number="欄位 staging_amount 必須是數字。" id="staging_amount" inputmode="numeric" name="staging_amount" placeholder="" required="required" type="number" value="@(Model.staging_amount.HasValue ? Model.staging_amount.Value.ToString() : "")" />
+                                <input alertMsg="辦理分期金額" class="form-control" data-val="true" data-val-number="欄位 staging_amount 必須是數字。" id="staging_amount" inputmode="numeric" name="staging_amount" required="required" type="number" value="@(Model.staging_amount.HasValue ? Model.staging_amount.Value.ToString() : "")" />
                             </div>
                             <div class="form-group col-12 add-line">
                                 <div class="form-row align-items-center">
                                     @if (Model.paymentInput.Count == 0)
                                     {
                                         <div class="col-lg-5 col-4">
-                                            <label class="" for="staging_num">期數</label>
-                                            <input type="text" class="form-control" name="paymentInput[0].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" />
+                                            <label class="require-item" for="periods_num">期數</label>
+                                            <input type="text" class="form-control" id="periods_num" name="paymentInput[0].num" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" required="required" />
                                         </div>
                                         <div class="col-md-6 col-7">
-                                            <label class="" for="staging_num_amount">每期總繳金額</label>
-                                            <input type="text" class="form-control" name="paymentInput[0].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" />
+                                            <label class="require-item" for="payment">每期總繳金額</label>
+                                            <input type="text" class="form-control" id="payment" name="paymentInput[0].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" required="required" />
                                         </div>
-                                        <div class="col-1">
-                                            <label for="" style="visibility:hidden;">add</label>
-                                            <button type="button" class="btn btn-add btn-opposite btn-sm" id="addLine"><i class="fas fa-plus"></i></button>
-                                        </div>
+                                        @*<div class="col-1">
+                                                <label for="" style="visibility:hidden;">add</label>
+                                                <button type="button" class="btn btn-add btn-opposite btn-sm" id="addLine"><i class="fas fa-plus"></i></button>
+                                            </div>*@
                                     }
                                     else
                                     {
@@ -92,50 +94,51 @@
                                             <div class="col-lg-5 col-4">
                                                 @if (i == 0)
                                                 {
-                                                    <label class="" for="staging_num">期數</label>
+                                                    <label class="require-item" for="periods_num">期數</label>
                                                 }
-                                                <input type="text" class="form-control" name="paymentInput[@i].num" placeholder="" inputmode="numeric" value="@Model.paymentInput[i].num" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" />
+                                                <input type="text" class="form-control" id="periods_num" name="paymentInput[@i].num" inputmode="numeric" value="@Model.paymentInput[i].num" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" required="required" />
                                             </div>
                                             <div class="col-md-6 col-7">
                                                 @if (i == 0)
                                                 {
-                                                    <label class="" for="staging_num_amount">每期總繳金額</label>
+                                                    <label class="require-item" for="payment">每期總繳金額</label>
                                                 }
-                                                <input type="text" class="form-control" name="paymentInput[@i].num_amount" placeholder="月付款" inputmode="numeric" value="@Model.paymentInput[i].num_amount" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" />
+                                                <input type="text" class="form-control" id="payment" name="paymentInput[@i].num_amount" placeholder="月付款" inputmode="numeric" value="@Model.paymentInput[i].num_amount" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" required="required" />
                                             </div>
-                                            if (i == 0)
-                                            {
-                                                <div class="col-1">
-                                                    <label for="" style="visibility:hidden;">add</label>
-                                                    <button type="button" class="btn btn-add btn-opposite btn-sm" id="addLine"><i class="fas fa-plus"></i></button>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="col-1">
-                                                    <button type="button" class="btn btn-secondary btn-sm delete" onclick="delLine(this)"><i class="fas fa-minus"></i></button>
-                                                </div>
-                                            }
+                                            @*if (i == 0)
+                                                {
+                                                    <div class="col-1">
+                                                        <label for="" style="visibility:hidden;">add</label>
+                                                        <button type="button" class="btn btn-add btn-opposite btn-sm" id="addLine"><i class="fas fa-plus"></i></button>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-1">
+                                                        <button type="button" class="btn btn-secondary btn-sm delete" onclick="delLine(this)"><i class="fas fa-minus"></i></button>
+                                                    </div>
+                                                }*@
                                         }
                                     }
                                 </div>
                             </div>
+
                             <script>
                                 $("#addLine").click(function () {
                                     var appendItems = $(".add-line").find(".form-row");
                                     var len = appendItems.length;
-                                    var addinput = $(`<div class="form-row align-items-center pt-2">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="col-lg-5 col-4">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <input type="text" class="form-control" name="paymentInput[`+ len + `].num" placeholder="" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "期數" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="col-md-6 col-7">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <input type="text" class="form-control" name="paymentInput[`+ len + `].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg = "每期總繳金額" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="col-1">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <button type="button" class="btn btn-secondary delete" onclick="delLine(this)"><i class="fas fa-minus"></i></button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>`);
+                                    var addinput = $(`
+                                                                                            <div class="form-row align-items-center pt-2">
+                                                                                                <div class="col-lg-5 col-4">
+                                                                                                    <input type="text" class="form-control" name="paymentInput[`+ len + `].num"  inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="期數" />
+                                                                                                </div>
+                                                                                                <div class="col-md-6 col-7">
+                                                                                                    <input type="text" class="form-control" name="paymentInput[`+ len + `].num_amount" placeholder="月付款" inputmode="numeric" onkeyup="value = value.replace(/[^-0-9]/g,'')" alertMsg="每期總繳金額" />
+                                                                                                </div>
+                                                                                                <div class="col-1">
+                                                                                                    <button type="button" class="btn btn-secondary delete" onclick="delLine(this)"><i class="fas fa-minus"></i></button>
+                                                                                                </div>
+                                                                                            </div>`);
                                     if (appendItems.length < 3) {
                                         $(".add-line").append(addinput);
                                     }
@@ -153,16 +156,16 @@
                                 <label class="require-item" for="customer_name">中文姓名</label>
                                 @if (string.IsNullOrWhiteSpace(Model.customer_name))
                                 {
-                                    <input alertMsg="中文姓名" class="form-control" id="customer_name" name="customer_name" placeholder="" required="required" type="text" value="" />
+                                    <input alertMsg="中文姓名" class="form-control" id="customer_name" name="customer_name" required="required" type="text" value="" />
                                 }
                                 else
                                 {
-                                    <input alertMsg="中文姓名" class="form-control" id="customer_name" name="customer_name" placeholder="" required="required" type="text" value="@Model.customer_name" readonly />
+                                    <input alertMsg="中文姓名" class="form-control" id="customer_name" name="customer_name" required="required" type="text" value="@Model.customer_name" readonly />
                                 }
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_idcard_no">身份證字號</label>
-                                <input alertMsg="身份證字號" class="form-control" id="customer_idcard_no" maxlength="10" minlength="10" name="customer_idcard_no" placeholder="" required="required" type="text" value="@Model.customer_idcard_no" readonly />
+                                <input alertMsg="身份證字號" class="form-control" id="customer_idcard_no" maxlength="10" minlength="10" name="customer_idcard_no" required="required" type="text" value="@Model.customer_idcard_no" readonly />
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_mobile_phone">行動電話</label>
@@ -246,28 +249,28 @@
                                 }
                             </div>
                             <!-- <div class="form-group col-lg-6 col-12">
-                                <label class="require-item" for="birthday">出生日期</label>
-                                <input type="text" class="form-control" id="birthday" name="birthday">
+                            <label class="require-item" for="birthday">出生日期</label>
+                            <input type="text" class="form-control" id="birthday" name="birthday">
                             </div> -->
                             <!-- <div class="form-group col-12">
-                                <label class="require-item" for="birthday">出生日期</label>
-                                <div class="form-row">
-                                    <div class="col-6">
-                                        <select name="birthdayYY" id="birthYear" class="form-control" onchange="setDays(this,birthMonth,birthDay);">
-                                            <option selected disabled>民國年</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-3">
-                                        <select name="birthdayMM" id="birthMonth" class="form-control" onchange="setDays(birthYear,this,birthDay);">
-                                            <option selected disabled>月</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-3">
-                                        <select name="birthdayDD" id="birthDay" class="form-control">
-                                            <option selected="" disabled="">日</option>
-                                        </select>
-                                    </div>
-                                </div>
+                            <label class="require-item" for="birthday">出生日期</label>
+                            <div class="form-row">
+                            <div class="col-6">
+                            <select name="birthdayYY" id="birthYear" class="form-control" onchange="setDays(this,birthMonth,birthDay);">
+                            <option selected disabled>民國年</option>
+                            </select>
+                            </div>
+                            <div class="col-3">
+                            <select name="birthdayMM" id="birthMonth" class="form-control" onchange="setDays(birthYear,this,birthDay);">
+                            <option selected disabled>月</option>
+                            </select>
+                            </div>
+                            <div class="col-3">
+                            <select name="birthdayDD" id="birthDay" class="form-control">
+                            <option selected="" disabled="">日</option>
+                            </select>
+                            </div>
+                            </div>
                             </div> -->
                             <!-- 電話 -->
                             <div class="form-group col-lg-6 col-12">
@@ -300,29 +303,29 @@
                                     <div class="col-lg-3 col-6">
                                         @Html.DropDownListFor(o => o.customer_resident_addcity, new SelectList(Model.city_list, "city_name", "city_name"), "縣市別", new { @class = "form-control", @required = "required", @alertMsg = "戶籍地址" })
                                         @*<select alertMsg="戶籍地址" class="form-control" id="customer_resident_addcity" name="customer_resident_addcity" required="required">
-                                                <option value="">縣市別</option>
-                                                <option value="台北市">台北市</option>
-                                                <option value="基隆市">基隆市</option>
-                                                <option value="新北市">新北市</option>
-                                                <option value="連江縣">連江縣</option>
-                                                <option value="宜蘭縣">宜蘭縣</option>
-                                                <option value="新竹市">新竹市</option>
-                                                <option value="新竹縣">新竹縣</option>
-                                                <option value="桃園市">桃園市</option>
-                                                <option value="苗栗縣">苗栗縣</option>
-                                                <option value="台中市">台中市</option>
-                                                <option value="彰化縣">彰化縣</option>
-                                                <option value="南投縣">南投縣</option>
-                                                <option value="嘉義市">嘉義市</option>
-                                                <option value="嘉義縣">嘉義縣</option>
-                                                <option value="雲林縣">雲林縣</option>
-                                                <option value="台南市">台南市</option>
-                                                <option value="高雄市">高雄市</option>
-                                                <option value="澎湖縣">澎湖縣</option>
-                                                <option value="金門縣">金門縣</option>
-                                                <option value="屏東縣">屏東縣</option>
-                                                <option value="台東縣">台東縣</option>
-                                                <option value="花蓮縣">花蓮縣</option>
+                                            <option value="">縣市別</option>
+                                            <option value="台北市">台北市</option>
+                                            <option value="基隆市">基隆市</option>
+                                            <option value="新北市">新北市</option>
+                                            <option value="連江縣">連江縣</option>
+                                            <option value="宜蘭縣">宜蘭縣</option>
+                                            <option value="新竹市">新竹市</option>
+                                            <option value="新竹縣">新竹縣</option>
+                                            <option value="桃園市">桃園市</option>
+                                            <option value="苗栗縣">苗栗縣</option>
+                                            <option value="台中市">台中市</option>
+                                            <option value="彰化縣">彰化縣</option>
+                                            <option value="南投縣">南投縣</option>
+                                            <option value="嘉義市">嘉義市</option>
+                                            <option value="嘉義縣">嘉義縣</option>
+                                            <option value="雲林縣">雲林縣</option>
+                                            <option value="台南市">台南市</option>
+                                            <option value="高雄市">高雄市</option>
+                                            <option value="澎湖縣">澎湖縣</option>
+                                            <option value="金門縣">金門縣</option>
+                                            <option value="屏東縣">屏東縣</option>
+                                            <option value="台東縣">台東縣</option>
+                                            <option value="花蓮縣">花蓮縣</option>
                                             </select>*@
 
                                     </div>
@@ -419,7 +422,7 @@
                             </script>
                             <div class="form-group col-12">
                                 <label for="customer_email">E-Mail</label>
-                                <input alertMsg="E-Mail" class="form-control" id="customer_email" name="customer_email" placeholder="" type="text" value="@Model.customer_email" />
+                                <input alertMsg="E-Mail" class="form-control" id="customer_email" name="customer_email" type="text" value="@Model.customer_email" />
                             </div>
                             <!-- 居住 -->
                             <div class="form-group col-lg-6 col-12">
@@ -443,11 +446,11 @@
                         <div class="row">
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_company_name">公司名稱</label>
-                                <input alertMsg="公司名稱" class="form-control" id="customer_company_name" name="customer_company_name" placeholder="" required="required" type="text" value="@Model.customer_company_name" />
+                                <input alertMsg="公司名稱" class="form-control" id="customer_company_name" name="customer_company_name" required="required" type="text" value="@Model.customer_company_name" />
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_job_type">工作職稱</label>
-                                <input alertMsg="工作職稱" class="form-control" id="customer_job_type" name="customer_job_type" placeholder="" required="required" type="text" value="@Model.customer_job_type" />
+                                <input alertMsg="工作職稱" class="form-control" id="customer_job_type" name="customer_job_type" required="required" type="text" value="@Model.customer_job_type" />
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label for="company_year">工作年資</label>
@@ -462,7 +465,7 @@
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="company_pay">月薪</label>
-                                <input class="form-control" data-val="true" data-val-number="欄位 customer_month_salary 必須是數字。" id="customer_month_salary" inputmode="numeric" onkeyup="value=value.replace(/[^0-9]/g,'')" name="customer_month_salary" placeholder="" required="required" type="number" value="@Model.customer_month_salary" />
+                                <input class="form-control" data-val="true" data-val-number="欄位 customer_month_salary 必須是數字。" id="customer_month_salary" inputmode="numeric" onkeyup="value=value.replace(/[^0-9]/g,'')" name="customer_month_salary" required="required" type="number" value="@Model.customer_month_salary" />
                             </div>
                             <div class="form-group col-12">
                                 <label class="require-item" for="">公司電話</label>
@@ -553,7 +556,9 @@
                             </div>
                             <script>
                                 $('#bank_code').editableSelect().on('select.editable-select', function (e, li) {
-                                    changeBankDetail(paddingLeft(li.val(), 3));
+                                    debugger
+                                    alert(li.text());
+                                    changeBankDetail(li.val());
                                 });
                                 $('#bank_detail_code').editableSelect();
                             </script>
@@ -566,17 +571,17 @@
                         <div class="row">
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="contact_person_name_i">聯絡人姓名</label>
-                                <input alertMsg="聯絡人姓名" class="form-control" id="contact_person_name_i" name="contact_person_name_i" type="text" value="@Model.contact_person_name_i" placeholder="" required="required" />
+                                <input alertMsg="聯絡人姓名" class="form-control" id="contact_person_name_i" name="contact_person_name_i" type="text" value="@Model.contact_person_name_i" required="required" />
 
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="contact_person_relation_i">聯絡人關係</label>
-                                <input alertMsg="聯絡人關係" class="form-control" id="contact_person_relation_i" name="contact_person_relation_i" type="text" value="@Model.contact_person_relation_i" placeholder="" required="required" />
+                                <input alertMsg="聯絡人關係" class="form-control" id="contact_person_relation_i" name="contact_person_relation_i" type="text" value="@Model.contact_person_relation_i" required="required" />
 
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="contact_person_mobile_phone_i">聯絡人行動電話</label>
-                                <input alertMsg="聯絡人行動電話" class="form-control" id="contact_person_mobile_phone_i" type="text" inputmode="tel" maxlength="10" minlength="10" name="contact_person_mobile_phone_i" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="" required="required" value="@Model.contact_person_mobile_phone_i" />
+                                <input alertMsg="聯絡人行動電話" class="form-control" id="contact_person_mobile_phone_i" type="text" inputmode="tel" maxlength="10" minlength="10" name="contact_person_mobile_phone_i" onkeyup="value = value.replace(/[^0-9]/g,'')" required="required" value="@Model.contact_person_mobile_phone_i" />
 
                             </div>
                             <div class="form-group col-lg-6 col-12">
@@ -629,15 +634,15 @@
                             <div class="row pt-2">
                                 <div class="form-group col-lg-6 col-12">
                                     <label for="guarantor_name">保證人姓名</label>
-                                    <input class="form-control" id="guarantor_name" name="guarantor_name" placeholder="" type="text" value="@Model.guarantor_name" />
+                                    <input class="form-control" id="guarantor_name" name="guarantor_name" type="text" value="@Model.guarantor_name" />
                                 </div>
                                 <div class="form-group col-lg-6 col-12">
                                     <label for="guarantor_relation">保證人關係</label>
-                                    <input class="form-control" id="guarantor_relation" name="guarantor_relation" placeholder="" type="text" value="@Model.guarantor_relation" />
+                                    <input class="form-control" id="guarantor_relation" name="guarantor_relation" type="text" value="@Model.guarantor_relation" />
                                 </div>
                                 <div class="form-group col-lg-6 col-12">
                                     <label for="guarantor_idcard_no">保證人身份證字號</label>
-                                    <input class="form-control" id="guarantor_idcard_no" maxlength="10" minlength="10" name="guarantor_idcard_no" placeholder="" type="text" value="@Model.guarantor_idcard_no" />
+                                    <input class="form-control" id="guarantor_idcard_no" maxlength="10" minlength="10" name="guarantor_idcard_no" type="text" value="@Model.guarantor_idcard_no" />
                                 </div>
                                 <div class="form-group col-12">
                                     <label for="guarantor_birthday">保證人出生日期</label>
@@ -689,11 +694,11 @@
                                 </div>
                                 <div class="form-group col-lg-6 col-12">
                                     <label for="guarantor_company_name">保證人公司名稱</label>
-                                    <input alertMsg="保證人公司名稱" class="form-control" id="guarantor_company_name" name="guarantor_company_name" placeholder="" type="text" value="@Model.guarantor_company_name" />
+                                    <input alertMsg="保證人公司名稱" class="form-control" id="guarantor_company_name" name="guarantor_company_name" type="text" value="@Model.guarantor_company_name" />
                                 </div>
                                 <div class="form-group col-lg-6 col-12">
                                     <label for="guarantor_job_type">保證人公司職稱</label>
-                                    <input alertMsg="保證人公司名稱" class="form-control" id="guarantor_job_type" name="guarantor_job_type" placeholder="" type="text" value="@Model.guarantor_job_type" />
+                                    <input alertMsg="保證人公司名稱" class="form-control" id="guarantor_job_type" name="guarantor_job_type" type="text" value="@Model.guarantor_job_type" />
                                 </div>
                                 <div class="form-group col-12">
                                     <label for="">保證人公司電話</label>
@@ -741,7 +746,7 @@
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label for="contact_person_mobile_phone_i">發卡銀行</label>
-                                <input class="form-control" id="customer_creditcard_bank" name="customer_creditcard_bank" placeholder="" type="text" value="@Model.customer_creditcard_bank" />
+                                <input class="form-control" id="customer_creditcard_bank" name="customer_creditcard_bank" type="text" value="@Model.customer_creditcard_bank" />
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label for="">有效日期</label>
@@ -847,9 +852,9 @@
 
                             <div class="form-group col-12">
                                 <label class="require-item" for="commission_target">撥佣對象(統編/身分證)</label>
-                                <input alertMsg="撥佣對象" class="form-control" id="commission_target" name="commission_target" required="required" type="text" value="@Model.commission_target" />
+                                <input alertMsg="撥佣對象" class="form-control" id="commission_target" name="commission_target" required="required" type="text" value="88021796" @*@Model.commission_target*@ />
                             </div>
-                        </div>                      
+                        </div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-center pt-3">
@@ -951,19 +956,30 @@
     @Html.HiddenFor(o => o.receive_id)
     @*@Html.HiddenFor(o => o.search_receive_id)*@
 </form>
-
+@Html.Hidden("hid_action", action)
 <script>
     $(function () {
         $(document).keydown(function (event) {
             switch (event.keyCode) {
-            case 13://enter
-            return false;
+                case 13://enter
+                    return false;
             }
         });
 
-        $('#customer_resident_addcity').on('change', function () { if ($('#sameAddress').prop('checked'))samAddressChecked(); getcitycode(this, 'town') });
-        $('#customer_resident_addregion').on('change', function () { if ($('#sameAddress').prop('checked'))samAddressChecked(); getcitycode(this, 'zipcode') });
-        $('#customer_resident_address').on('keyup', function () { if ($('#sameAddress').prop('checked'))samAddressChecked(); })
+        //判斷編輯或新增模式
+        switch ($('#hid_action').val()) {
+            case 'Create':
+                $('#customer_idcard_no').removeAttr('readonly');
+                $('#customer_mobile_phone').removeAttr('readonly');
+                break;
+            case 'Edit':
+
+                break;
+        }
+
+        $('#customer_resident_addcity').on('change', function () { if ($('#sameAddress').prop('checked')) samAddressChecked(); getcitycode(this, 'town') });
+        $('#customer_resident_addregion').on('change', function () { if ($('#sameAddress').prop('checked')) samAddressChecked(); getcitycode(this, 'zipcode') });
+        $('#customer_resident_address').on('keyup', function () { if ($('#sameAddress').prop('checked')) samAddressChecked(); })
         $('#customer_mail_addcity').on('change', function () { getcitycode(this, 'town') });
         $('#customer_mail_addregion').on('change', function () { getcitycode(this, 'zipcode') });
         $('#customer_company_addcity').on('change', function () { getcitycode(this, 'town') });
@@ -977,8 +993,7 @@
         $('input[name="customer_mail_identical"][value=""]').prop('checked', true);
         //samAddressChecked()
         checkGuarantorOption($('input[type=radio][name=guarantor_option]:checked').val());
-        checkApplyMethodOption('@Model.bus_type')
-       
+        //checkApplyMethodOption('@Model.bus_type'); //商品型號, 商品名稱 改非必填
     });
     function toTop() {
         $('html,body').animate({ scrollTop: 0 }, 333);
@@ -986,7 +1001,7 @@
     function next() {
         var ck = false;
         $('input[required]').each(function (i, o) {
-            debugger
+            //debugger
             if ($(o).val() == '') {
                 ck = true;
                 $.notify($(o).attr('alertMsg') + '必填', { className: "Error", position: "top center" });
@@ -1032,6 +1047,19 @@
         })
         if (ck)
             return false;
+
+        if ($('#periods_num').val() != '' && $('#payment').val() != '') {
+            if ((parseInt($('#periods_num').val()) * parseInt($('#payment').val())) <
+                parseInt($('#staging_amount').val())) {
+                ck = true;
+                $.notify('分期總額不得低於辦理分期金額', { className: "Error", position: "top center" });
+                $($('#periods_num')).focus();
+                return false;
+            }
+        }
+        if (ck)
+            return false;
+
         $('#fillInData').attr('class', 'd-none');
         $('#addItem').attr('class', 'd-block');
         $(".process-wrap").attr('class', 'process-wrap active-step2');
@@ -1121,21 +1149,21 @@
     }
     function changePromotion(obj) {
         $.ajax({
-                url: '@Url.Action("searchPromotion", "Receive", new { @Area = "ApplyForm" })',
-                data: { search_bus_type: obj },
-                type: 'POST',
-                async: false,
-                success: function (data) {
-                    if (data != null) {
-                        $('#promotion').find('option').remove();
-                        $('#promotion').append("<option value=''>請選擇</option>");
-                        for (var i = 0; i < data.length; i++) {
-                            $('#promotion').append($('<option></option>').val(data[i].promo_no).text(data[i].promo_name));
-                        }
-
+            url: '@Url.Action("searchPromotion", "Receive", new { @Area = "ApplyForm" })',
+            data: { search_bus_type: obj },
+            type: 'POST',
+            async: false,
+            success: function (data) {
+                if (data != null) {
+                    $('#promotion').find('option').remove();
+                    $('#promotion').append("<option value=''>請選擇</option>");
+                    for (var i = 0; i < data.length; i++) {
+                        $('#promotion').append($('<option></option>').val(data[i].promo_no).text(data[i].promo_name));
                     }
+
                 }
-            });
+            }
+        });
     }
     function changeBankDetail(obj) {
         console.log(obj);
@@ -1195,39 +1223,38 @@
                 }
             });
         }
-
     }
+
     //上傳
     function readURL(input) {
-            if (input.files && input.files[0]) {
-                var file_type = input.files[0].type;
-                if (file_type != 'image/jpg' && file_type != 'image/jpeg' && file_type != 'image/bmp' && file_type != 'image/png' && file_type != 'application/pdf') {
-                    MN.Alert('topCenter', 'error', '非圖檔與PDF檔');
-                    $(input).val('');
-                    return false;
-                }
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    //$('.image-upload-wrap').hide();
-
-                    $(input).parent().parent().find('.image-upload-wrap').hide();
-                    $(input).parent().parent().find('.file-upload-image').attr('src', e.target.result);
-                    $(input).parent().parent().find('.file-upload-content').show();
-                    //$('.file-upload-image').attr('src', e.target.result);
-                    //$('.file-upload-content').show();
-                    $(input).parent().parent().find('.image-title').html(input.files[0].name);
-
-                    //$('.image-title').html(input.files[0].name);
-                };
-
-                reader.readAsDataURL(input.files[0]);
-
-            } else {
-                removeUpload();
+        if (input.files && input.files[0]) {
+            var file_type = input.files[0].type;
+            if (file_type != 'image/jpg' && file_type != 'image/jpeg' && file_type != 'image/bmp' && file_type != 'image/png' && file_type != 'application/pdf') {
+                MN.Alert('topCenter', 'error', '非圖檔與PDF檔');
+                $(input).val('');
+                return false;
             }
-        }
+            var reader = new FileReader();
 
+            reader.onload = function (e) {
+                //$('.image-upload-wrap').hide();
+
+                $(input).parent().parent().find('.image-upload-wrap').hide();
+                $(input).parent().parent().find('.file-upload-image').attr('src', e.target.result);
+                $(input).parent().parent().find('.file-upload-content').show();
+                //$('.file-upload-image').attr('src', e.target.result);
+                //$('.file-upload-content').show();
+                $(input).parent().parent().find('.image-title').html(input.files[0].name);
+
+                //$('.image-title').html(input.files[0].name);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+
+        } else {
+            removeUpload();
+        }
+    }
     function removeUpload(input) {
         $(input).parent().parent().parent().find('.image-upload-wrap').show();
         $(input).parent().parent().parent().find('.file-upload-input').val('').replaceWith($(input).parent().parent().parent().find('.file-upload-input').clone());
@@ -1242,5 +1269,5 @@
     $('.image-upload-wrap').bind('dragleave', function () {
         $('.image-upload-wrap').removeClass('image-dropping');
     });
-    //上傳
+//上傳
 </script>

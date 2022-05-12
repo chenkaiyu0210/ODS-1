@@ -38,10 +38,10 @@
                                     @using (Html.BeginForm(ViewContext.RouteData.GetRequiredString("Action"), ViewContext.RouteData.GetRequiredString("Controller"), new { }, FormMethod.Post, new { @class = "user", @autocomplete = "off", @enctype = "multipart/form-data" }))
                                     {
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-user" name="txtAccount" placeholder="帳號">
+                                            <input type="text" class="form-control form-control-user" name="txtAccount" placeholder="帳號" value="">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user" name="txtPassword" placeholder="密碼">
+                                            <input type="password" class="form-control form-control-user" name="txtPassword" placeholder="密碼" value="">
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">

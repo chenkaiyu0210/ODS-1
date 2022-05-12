@@ -9,11 +9,13 @@
         <tr>
             <th>商品資訊</th>
             <th>申請日期</th>
+            <th>審件編號</th>
             <th>案件狀態</th>
             <th>中文姓名</th>
             <th>身份證字號</th>
             <th>行動電話</th>
             <th>辦理分期金額</th>
+            <th>進件人員</th>
             <th>功能列</th>
         </tr>
     </thead>    
@@ -37,11 +39,8 @@
                             return moment(data).isValid() ? moment(data).format('YYYY/MM/DD HH:mm:ss') : ""
                         }
                     },
-                    {
-                        data: "receive_status", orderable: false, render: function (data, type, row, meta) {
-                            return data == "1" ? "已送件" : "未送件";
-                        }
-                    },
+                    { data: "examine_no", orderable: false },
+                    { data: "receive_status", orderable: false },
                     { data: "customer_name", orderable: false },
                     { data: "customer_idcard_no", orderable: false },
                     { data: "customer_mobile_phone", orderable: false },
@@ -50,6 +49,7 @@
                             return data == null ? 0 : parseInt(data).currency()
                         }
                     },
+                    { data: "receive_staff_name", orderable: false },
                     {
                         data: "receive_id", render: function (data, type, row, meta) {
                             return data = "<a class='btn btn-success' style='margin: 0 5px 0 5px;' href='@Url.Action("Edit", "Receive", new { Area = "ApplyForm" })?id=" + data + "'>編輯</a>";
@@ -61,11 +61,10 @@
                     method: "POST",
                     url: "@Url.Action("Table", "Receive", new { Area = "ApplyForm" })",
                     data: function (d) {
-                        //d.userid = $("#userid").val();
-                        //d.userphone = $("#userphone").val();
-                        ////d.errorcode = $("#errorcode").val();
-                        //d.daterange = $("#daterange").val();
-                        //d.returncodedesc = $("#returncodedesc").val();
+                        d.receive_date = $("#receive_date").val();
+                        d.customer_idcard_no = $("#customer_idcard_no").val();
+                        d.receive_staff = $("#receive_staff").val();
+                        d.receive_status = $("#receive_status").val();
                     }
                 },
                 oLanguage: dataTableSettings,

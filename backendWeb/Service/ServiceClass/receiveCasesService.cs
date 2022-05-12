@@ -22,19 +22,38 @@ namespace backendWeb.Service.ServiceClass
             try
             {
                 StringBuilder builder = new StringBuilder();
-                builder.Append("SELECT * FROM receiveCases WHERE 1 = 1" + Environment.NewLine);
+                builder.Append(@"
+SELECT r.*
+	,isnull(u.name, '') AS receive_staff_name
+FROM receiveCases r
+LEFT JOIN backendUser u ON r.receive_staff = u.account
+WHERE 1 = 1" + Environment.NewLine);
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                //if (!string.IsNullOrWhiteSpace(model.searchIn_authorize_code))
-                //{
-                //    builder.Append(" AND authorize_code in (");
-                //    string[] group_codes = model.searchIn_authorize_code.Split(new char[] { ',' });
-                //    for (int i = 0; i < group_codes.Length; i++)
-                //    {
-                //        builder.Append($"@authCode{(i == group_codes.Length - 1 ? i.ToString() : i.ToString() + ",")}");
-                //        parameters.Add(new SqlParameter { ParameterName = $"authCode{i}", Value = group_codes[i] });
-                //    }
-                //    builder.Append(")");
-                //}
+
+                if (model.receive_date != null)
+                {
+                    builder.Append(" AND convert(VARCHAR, receive_date, 23) = @receive_date" + Environment.NewLine);
+                    parameters.Add(new SqlParameter { ParameterName = "receive_date", Value = model.receive_date.Value.ToString("yyyy-MM-dd") });
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.customer_idcard_no))
+                {
+                    builder.Append(" AND customer_idcard_no = @customer_idcard_no" + Environment.NewLine);
+                    parameters.Add(new SqlParameter { ParameterName = "customer_idcard_no", Value = model.customer_idcard_no });
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.receive_staff))
+                {
+                    builder.Append(" AND receive_staff = @receive_staff" + Environment.NewLine);
+                    parameters.Add(new SqlParameter { ParameterName = "receive_staff", Value = model.receive_staff });
+                }
+
+                if ( !string.IsNullOrWhiteSpace(model.receive_status))
+                {
+                    builder.Append(" AND receive_status = @receive_status" + Environment.NewLine);
+                    parameters.Add(new SqlParameter { ParameterName = "receive_status", Value = model.receive_status });
+                }
+
                 if (model.start.HasValue)
                 {
                     builder.Append(" ORDER BY receive_date DESC OFFSET @skip ROWS");

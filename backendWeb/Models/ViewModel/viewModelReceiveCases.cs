@@ -128,6 +128,7 @@ namespace backendWeb.Models.ViewModel
         public List<viewModelBackendProduct> productKind_list { get; set; }
         public List<viewModelBackendBank> bank_list { get; set; }
         public List<viewModelBackendBankDetail> bankDetail_list { get; set; }
+        public string receive_staff_name { get; set; }
         #endregion
     }
     public class payment

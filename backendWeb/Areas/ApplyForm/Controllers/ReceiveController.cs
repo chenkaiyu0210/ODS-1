@@ -23,6 +23,13 @@ namespace backendWeb.Areas.ApplyForm.Controllers
         // GET: ApplyForm/Receive
         public ActionResult Index()
         {
+            IBaseCrudService<viewModelBackendUser> crudService = new backendUserService();
+
+            IList<viewModelBackendUser> list = crudService.GetList(new viewModelBackendUser());
+            List<SelectListItem> selectListItems = new SelectList(list, "account", "name").ToList();
+            selectListItems.Insert(0, (new SelectListItem { Text = "全部", Value = "" }));
+
+            TempData["UserList"] = selectListItems;
             return View();
         }
         public ActionResult Table()
@@ -30,28 +37,41 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Table(int draw, int start, int length)
+        public ActionResult Table(viewModelReceiveCases model) //int draw, int start, int length
         {
             IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
-            IList<viewModelReceiveCases> list = crudService.GetList(new viewModelReceiveCases { draw = draw, start = start, length = length });
+            IList<viewModelReceiveCases> list = crudService.GetList(model);
             var returnObj =
                   new
                   {
-                      draw = draw,
-                      recordsTotal = 4,
-                      recordsFiltered = 4,
+                      draw = model.draw,
+                      recordsTotal = list == null || list.Count == 0 ? 0 : list.Count,
+                      recordsFiltered = list == null || list.Count == 0 ? 0 : list.Count,
                       data = list == null ? new List<viewModelReceiveCases>() : list//分頁後的資料 
                   };
             return Json(returnObj);
         }
         public ActionResult Edit(string id)
-        {            
-            IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
-            viewModelReceiveCases item = crudService.GetOnly(new viewModelReceiveCases { search_receive_id = id });
-            item.customer_id_number_areacode = item.customer_id_number_areacode.Trim();
+        {
+            viewModelReceiveCases item = new viewModelReceiveCases();
+            if (!string.IsNullOrEmpty(id))
+            {
+                IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
+                item = crudService.GetOnly(new viewModelReceiveCases { search_receive_id = id });
+                item.customer_id_number_areacode = item.customer_id_number_areacode.Trim();
+            }
+            
             reBindModel(ref item);
             return View(item);
         }
+
+        public ActionResult Create()
+        {
+            viewModelReceiveCases item = new viewModelReceiveCases();
+            reBindModel(ref item);
+            return View("Edit", item);
+        }
+
         [HttpPost]
         public ActionResult Edit(viewModelReceiveCases model)
         {
@@ -126,7 +146,15 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                 #region 儲存資料
                 IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
                 model.receive_staff = this.userInfoMdoel.account;
-                model.saveAction = "Modify";
+
+                if (model.receive_id == null || model.receive_id == Guid.Empty)
+                {
+                    model.saveAction = "Create";
+                    model.receive_id = Guid.NewGuid();
+                }
+                else
+                    model.saveAction = "Modify";
+                
                 model.receive_status = "案件存檔";
                 model.receive_date = this.TaiwanDateTime;
                 crudService.Save(model);
@@ -137,7 +165,8 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                 apiModelEncryption modelEncryption = new apiModelEncryption
                 {
                     encryptEnterCase = Convert.ToBase64String(encryption.Encode(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(apiModel)))),
-                    version = "2.0"
+                    version = "2.0",
+                    transactionId = Guid.NewGuid().ToString()
                 };
                 HttpResponseMessage responseMessage = HttpHelpers.PostHttpClient(modelEncryption, this.configSetting.apiSetting.apiUrls.Where(o => o.func == "receive").FirstOrDefault().url);
                 if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
@@ -337,6 +366,7 @@ namespace backendWeb.Areas.ApplyForm.Controllers
         public apiModelReceive BindApiModel(viewModelReceiveCases item)
         {
             apiModelReceive apiModel = CommonHelpers.Migration<viewModelReceiveCases, apiModelReceive>(item);
+            apiModel.customer_birthday = item.customer_birthday;
             apiModel.customer_check_identical = item.customer_mail_identical.HasValue ? item.customer_mail_identical.Value ? "Y" : "N" : "N";
             apiModel.payee_account_name = item.customer_name;
             apiModel.payee_account_idno = item.customer_idcard_no;
@@ -344,17 +374,20 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             apiModel.payee_bank_detail_code = item.bank_detail_code;
             apiModel.payee_account_num = item.account_num;
             apiModel.promotion_no = item.promotion;
-            apiModel.staging_total_price = item.staging_amount;
+            
             apiModel.periods_num = item.num;
             apiModel.payment = item.num_amount;
-            int _stagingAmount = 0;
+            apiModel.payment_mode = item.payment_mode.ToString();
+            
+            int staging_total_price = 0;
             foreach (payment p in item.paymentInput)
             {
                 int.TryParse(p.num, out int _num);
                 int.TryParse(p.num_amount, out int _numAmount);
-                _stagingAmount += _num * _numAmount;          
+                staging_total_price += _num * _numAmount;          
             }
-            apiModel.staging_amount = _stagingAmount;
+            apiModel.staging_amount = item.staging_amount;
+            apiModel.staging_total_price = staging_total_price;
             apiModel.product_category_id = item.product_brand;
             apiModel.product_id = item.product_kind;
             apiModel.dealer_no = "OD01";
@@ -372,7 +405,13 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             Dictionary<string, System.IO.Stream> dicFiles = new Dictionary<string, System.IO.Stream>();            
             foreach (FileUpload fu in item.FileUploads)
             {
-                dicFiles.Add(fu.Name , fu.File.InputStream);
+                if (fu.File != null)
+                {
+                    if (fu.File.ContentLength > 0)
+                    {
+                        dicFiles.Add(fu.File.FileName, fu.File.InputStream);
+                    }
+                }
             }
             apiModel.Attachmentfile = new List<attachmentfileYrc> {
                 new attachmentfileYrc { file_index = "0",

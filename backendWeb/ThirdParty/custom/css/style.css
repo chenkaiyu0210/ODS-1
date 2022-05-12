@@ -3513,31 +3513,31 @@ input[type="radio"]:checked + .label:after {
     }
 
 .drag-img-idcard01 {
-    background: url(../Image/idcard-01.png) no-repeat center;
+    background: url(/ThirdParty/custom/Image/idcard-01.png) no-repeat center;
 }
 
 .drag-img-idcard02 {
-    background: url(../Image/idcard-02.png) no-repeat center;
+    background: url(/ThirdParty/custom/Image/idcard-02.png) no-repeat center;
 }
 
 .drag-img-idcard03 {
-    background: url(../Image/idcard-04.png) no-repeat center;
+    background: url(/ThirdParty/custom/Image/idcard-04.png) no-repeat center;
 }
 
 .drag-img-idcard04 {
-    background: url(../Image/idcard-04.png) no-repeat center;
+    background: url(/ThirdParty/custom/Image/idcard-04.png) no-repeat center;
 }
 
 .drag-img-idcard05 {
-    background: url(../Image/idcard-05.png) no-repeat center;
+    background: url(/ThirdParty/custom/Image/idcard-05.png) no-repeat center;
 }
 
 .drag-img-file06 {
-    background: url(../Image/img-file-06.png) no-repeat center;
+    background: url(/ThirdParty/custom/Image/img-file-06.png) no-repeat center;
 }
 
 .drag-img-add {
-    background: url(../Image/card-add.png) no-repeat center;
+    background: url(/ThirdParty/custom/Image/card-add.png) no-repeat center;
 }
 
 .drag-img-idcard01, .drag-img-idcard02, .drag-img-idcard03, .drag-img-idcard04, .drag-img-idcard05, .drag-img-file06, .drag-img-add {
@@ -3561,18 +3561,19 @@ input[type="radio"]:checked + .label:after {
     width: 200px;
     margin: 0;
     color: #fff;
-    background: #ffba00;
+    background: #4ebbdf;
     border: none;
     padding: 10px;
     border-radius: 4px;
-    border-bottom: 4px solid #d89f02;
+    border-bottom: 4px solid #4ebbdf;
     transition: all .2s ease;
     outline: none;
     font-weight: 700;
 }
 
     .remove-image:hover {
-        background: #ffa600;
+        background: #4edfbb;
+        border-bottom: 4px solid #4edfbb;
         color: #ffffff;
         transition: all .2s ease;
         cursor: pointer;
