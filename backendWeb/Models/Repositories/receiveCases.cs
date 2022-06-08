@@ -21,6 +21,13 @@ namespace backendWeb.Models.Repositories
         public string promotion { get; set; }
         public Nullable<System.DateTime> receive_date { get; set; }
         public string receive_status { get; set; }
+        public string error_message { get; set; }
+        public string receive_status_update_time { get; set; }
+        public string appropriationDate { get; set; }
+        public Nullable<int> appropriationAmt { get; set; }
+        public string repayKindName { get; set; }
+        public string appropriation_status { get; set; }
+        public string appropriation_update_time { get; set; }
         public string customer_name { get; set; }
         public string customer_idcard_no { get; set; }
         public string customer_mobile_phone { get; set; }
@@ -78,6 +85,14 @@ namespace backendWeb.Models.Repositories
         public string contact_person_company_areacode_i { get; set; }
         public string contact_person_company_tel_i { get; set; }
         public string contact_person_company_tel_ext_i { get; set; }
+        public string contact_person_name_ii { get; set; }
+        public string contact_person_relation_ii { get; set; }
+        public string contact_person_mobile_phone_ii { get; set; }
+        public string contact_person_areacode_ii { get; set; }
+        public string contact_person_tel_ii { get; set; }
+        public string contact_person_company_areacode_ii { get; set; }
+        public string contact_person_company_tel_ii { get; set; }
+        public string contact_person_company_tel_ext_ii { get; set; }
         public string guarantor_relation { get; set; }
         public string guarantor_name { get; set; }
         public string guarantor_idcard_no { get; set; }
@@ -106,5 +121,6 @@ namespace backendWeb.Models.Repositories
         public Nullable<bool> is_secret { get; set; }
         public string commission_target { get; set; }
         public string receive_staff { get; set; }
+        public bool is_delete { get; set; }
     }
 }

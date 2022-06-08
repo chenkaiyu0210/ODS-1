@@ -27,7 +27,7 @@ SELECT r.*
 	,isnull(u.name, '') AS receive_staff_name
 FROM receiveCases r
 LEFT JOIN backendUser u ON r.receive_staff = u.account
-WHERE 1 = 1" + Environment.NewLine);
+WHERE 1 = 1 and is_delete = 0" + Environment.NewLine);
                 List<SqlParameter> parameters = new List<SqlParameter>();
 
                 if (model.receive_date != null)
@@ -52,6 +52,11 @@ WHERE 1 = 1" + Environment.NewLine);
                 {
                     builder.Append(" AND receive_status = @receive_status" + Environment.NewLine);
                     parameters.Add(new SqlParameter { ParameterName = "receive_status", Value = model.receive_status });
+                }
+
+                if (model.search_isAppropriation)
+                {
+                    builder.Append(" AND appropriation_status IS NOT NULL" + Environment.NewLine);
                 }
 
                 if (model.start.HasValue)
@@ -80,8 +85,19 @@ WHERE 1 = 1" + Environment.NewLine);
                 StringBuilder builder = new StringBuilder();
                 builder.Append("SELECT * FROM receiveCases WHERE 1 = 1" + Environment.NewLine);
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                builder.Append(" AND receive_id = @receive_id" + Environment.NewLine);
-                parameters.Add(new SqlParameter("@receive_id", DbType.Guid) { Value = model.search_receive_id });
+
+                if (model.search_receive_id != null)
+                {
+                    builder.Append(" AND receive_id = @receive_id" + Environment.NewLine);
+                    parameters.Add(new SqlParameter("@receive_id", DbType.Guid) { Value = model.search_receive_id });
+                }
+
+                if (model.search_examine_no != null)
+                {
+                    builder.Append(" AND examine_no = @examine_no" + Environment.NewLine);
+                    parameters.Add(new SqlParameter("@examine_no", DbType.Guid) { Value = model.search_examine_no });
+                }
+
                 return new baseRepository<viewModelReceiveCases>(new List<string> { builder.ToString() }, new List<List<SqlParameter>> { parameters }).GetOnly();
             }
             catch (Exception ex)

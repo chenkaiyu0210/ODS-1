@@ -37,6 +37,7 @@ namespace backendWeb.Models.Repositories
         public virtual DbSet<backendPromotion> backendPromotion { get; set; }
         public virtual DbSet<backendSetConfig> backendSetConfig { get; set; }
         public virtual DbSet<backendProduct> backendProduct { get; set; }
+        public virtual DbSet<SystemLog> SystemLog { get; set; }
         public virtual DbSet<receiveCases> receiveCases { get; set; }
     }
 }

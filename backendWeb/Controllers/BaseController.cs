@@ -1,11 +1,9 @@
 ﻿using backendWeb.Models;
 using backendWeb.Models.ViewModel;
+using backendWeb.Service.ServiceClass;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Web;
+using System.Text;
 using System.Web.Mvc;
 
 namespace backendWeb.Controllers
@@ -39,7 +37,7 @@ namespace backendWeb.Controllers
             get
             {
                 return Session["userInfo"] == null ? null : JsonConvert.DeserializeObject<viewModelBackendUser>(this.userInfo);
-            }            
+            }
         }
         //public string roleInfo
         //{
@@ -87,6 +85,22 @@ namespace backendWeb.Controllers
                 return System.TimeZoneInfo.ConvertTimeBySystemTimeZoneId(System.DateTime.Now, "Taipei Standard Time");
             }
         }
+
+        LogUtil logUtil = new LogUtil();
         #endregion
+
+        /// <summary>
+        /// 錯誤事件
+        /// </summary>
+        /// <param name="filterContext"></param>
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            //儲存錯誤訊息
+            StringBuilder buff = new StringBuilder();
+            buff.Append(string.Concat(new object[] { "Exception.Type : ", filterContext.Exception.GetType().Name, "\r\nException.Message : ", filterContext.Exception.Message, "\r\nException.TargetSite: ", filterContext.Exception.TargetSite, "\r\nException.StackTrace: \r\n", filterContext.Exception.StackTrace }));
+            this.logUtil.OutputLog("系統發生錯誤", buff.ToString());
+
+            base.OnException(filterContext);
+        }
     }
 }

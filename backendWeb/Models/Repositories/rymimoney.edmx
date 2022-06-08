@@ -177,6 +177,13 @@
           <Property Name="promotion" Type="nvarchar" MaxLength="8" />
           <Property Name="receive_date" Type="datetime" />
           <Property Name="receive_status" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="50" />
+          <Property Name="receive_status_update_time" Type="varchar" MaxLength="14" />
+          <Property Name="appropriationDate" Type="varchar" MaxLength="12" />
+          <Property Name="appropriationAmt" Type="int" />
+          <Property Name="repayKindName" Type="nvarchar" MaxLength="50" />
+          <Property Name="appropriation_status" Type="varchar" MaxLength="4" />
+          <Property Name="appropriation_update_time" Type="varchar" MaxLength="14" />
           <Property Name="customer_name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="customer_idcard_no" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="customer_mobile_phone" Type="varchar" MaxLength="10" Nullable="false" />
@@ -234,6 +241,14 @@
           <Property Name="contact_person_company_areacode_i" Type="varchar" MaxLength="5" />
           <Property Name="contact_person_company_tel_i" Type="varchar" MaxLength="10" />
           <Property Name="contact_person_company_tel_ext_i" Type="varchar" MaxLength="5" />
+          <Property Name="contact_person_name_ii" Type="nvarchar" MaxLength="50" />
+          <Property Name="contact_person_relation_ii" Type="nvarchar" MaxLength="50" />
+          <Property Name="contact_person_mobile_phone_ii" Type="varchar" MaxLength="10" />
+          <Property Name="contact_person_areacode_ii" Type="varchar" MaxLength="5" />
+          <Property Name="contact_person_tel_ii" Type="varchar" MaxLength="10" />
+          <Property Name="contact_person_company_areacode_ii" Type="varchar" MaxLength="5" />
+          <Property Name="contact_person_company_tel_ii" Type="varchar" MaxLength="10" />
+          <Property Name="contact_person_company_tel_ext_ii" Type="varchar" MaxLength="5" />
           <Property Name="guarantor_relation" Type="nvarchar" MaxLength="50" />
           <Property Name="guarantor_name" Type="nvarchar" MaxLength="50" />
           <Property Name="guarantor_idcard_no" Type="varchar" MaxLength="10" />
@@ -262,6 +277,16 @@
           <Property Name="is_secret" Type="bit" />
           <Property Name="commission_target" Type="varchar" MaxLength="10" />
           <Property Name="receive_staff" Type="varchar" MaxLength="20" />
+          <Property Name="is_delete" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SystemLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LogTime" Type="datetime" Nullable="false" />
+          <Property Name="LogMethod" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="LogMessage" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityContainer Name="RYMimoneyModelStoreContainer">
           <EntitySet Name="backendBank" EntityType="Self.backendBank" Schema="dbo" store:Type="Tables" />
@@ -276,6 +301,7 @@
           <EntitySet Name="members" EntityType="Self.members" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="postfile" EntityType="Self.postfile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="receiveCases" EntityType="Self.receiveCases" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemLog" EntityType="Self.SystemLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="backendRoleGroup" EntityType="Self.backendRoleGroup" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [backendRoleGroup].[role_group_code] AS [role_group_code], 
@@ -303,6 +329,7 @@
           <EntitySet Name="backendPromotion" EntityType="RYMimoneyModel.backendPromotion" />
           <EntitySet Name="backendSetConfig" EntityType="RYMimoneyModel.backendSetConfig" />
           <EntitySet Name="backendProduct" EntityType="RYMimoneyModel.backendProduct" />
+          <EntitySet Name="SystemLog" EntityType="RYMimoneyModel.SystemLog" />
           <EntitySet Name="receiveCases" EntityType="RYMimoneyModel.receiveCases" />
         </EntityContainer>
         <EntityType Name="postfile">
@@ -464,6 +491,15 @@
           <Property Name="create_time" Type="DateTime" Precision="3" />
           <Property Name="modify_time" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="SystemLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LogTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LogMethod" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LogMessage" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="receiveCases">
           <Key>
             <PropertyRef Name="receive_id" />
@@ -475,6 +511,13 @@
           <Property Name="promotion" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
           <Property Name="receive_date" Type="DateTime" Precision="3" />
           <Property Name="receive_status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="receive_status_update_time" Type="String" MaxLength="14" FixedLength="false" Unicode="false" />
+          <Property Name="appropriationDate" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="appropriationAmt" Type="Int32" />
+          <Property Name="repayKindName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="appropriation_status" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="appropriation_update_time" Type="String" MaxLength="14" FixedLength="false" Unicode="false" />
           <Property Name="customer_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="customer_idcard_no" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="customer_mobile_phone" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -532,6 +575,14 @@
           <Property Name="contact_person_company_areacode_i" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Name="contact_person_company_tel_i" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="contact_person_company_tel_ext_i" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="contact_person_name_ii" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="contact_person_relation_ii" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="contact_person_mobile_phone_ii" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="contact_person_areacode_ii" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="contact_person_tel_ii" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="contact_person_company_areacode_ii" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="contact_person_company_tel_ii" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="contact_person_company_tel_ext_ii" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
           <Property Name="guarantor_relation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="guarantor_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="guarantor_idcard_no" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -560,6 +611,7 @@
           <Property Name="is_secret" Type="Boolean" />
           <Property Name="commission_target" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="receive_staff" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="is_delete" Type="Boolean" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -728,9 +780,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="SystemLog">
+            <EntityTypeMapping TypeName="RYMimoneyModel.SystemLog">
+              <MappingFragment StoreEntitySet="SystemLog">
+                <ScalarProperty Name="LogMessage" ColumnName="LogMessage" />
+                <ScalarProperty Name="LogMethod" ColumnName="LogMethod" />
+                <ScalarProperty Name="LogTime" ColumnName="LogTime" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="receiveCases">
             <EntityTypeMapping TypeName="RYMimoneyModel.receiveCases">
               <MappingFragment StoreEntitySet="receiveCases">
+                <ScalarProperty Name="is_delete" ColumnName="is_delete" />
                 <ScalarProperty Name="receive_staff" ColumnName="receive_staff" />
                 <ScalarProperty Name="commission_target" ColumnName="commission_target" />
                 <ScalarProperty Name="is_secret" ColumnName="is_secret" />
@@ -759,6 +822,14 @@
                 <ScalarProperty Name="guarantor_idcard_no" ColumnName="guarantor_idcard_no" />
                 <ScalarProperty Name="guarantor_name" ColumnName="guarantor_name" />
                 <ScalarProperty Name="guarantor_relation" ColumnName="guarantor_relation" />
+                <ScalarProperty Name="contact_person_company_tel_ext_ii" ColumnName="contact_person_company_tel_ext_ii" />
+                <ScalarProperty Name="contact_person_company_tel_ii" ColumnName="contact_person_company_tel_ii" />
+                <ScalarProperty Name="contact_person_company_areacode_ii" ColumnName="contact_person_company_areacode_ii" />
+                <ScalarProperty Name="contact_person_tel_ii" ColumnName="contact_person_tel_ii" />
+                <ScalarProperty Name="contact_person_areacode_ii" ColumnName="contact_person_areacode_ii" />
+                <ScalarProperty Name="contact_person_mobile_phone_ii" ColumnName="contact_person_mobile_phone_ii" />
+                <ScalarProperty Name="contact_person_relation_ii" ColumnName="contact_person_relation_ii" />
+                <ScalarProperty Name="contact_person_name_ii" ColumnName="contact_person_name_ii" />
                 <ScalarProperty Name="contact_person_company_tel_ext_i" ColumnName="contact_person_company_tel_ext_i" />
                 <ScalarProperty Name="contact_person_company_tel_i" ColumnName="contact_person_company_tel_i" />
                 <ScalarProperty Name="contact_person_company_areacode_i" ColumnName="contact_person_company_areacode_i" />
@@ -816,6 +887,13 @@
                 <ScalarProperty Name="customer_mobile_phone" ColumnName="customer_mobile_phone" />
                 <ScalarProperty Name="customer_idcard_no" ColumnName="customer_idcard_no" />
                 <ScalarProperty Name="customer_name" ColumnName="customer_name" />
+                <ScalarProperty Name="appropriation_update_time" ColumnName="appropriation_update_time" />
+                <ScalarProperty Name="appropriation_status" ColumnName="appropriation_status" />
+                <ScalarProperty Name="repayKindName" ColumnName="repayKindName" />
+                <ScalarProperty Name="appropriationAmt" ColumnName="appropriationAmt" />
+                <ScalarProperty Name="appropriationDate" ColumnName="appropriationDate" />
+                <ScalarProperty Name="receive_status_update_time" ColumnName="receive_status_update_time" />
+                <ScalarProperty Name="error_message" ColumnName="error_message" />
                 <ScalarProperty Name="receive_status" ColumnName="receive_status" />
                 <ScalarProperty Name="receive_date" ColumnName="receive_date" />
                 <ScalarProperty Name="promotion" ColumnName="promotion" />

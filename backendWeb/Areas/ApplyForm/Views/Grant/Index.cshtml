@@ -4,12 +4,8 @@
 
     List<SelectListItem> UserList = TempData["UserList"] as List<SelectListItem>;
     List<SelectListItem> StatusList = new List<SelectListItem>
-     {
+    { 
         new SelectListItem(){Text="全部", Value=""},
-        new SelectListItem(){Text="案件存檔", Value="案件存檔"},
-        new SelectListItem(){Text="案件送出", Value="案件送出"},
-        new SelectListItem(){Text="案件送出失敗", Value="案件送出失敗"},
-        new SelectListItem(){Text="案件送出異常", Value="案件送出異常"},
         new SelectListItem(){Text="收件", Value="收件"},
         new SelectListItem(){Text="核准", Value="核准"},
         new SelectListItem(){Text="婉拒", Value="婉拒"},
@@ -48,7 +44,7 @@
                         <label class="" for="receive_staff">
                             進件人員
                         </label>
-                        @Html.DropDownList("receive_staff", UserList, new {@class = "form-control"})
+                        @Html.DropDownList("receive_staff", UserList, new { @class = "form-control" })
                     </div>
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
                         <label class="" for="receive_status">
@@ -61,7 +57,7 @@
         </div>
         <div class="d-flex .justify-content-start pt-3">
             <input id="btnSearch" type="button" class="btn btn-info btn-icon-split py-2 px-4" value="查詢" />
-            <a class='btn btn-info btn-icon-split py-2 px-4' style='margin: 0 5px 0 5px;' href='@Url.Action("Create", "Receive", new { Area = "ApplyForm",  })'>新增案件</a>
+            @*<a class='btn btn-info btn-icon-split py-2 px-4' style='margin: 0 5px 0 5px;' href='@Url.Action("Create", "Receive", new { Area = "ApplyForm",  })'>新增案件</a>*@
         </div>
     </div>
 </div>
@@ -77,14 +73,14 @@
     <script type="text/javascript">
         $(function () {
             GetTable();
-        }); 
+        });
 
         $('#btnSearch').click(function () {
             GetTable();
         })
 
         function GetTable() {
-            $('#dv_table').load('@Url.Action("Table", "Receive", new { Area = "ApplyForm" })');
+            $('#dv_table').load('@Url.Action("Table", "Grant", new { Area = "ApplyForm" })');
         }
     </script>
 }

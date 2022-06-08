@@ -900,12 +900,13 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-center pt-3">
-                    <button type="submit" class="btn btn-opposite rounded-pill py-2 px-4 serv_bottom" name="action" value="temp">暫存</button>
-                    <button type="button" class="btn btn-opposite rounded-pill py-2 px-4" onclick="next()" style="margin-left:20px;">上傳檔案</button>
-                    @if (Model.receive_id != null && Model.receive_id != Guid.Empty && Model.receive_status != "案件送出")
-                    {
-                        <button type="submit" id="delete" class="btn btn-opposite rounded-pill py-2 px-4 serv_bottom" formaction="Delete" onclick="return confirm('確定要刪除?')" style="margin-left:20px;">刪除</button>
-                    }
+                    <input type="button" class="btn btn-opposite rounded-pill py-2 px-4 serv_bottom" onclick="history.back()" value="回到上一頁"></input>
+                    @*<button type="submit" class="btn btn-opposite rounded-pill py-2 px-4 serv_bottom" name="action" value="temp">暫存</button>
+        <button type="button" class="btn btn-opposite rounded-pill py-2 px-4" onclick="next()" style="margin-left:20px;">上傳檔案</button>
+        @if (Model.receive_id != null && Model.receive_id != Guid.Empty && Model.receive_status != "案件送出")
+        {
+            <button type="submit" id="delete" class="btn btn-opposite rounded-pill py-2 px-4 serv_bottom" formaction="Delete" onclick="return confirm('確定要刪除?')" style="margin-left:20px;">刪除</button>
+        }*@
                 </div>
             </div>
             <!-- 加分項目上傳 -->

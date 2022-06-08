@@ -146,10 +146,13 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\ApplyForm\ApplyFormAreaRegistration.cs" />
     <Compile Include="Areas\ApplyForm\Controllers\ReceiveController.cs" />
+    <Compile Include="Areas\ApplyForm\Controllers\GrantController.cs" />
     <Compile Include="Areas\Management\Controllers\GroupSettingController.cs" />
     <Compile Include="Areas\Management\Controllers\MenuSettingController.cs" />
     <Compile Include="Areas\Management\Controllers\UserSettingController.cs" />
     <Compile Include="Areas\Management\ManagementAreaRegistration.cs" />
+    <Compile Include="Areas\Yrc\Controllers\YrcController.cs" />
+    <Compile Include="Areas\Yrc\YrcAreaRegistration.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Filter\CustomAuthorizeAttribute.cs" />
@@ -163,6 +166,8 @@
     <Compile Include="Helpers\GlobalVariablesHelpers.cs" />
     <Compile Include="Helpers\HttpHelpers.cs" />
     <Compile Include="Models\ApiModel\apiModelEncryption.cs" />
+    <Compile Include="Models\ApiModel\apiModelQueryAppropriation.cs" />
+    <Compile Include="Models\ApiModel\apiModelQueryCaseStatus.cs" />
     <Compile Include="Models\ApiModel\apiModelReceive.cs" />
     <Compile Include="Models\ApiModel\responseModel\apiResponseReceive.cs" />
     <Compile Include="Models\Repositories\backendBank.cs">
@@ -220,6 +225,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>rymimoney.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Repositories\SystemLog.cs">
+      <DependentUpon>rymimoney.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\settingConifgModel.cs" />
     <Compile Include="Models\ViewModel\baseModel.cs" />
     <Compile Include="Models\ViewModel\viewModelBackendBank.cs" />
@@ -244,6 +252,7 @@
     <Compile Include="Service\ServiceClass\backendRoleGroupService.cs" />
     <Compile Include="Service\ServiceClass\backendSetConfigService.cs" />
     <Compile Include="Service\ServiceClass\backendUserService.cs" />
+    <Compile Include="Service\ServiceClass\LogUtil.cs" />
     <Compile Include="Service\ServiceClass\postfileService.cs" />
     <Compile Include="Service\ServiceClass\receiveCasesService.cs" />
   </ItemGroup>
@@ -2144,6 +2153,9 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\ApplyForm\Data\" />
     <Folder Include="Areas\Management\Data\" />
+    <Folder Include="Areas\Yrc\Data\" />
+    <Folder Include="Areas\Yrc\Views\Shared\" />
+    <Folder Include="Views\Yrc\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -2172,6 +2184,10 @@
     <Content Include="fonts\webfonts\fa-solid-900.ttf" />
     <Content Include="fonts\webfonts\fa-solid-900.woff" />
     <Content Include="fonts\webfonts\fa-solid-900.woff2" />
+    <Content Include="Areas\Yrc\Views\web.config" />
+    <Content Include="Areas\ApplyForm\Views\Grant\Index.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\Grant\Edit.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\Grant\Table.cshtml" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\RYMimoneyBackend - Web Deploy.pubxml" />

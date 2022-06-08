@@ -23,7 +23,7 @@ namespace backendWeb.Service.ServiceClass
             try
             {
                 StringBuilder builder = new StringBuilder();
-                builder.Append("SELECT * FROM backendPromotion WHERE 1 = 1" + Environment.NewLine);
+                builder.Append("SELECT * FROM backendPromotion WHERE 1 = 1 AND is_enable = 1 " + Environment.NewLine);
                 List<SqlParameter> parameters = new List<SqlParameter>();
 
                 if (!string.IsNullOrEmpty(model.search_bus_type))

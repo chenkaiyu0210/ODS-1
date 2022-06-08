@@ -11,6 +11,10 @@
             <th>申請日期</th>
             <th>審件編號</th>
             <th>案件狀態</th>
+            <th>撥款狀態</th>
+            <th>撥款時間</th>
+            <th>撥款金額</th>
+            <th>繳款方式</th>
             <th>中文姓名</th>
             <th>身份證字號</th>
             <th>行動電話</th>
@@ -46,6 +50,27 @@
                             return data == null || data == '' ? row.receive_status : row.receive_status + "<br />" + row.error_message
                         }
                     },
+                    {
+                        data: "appropriation_status", orderable: false, render: function (data, type, row, meta) {
+                            switch (data) {
+                                case 'A001':
+                                    return '未申請';
+                                    break;
+                                case 'A002':
+                                    return '申請中';
+                                    break;
+                                case 'A003':
+                                    return '撥款中';
+                                    break;
+                                case 'A004':
+                                    return '已撥款';
+                                    break;
+                            }
+                        }
+                    },
+                    { data: "appropriationDate", orderable: false },
+                    { data: "appropriationAmt", orderable: false },
+                    { data: "repayKindName", orderable: false},
                     { data: "customer_name", orderable: false },
                     { data: "customer_idcard_no", orderable: false },
                     { data: "customer_mobile_phone", orderable: false },
@@ -58,10 +83,10 @@
                     {
                         data: "receive_id", render: function (data, type, row, meta) {
                             if (row.examine_no != null) {
-                                return data = "<a class='btn btn-success' style='margin: 0 5px 0 5px;' href='@Url.Action("Edit", "Receive", new { Area = "ApplyForm" })?id=" + data + "'>編輯</a>" +
-                                    "<a class='btn btn-success' style='margin: 0 5px 0 5px;' onclick='UudateStatus(\"" + row.examine_no + "\");' >更新狀態</a>";
+                                return data = "<a class='btn btn-success' style='margin: 0 5px 0 5px;' href='@Url.Action("Edit", "Grant", new { Area = "ApplyForm" })?id=" + data + "'>查詢</a>" +
+                                    "<a class='btn btn-success' style='margin: 0 5px 0 5px;' onclick='UudateStatus(\"" + row.examine_no + "\");' >更新撥款狀態</a>";
                             } else {
-                                return data = "<a class='btn btn-success' style='margin: 0 5px 0 5px;' href='@Url.Action("Edit", "Receive", new { Area = "ApplyForm" })?id=" + data + "'>編輯</a>";
+                                return data = "<a class='btn btn-success' style='margin: 0 5px 0 5px;' href='@Url.Action("Edit", "Grant", new { Area = "ApplyForm" })?id=" + data + "'>查詢</a>";
                             }
                         }
                     }
@@ -69,7 +94,7 @@
                 serverSide: true,
                 ajax: {
                     method: "POST",
-                    url: "@Url.Action("Table", "Receive", new { Area = "ApplyForm" })",
+                    url: "@Url.Action("Table", "Grant", new { Area = "ApplyForm" })",
                     data: function (d) {
                         d.receive_date = $("#receive_date").val();
                         d.customer_idcard_no = $("#customer_idcard_no").val();
@@ -85,7 +110,7 @@
 
     function UudateStatus(examine_no) {
         $.ajax({
-            url: '@Url.Action("UudateStatus", "Receive", new { Area = "ApplyForm" })',
+            url: '@Url.Action("UudateStatus", "Grant", new { Area = "ApplyForm" })',
             data: { examine_no: examine_no },
             type: 'POST',
             success: function (data) {
@@ -94,9 +119,8 @@
                         className: "warn",
                         position: "top center"
                     });
-
-                    GetTable();
                 }
+                GetTable();
             }
         })
     }

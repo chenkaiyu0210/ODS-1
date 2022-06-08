@@ -12,7 +12,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
 
 
@@ -20,6 +19,8 @@ namespace backendWeb.Areas.ApplyForm.Controllers
 {
     public class ReceiveController : BaseController
     {
+        LogUtil logUtil = new LogUtil();
+
         // GET: ApplyForm/Receive
         public ActionResult Index()
         {
@@ -60,21 +61,107 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                 item = crudService.GetOnly(new viewModelReceiveCases { search_receive_id = id });
                 item.customer_id_number_areacode = item.customer_id_number_areacode.Trim();
             }
-            
+
             reBindModel(ref item);
             return View(item);
+        }
+
+        public ActionResult UudateStatus(string examine_no)
+        {
+            logUtil.OutputLog("查詢案件狀態", examine_no);
+            string returnString = string.Empty;
+            string status = string.Empty;
+
+            #region 取得案件狀態
+            try
+            {
+                ReqQCS reqQCS = new ReqQCS
+                {
+                    dealerNo = "OD01",
+                    branchNo = "0001",
+                    salesNo = "88021796",
+                    examineNo = examine_no,
+                    source = "22"
+                };
+                RespQCS respQCS = new RespQCS();
+
+
+                EncryptionProcessor<RijndaelProcessor> encryption = new RijndaelProcessor(this.configSetting.apiSetting.apiKey.aesKey, this.configSetting.apiSetting.apiKey.aesIv, 256, 128, CipherMode.CBC, PaddingMode.PKCS7);
+                apiModelEncryption modelEncryption = new apiModelEncryption
+                {
+                    encryptEnterCase = Convert.ToBase64String(encryption.Encode(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(reqQCS)))),
+                    version = "2.0",
+                    transactionId = Guid.NewGuid().ToString()
+                };
+                HttpResponseMessage responseMessage = HttpHelpers.PostHttpClient(modelEncryption, "https://egateway.tac.com.tw/production/api/yrc/agent/QueryCaseStatus");
+                if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    string result = responseMessage.Content.ReadAsStringAsync().Result;
+                    respQCS = JsonConvert.DeserializeObject<RespQCS>(result);
+                    if (respQCS != null)
+                    {
+                        if (respQCS.code == "S001")
+                            status = respQCS.examStatusExplain;
+                        else
+                            returnString = respQCS.msg;
+                    }
+                    else
+                        returnString = "API回傳NULL";
+                }
+                else
+                    returnString = "API回傳錯誤";
+            }
+            catch (Exception ex)
+            {
+                returnString = "查詢案件狀態異常";
+                logUtil.OutputLog("查詢案件狀態異常", ex.Message);
+            }
+            #endregion
+
+            if (!string.IsNullOrWhiteSpace(status))
+            {
+                IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
+                viewModelReceiveCases item = crudService.GetOnly(new viewModelReceiveCases { search_examine_no = examine_no });
+
+                if (status == item.receive_status)
+                {
+                    returnString = "案件狀態與分期系統一致";
+                }
+                else
+                {
+                    item.receive_status = status;
+                    item.receive_status_update_time = DateTime.Now.ToString("yyyyMMddhhmm");
+
+                    viewModelReceiveCases returnValue = crudService.Save(item);
+
+                    if (returnValue.replyResult == null ||
+                        !returnValue.replyResult.Value)
+                    {
+                        logUtil.OutputLog("查詢案件狀態異常", "儲存更新狀態錯誤");
+                        returnString = "儲存更新狀態錯誤";
+                    }
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(returnString))
+                logUtil.OutputLog("查詢案件狀態異常", returnString);
+
+            return Json(returnString, JsonRequestBehavior.DenyGet);
         }
 
         public ActionResult Create()
         {
             viewModelReceiveCases item = new viewModelReceiveCases();
             reBindModel(ref item);
+
             return View("Edit", item);
         }
 
         [HttpPost]
-        public ActionResult Edit(viewModelReceiveCases model)
+        public ActionResult Edit(string action, viewModelReceiveCases model)
         {
+            IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
+
             try
             {
                 #region 合併資料
@@ -144,7 +231,6 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                     model.bank_detail_code = model.bank_detail_code.Split('-')[0];
                 #endregion
                 #region 儲存資料
-                IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
                 model.receive_staff = this.userInfoMdoel.account;
 
                 if (model.receive_id == null || model.receive_id == Guid.Empty)
@@ -154,56 +240,105 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                 }
                 else
                     model.saveAction = "Modify";
-                
+
                 model.receive_status = "案件存檔";
+                model.error_message = "";
                 model.receive_date = this.TaiwanDateTime;
-                crudService.Save(model);
+                viewModelReceiveCases returnValue = crudService.Save(model);
                 #endregion
-                #region 呼叫YRC
-                apiModelReceive apiModel = BindApiModel(model);
-                EncryptionProcessor<RijndaelProcessor> encryption = new RijndaelProcessor(this.configSetting.apiSetting.apiKey.aesKey, this.configSetting.apiSetting.apiKey.aesIv, 256, 128, CipherMode.CBC, PaddingMode.PKCS7);
-                apiModelEncryption modelEncryption = new apiModelEncryption
+                if (action == "temp") //暫存模式不需要打API
                 {
-                    encryptEnterCase = Convert.ToBase64String(encryption.Encode(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(apiModel)))),
-                    version = "2.0",
-                    transactionId = Guid.NewGuid().ToString()
-                };
-                HttpResponseMessage responseMessage = HttpHelpers.PostHttpClient(modelEncryption, this.configSetting.apiSetting.apiUrls.Where(o => o.func == "receive").FirstOrDefault().url);
-                if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    string result = responseMessage.Content.ReadAsStringAsync().Result;
-                    apiResponseReceive apiResponse = JsonConvert.DeserializeObject<apiResponseReceive>(result);
-                    if (apiResponse != null)
+                    if (returnValue.replyResult != null &&
+                        returnValue.replyResult.Value)
+                        ViewData["successMsg"] = "存檔完成";
+                    else
                     {
-                        if (apiResponse.code == "1000" || apiResponse.code == "1001")
+                        ViewData["errMsg"] = returnValue.replyMsg;
+                        logUtil.OutputLog("進件存檔失敗", returnValue.replyMsg);
+                    }
+                }
+                else
+                {
+                    #region 呼叫YRC
+                    apiModelReceive apiModel = BindApiModel(model);
+                    EncryptionProcessor<RijndaelProcessor> encryption = new RijndaelProcessor(this.configSetting.apiSetting.apiKey.aesKey, this.configSetting.apiSetting.apiKey.aesIv, 256, 128, CipherMode.CBC, PaddingMode.PKCS7);
+                    apiModelEncryption modelEncryption = new apiModelEncryption
+                    {
+                        encryptEnterCase = Convert.ToBase64String(encryption.Encode(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(apiModel)))),
+                        version = "2.0",
+                        transactionId = Guid.NewGuid().ToString()
+                    };
+                    HttpResponseMessage responseMessage = HttpHelpers.PostHttpClient(modelEncryption, this.configSetting.apiSetting.apiUrls.Where(o => o.func == "receive").FirstOrDefault().url);
+                    if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        string result = responseMessage.Content.ReadAsStringAsync().Result;
+                        apiResponseReceive apiResponse = JsonConvert.DeserializeObject<apiResponseReceive>(result);
+                        if (apiResponse != null)
                         {
-                            model.saveAction = "Modify";
-                            model.receive_status = "案件送出";
-                            model.examine_no = apiResponse.examineNo;
-                            crudService.Save(model);
-                            ViewData["successMsg"] = "案件送出完成";
+                            if (apiResponse.code == "1000" || apiResponse.code == "1001")
+                            {
+                                model.saveAction = "Modify";
+                                model.receive_status = "案件送出";
+                                model.error_message = "";
+                                model.examine_no = apiResponse.examineNo;
+                                crudService.Save(model);
+                                ViewData["successMsg"] = "案件送出完成";
+                            }
+                            else
+                            {
+                                model.saveAction = "Modify";
+                                model.receive_status = "案件送出失敗";
+                                model.error_message = apiResponse.msg;
+                                crudService.Save(model);
+                                ViewData["errMsg"] = apiResponse.msg;
+                                logUtil.OutputLog("案件送出失敗", apiResponse.msg);
+                            }
                         }
                         else
                         {
-                            ViewData["errMsg"] = apiResponse.msg;
+                            model.saveAction = "Modify";
+                            model.receive_status = "案件送出失敗";
+                            model.error_message = "案件送出失敗 API回傳NULL";
+                            crudService.Save(model);
+                            ViewData["errMsg"] = result;
+                            logUtil.OutputLog("案件送出失敗", "API回傳NULL");
                         }
                     }
-                    else
-                    {
-                        ViewData["errMsg"] = result;
-                    }
-                }       
-                #endregion
+                    #endregion
+                }
             }
             catch (Exception ex)
             {
-                ViewData["errMsg"] = ex.Message;               
+                model.saveAction = "Modify";
+                model.receive_status = "案件送出異常";
+                model.error_message = "案件送出異常";
+                crudService.Save(model);
+                ViewData["errMsg"] = ex.Message;
+                logUtil.OutputLog("案件送出異常", ex.Message);
             }
             finally
             {
-                reBindModel(ref model);               
+                reBindModel(ref model);
             }
             return View(model);
+        }
+        [HttpPost]
+        public ActionResult Delete(string receive_id)
+        {
+            IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
+            viewModelReceiveCases item = new viewModelReceiveCases();
+            item = crudService.GetOnly(new viewModelReceiveCases { search_receive_id = receive_id });
+            item.is_delete = true;
+
+            viewModelReceiveCases returnValue = crudService.Save(item);
+
+            if (returnValue.replyResult != null &&
+                returnValue.replyResult.Value)
+                ViewData["successMsg"] = "存檔完成";
+            else
+                ViewData["errMsg"] = returnValue.replyMsg;
+
+            return RedirectToAction("index", "Receive");
         }
         [HttpPost]
         public JsonResult searchPostfileCode(string query_type, string city_name, string town_name)
@@ -262,7 +397,7 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             if (list.Count > 0)
                 return Json(list);
             else
-                return Json(null);            
+                return Json(null);
         }
         public void reBindModel(ref viewModelReceiveCases model)
         {
@@ -311,6 +446,12 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             {
                 IBaseCrudService<viewModelBackendPromotion> promotionService = new backendPromotionService();
                 model.promotion_list = promotionService.GetList(new viewModelBackendPromotion { search_bus_type = model.bus_type }).ToList();
+            }
+            else if (model.busType_list != null && model.busType_list.Count > 0 &&
+                model.busType_list[0] != null && model.busType_list[0].bus_type != null)
+            {
+                IBaseCrudService<viewModelBackendPromotion> promotionService = new backendPromotionService();
+                model.promotion_list = promotionService.GetList(new viewModelBackendPromotion { search_bus_type = model.busType_list[0].bus_type }).ToList();
             }
             else
                 model.promotion_list = new List<viewModelBackendPromotion>();
@@ -374,17 +515,17 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             apiModel.payee_bank_detail_code = item.bank_detail_code;
             apiModel.payee_account_num = item.account_num;
             apiModel.promotion_no = item.promotion;
-            
+
             apiModel.periods_num = item.num;
             apiModel.payment = item.num_amount;
             apiModel.payment_mode = item.payment_mode.ToString();
-            
+
             int staging_total_price = 0;
             foreach (payment p in item.paymentInput)
             {
                 int.TryParse(p.num, out int _num);
                 int.TryParse(p.num_amount, out int _numAmount);
-                staging_total_price += _num * _numAmount;          
+                staging_total_price += _num * _numAmount;
             }
             apiModel.staging_amount = item.staging_amount;
             apiModel.staging_total_price = staging_total_price;
@@ -397,12 +538,12 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             apiModel.dealer_branch_name = "岳沐企業";
             //apiModel.dealer_tel = "OD01";
             //apiModel.contact_id_no = "OD01";
-            apiModel.contact_name = "陳家蓁";            
+            apiModel.contact_name = "陳家蓁";
             apiModel.contact_phone = "0903113735";
 
             #region 壓縮檔案
             CompressHelpers compress = new DotNetZipHelpers();
-            Dictionary<string, System.IO.Stream> dicFiles = new Dictionary<string, System.IO.Stream>();            
+            Dictionary<string, System.IO.Stream> dicFiles = new Dictionary<string, System.IO.Stream>();
             foreach (FileUpload fu in item.FileUploads)
             {
                 if (fu.File != null)
