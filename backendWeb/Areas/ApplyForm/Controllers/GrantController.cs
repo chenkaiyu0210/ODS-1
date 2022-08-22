@@ -8,6 +8,7 @@ using backendWeb.Service.ServiceClass;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
@@ -45,10 +46,10 @@ namespace backendWeb.Areas.ApplyForm
             var returnObj =
                   new
                   {
-                      draw = model.draw,
-                      recordsTotal = list == null || list.Count == 0 ? 0 : list.Count,
-                      recordsFiltered = list == null || list.Count == 0 ? 0 : list.Count,
-                      data = list == null ? new List<viewModelReceiveCases>() : list//分頁後的資料 
+                      //draw = model.draw,
+                      //recordsTotal = list == null || list.Count == 0 ? 0 : list.Count,
+                      //recordsFiltered = list == null || list.Count == 0 ? 0 : list.Count,
+                      data = list ?? new List<viewModelReceiveCases>()//分頁後的資料 
                   };
             return Json(returnObj);
         }
@@ -92,7 +93,7 @@ namespace backendWeb.Areas.ApplyForm
                     version = "2.0",
                     transactionId = Guid.NewGuid().ToString()
                 };
-                HttpResponseMessage responseMessage = HttpHelpers.PostHttpClient(modelEncryption, "https://egateway.tac.com.tw/production/api/yrc/agent/QueryAppropriation");
+                HttpResponseMessage responseMessage = HttpHelpers.PostHttpClient(modelEncryption, ConfigurationManager.AppSettings["API"].ToString() + "QueryAppropriation");
                 if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     string result = responseMessage.Content.ReadAsStringAsync().Result;

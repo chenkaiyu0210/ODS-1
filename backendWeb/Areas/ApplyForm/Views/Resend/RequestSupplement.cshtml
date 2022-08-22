@@ -1,0 +1,162 @@
+﻿@using backendWeb.Models.ViewModel
+@model viewModelRequestSupplement
+@{
+    ViewData["Title"] = "補件";
+    string action = ViewContext.RouteData.GetRequiredString("Action");
+    string Controller = ViewContext.RouteData.GetRequiredString("Controller");
+}
+
+<form action="@Url.Action("RequestSupplement", "Resend")" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(o => o.examine_no)
+    <div style="background-color: #fafafa;">
+        <div class="container py-md-5 py-3">
+            <h2 style="text-align:center;">補件</h2>
+            <div id="fillInData" class="d-block">
+                <div>
+                    <h5 class="product-form-title">上傳附件</h5>
+                    <p></p>
+                    <div class="row">
+                        <div class="file-upload col-md-4 col-12">
+                            <div class="image-upload-wrap">
+                                <input class="file-upload-input" type='file' onchange="readURL(this);" Name="FileUploads[0].File" id="" />
+                                <div class="drag-text drag-img-add">
+                                </div>
+                            </div>
+                            <div class="file-upload-content">
+                                <input type="text" class="supplement" name="supplement[0]" placeholder="補件說明" />
+                                <img class="file-upload-image" src="javascript:void(0)" alt="" />
+                                <div class="image-title-wrap">
+                                    <button type="button" onclick="removeUpload(this)" class="remove-image">移除 <span class="image-title">上傳檔案</span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="file-upload col-md-4 col-12">
+                            <div class="image-upload-wrap">
+                                <input class="file-upload-input" type='file' onchange="readURL(this);" Name="FileUploads[1].File" id="" />
+                                <div class="drag-img-add">
+                                </div>
+                            </div>
+                            <div class="file-upload-content">
+                                <input type="text" class="supplement" name="supplement[1]" placeholder="補件說明" />
+                                <img class="file-upload-image" src="javascript:void(0)" alt="" />
+                                <div class="image-title-wrap">
+                                    <button type="button" onclick="removeUpload(this)" class="remove-image">移除 <span class="image-title">上傳檔案</span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="file-upload col-md-4 col-12">
+                            <div class="image-upload-wrap">
+                                <input class="file-upload-input" type='file' onchange="readURL(this);" Name="FileUploads[2].File" id="" />
+                                <div class="drag-img-add">
+                                </div>
+                            </div>
+                            <div class="file-upload-content">
+                                <input type="text" class="supplement" name="supplement[2]" placeholder="補件說明" />
+                                <img class="file-upload-image" src="javascript:void(0)" alt="" />
+                                <div class="image-title-wrap">
+                                    <button type="button" onclick="removeUpload(this)" class="remove-image">移除 <span class="image-title">上傳檔案</span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="file-upload col-md-4 col-12">
+                            <div class="image-upload-wrap">
+                                <input class="file-upload-input" type='file' onchange="readURL(this);" Name="FileUploads[3].File" id="" />
+                                <div class="drag-img-add">
+                                </div>
+                            </div>
+                            <div class="file-upload-content">
+                                <input type="text" class="supplement" name="supplement[3]" placeholder="補件說明" />
+                                <img class="file-upload-image" src="javascript:void(0)" alt="" />
+                                <div class="image-title-wrap">
+                                    <button type="button" onclick="removeUpload(this)" class="remove-image">移除 <span class="image-title">上傳檔案</span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="file-upload col-md-4 col-12">
+                            <div class="image-upload-wrap">
+                                <input class="file-upload-input" type='file' onchange="readURL(this);" Name="FileUploads[4].File" id="" />
+                                <div class="drag-img-add">
+                                </div>
+                            </div>
+                            <div class="file-upload-content">
+                                <input type="text" class="supplement" name="supplement[4]" placeholder="補件說明" />
+                                <img class="file-upload-image" src="javascript:void(0)" alt="" />
+                                <div class="image-title-wrap">
+                                    <button type="button" onclick="removeUpload(this)" class="remove-image">移除 <span class="image-title">上傳檔案</span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="file-upload col-md-4 col-12">
+                            <div class="image-upload-wrap">
+                                <input class="file-upload-input" type='file' onchange="readURL(this);" Name="FileUploads[5].File" id="" />
+                                <div class="drag-img-add">
+                                </div>
+                            </div>
+                            <div class="file-upload-content">
+                                <input type="text" class="supplement" name="supplement[5]" placeholder="補件說明" />
+                                <img class="file-upload-image" src="javascript:void(0)" alt="" />
+                                <div class="image-title-wrap">
+                                    <button type="button" onclick="removeUpload(this)" class="remove-image">移除 <span class="image-title">上傳檔案</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between pt-3">
+                        <button type="submit" class="btn btn-opposite rounded-pill py-2 px-4 serv_bottom">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(o => o.receive_id)
+</form>
+@Html.Hidden("hid_action", action)
+<script>
+    $(function () {
+        //$(document).keydown(function (event) {
+        //    switch (event.keyCode) {
+        //        case 13://enter
+        //            return false;
+        //    }
+        //});
+    });
+    //上傳
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var file_type = input.files[0].type;
+            if (file_type != 'image/jpg' && file_type != 'image/jpeg' && file_type != 'image/bmp' && file_type != 'image/png' && file_type != 'application/pdf') {
+                MN.Alert('topCenter', 'error', '非圖檔與PDF檔');
+                $(input).val('');
+                return false;
+            }
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                //$('.image-upload-wrap').hide();
+
+                $(input).parent().parent().find('.image-upload-wrap').hide();
+                $(input).parent().parent().find('.file-upload-image').attr('src', e.target.result);
+                $(input).parent().parent().find('.file-upload-content').show();
+                //$('.file-upload-image').attr('src', e.target.result);
+                //$('.file-upload-content').show();
+                $(input).parent().parent().find('.image-title').html(input.files[0].name);
+
+                //$('.image-title').html(input.files[0].name);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+
+        } else {
+            removeUpload();
+        }
+    }
+    function removeUpload(input) {
+        $(input).parent().parent().parent().find('.image-upload-wrap').show();
+        $(input).parent().parent().parent().find('.file-upload-input').val('').replaceWith($(input).parent().parent().parent().find('.file-upload-input').clone());
+        $(input).parent().parent().parent().find('.file-upload-content').hide();
+        //$('.file-upload-input').replaceWith($('.file-upload-input').clone());
+        //$('.file-upload-content').hide();
+        //$('.image-upload-wrap').show();
+    }
+</script>

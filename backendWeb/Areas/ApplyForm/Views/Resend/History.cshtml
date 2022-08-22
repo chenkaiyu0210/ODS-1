@@ -1,0 +1,68 @@
+﻿@using backendWeb.Areas.Yrc.Controllers
+@using backendWeb.Models.ApiModel
+@using Newtonsoft.Json
+@using System.Globalization
+@model List<modelNotifyStatusReq>
+@{
+    ViewBag.Title = "History";
+    Layout = null;
+}
+
+@{
+    foreach (modelNotifyStatusReq s in Model)
+    {
+        RespQCS respQCS = JsonConvert.DeserializeObject<RespQCS>(s.QueryCaseStatus);
+
+        if (respQCS.examStatusExplain != null)
+        {
+            @("日期 : " + DateTime.ParseExact(s.ModifyTime.Substring(0, 12), "yyyyMMddhhmm", CultureInfo.InvariantCulture,
+DateTimeStyles.AllowWhiteSpaces).ToString("yyyy-MM-dd HH:mm"))
+            <br />
+            @("案件狀態 : " + respQCS.examStatusExplain)
+            <br />
+            if (respQCS.customer != null)
+            {
+                foreach (contentCustomer c in respQCS.customer)
+                {
+                    if (c.calloutResult != null && c.calloutResult.comment != null)
+                    {
+                        @("照會結果 : " + c.calloutResult.comment)
+                        <br />
+                    }
+                }
+            }
+
+            if (respQCS.examineComment != null)
+            {
+                @("備註說明 : " + respQCS.examineComment)
+                <br />
+            }
+
+            if (respQCS.reasonSuggestionDetail != null)
+            {
+                foreach (reasonSuggestionDetailInfo r in respQCS.reasonSuggestionDetail)
+                {
+                    if (r.kind != null)
+                    {
+                        @("原因/建議 : " + r.kind)
+                        <br />
+                    }
+                    if (r.explain != null)
+                    {
+                        @("審件狀態 : " + r.explain)
+                        <br />
+                    }
+                    if (r.comment != null)
+                    {
+                        @("原因/建議 備註說明: " + r.comment)
+                        <br />
+
+                    }
+                }
+            }
+            <br />
+            <br />
+        }
+    }
+}
+

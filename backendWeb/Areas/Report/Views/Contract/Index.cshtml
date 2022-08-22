@@ -1,0 +1,56 @@
+﻿@using backendWeb.Models.ViewModel;
+@{
+    ViewBag.Title = "Index";
+
+    List<SelectListItem> UserList = TempData["UserList"] as List<SelectListItem>;
+    List<SelectListItem> StatusList = new List<SelectListItem>
+{
+        new SelectListItem(){Text="全部", Value=""},
+        new SelectListItem(){Text="案件存檔", Value="案件存檔"},
+        new SelectListItem(){Text="案件送出", Value="案件送出"},
+        new SelectListItem(){Text="案件送出失敗", Value="案件送出失敗"},
+        new SelectListItem(){Text="案件送出異常", Value="案件送出異常"},
+        new SelectListItem(){Text="收件", Value="收件"},
+        new SelectListItem(){Text="核准", Value="核准"},
+        new SelectListItem(){Text="婉拒", Value="婉拒"},
+        new SelectListItem(){Text="附條件", Value="附條件"},
+        new SelectListItem(){Text="待補", Value="待補"},
+        new SelectListItem(){Text="補件", Value="補件"},
+        new SelectListItem(){Text="申覆", Value="申覆"},
+        new SelectListItem(){Text="自退", Value="自退"}
+    };
+}
+<div class="card mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">下載</h6>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Download", "Contract", new { Area = "Report" }, FormMethod.Post))
+        {<div class="row">
+                <div class="col-md-6 col-12">
+                    <div class="row">
+                        <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
+                            <label class="" for="receive_date_start">
+                                申請日期(起)
+                            </label>
+                            <input class="form-control" id="receive_date_start" name="receive_date_start" type="date" value="@DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd")" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="row">
+                        <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
+                            <label class="" for="receive_date_end">
+                                申請日期(訖)
+                            </label>
+                            <input class="form-control" id="receive_date_end" name="receive_date_end" type="text" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex .justify-content-start pt-3">
+                <input id="btnSearch" type="submit" class="btn btn-info btn-icon-split py-2 px-4" value="下載" />
+            </div>
+        }
+    </div>
+</div>

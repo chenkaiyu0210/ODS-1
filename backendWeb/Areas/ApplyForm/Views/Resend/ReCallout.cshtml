@@ -1,0 +1,52 @@
+﻿@using backendWeb.Models.ViewModel
+@model viewModelReCallout
+@{
+    ViewData["Title"] = "重照";
+    string action = ViewContext.RouteData.GetRequiredString("Action");
+    string Controller = ViewContext.RouteData.GetRequiredString("Controller");
+}
+
+<form action="@Url.Action("ReCallout", "Resend")" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(o => o.receive_id)
+    @Html.HiddenFor(o => o.examine_no)
+    <div style="background-color: #fafafa;">
+        <div class="container py-md-5 py-3">
+            <h2 style="text-align:center;">重照</h2>
+            <div id="fillInData" class="d-block">
+                <div class="row">
+                    <div class="col-md-12 col-12">
+                        重照時間 @Html.TextBoxFor(o => o.calloutDate, new { @type = "datetime-local", @class = "form-control", @Value=DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") })
+                        電話 @Html.TextBoxFor(o => o.tel, new { @type = "number", @class = "form-control", @MaxLength = "12" })
+                        備註描述 @Html.TextAreaFor(o => o.descript, new { @type = "number", @class = "form-control",@rows="3", @MaxLength = "50" })
+                        <input class="inp-cbx" id="nowCallout" name="nowCallout" type="checkbox" style="display: none;" value="true" />
+                        <label class="cbx" for="nowCallout">
+                            <span>
+                                <svg width="12px" height="10px" >
+                                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>現可照</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex justify-content-between pt-3">
+                        <button type="submit" class="btn btn-opposite rounded-pill py-2 px-4 serv_bottom">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@Html.Hidden("hid_action", action)
+<script>
+    $(function () {
+        $(document).keydown(function (event) {
+            switch (event.keyCode) {
+                case 13://enter
+                    return false;
+            }
+        });
+</script>
+

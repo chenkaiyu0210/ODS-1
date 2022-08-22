@@ -765,20 +765,20 @@
                                 <label>銀行狀態</label>
                                 <div class="cntr py-1">
                                     <label for="bankStatus01" class="radio">
-                                        <input type="radio" name="customer_creditcard_status" id="bankStatus01" class="hidden" value="1" checked="@(Model.customer_creditcard_status == "1" ? true : false)" />
+                                        <input type="radio" name="customer_creditcard_status" id="bankStatus01" class="hidden" value="沒辦過卡" checked="@(Model.customer_creditcard_status == "沒辦過卡" ? true : false)" />
                                         <span class="label"></span>沒辦過卡
                                     </label>
                                     <label for="bankStatus02" class="radio">
-                                        <input type="radio" name="customer_creditcard_status" id="bankStatus02" class="hidden" value="2" checked="@(Model.customer_creditcard_status == "2" ? true : false)" />
+                                        <input type="radio" name="customer_creditcard_status" id="bankStatus02" class="hidden" value="無卡自停" checked="@(Model.customer_creditcard_status == "無卡自停" ? true : false)" />
                                         <span class="label"></span>無卡自停
                                     </label>
                                     <label for="bankStatus03" class="radio">
-                                        <input type="radio" name="customer_creditcard_status" id="bankStatus03" class="hidden" value="3" checked="@(Model.customer_creditcard_status == "3" ? true : false)" />
+                                        <input type="radio" name="customer_creditcard_status" id="bankStatus03" class="hidden" value="協商繳款中" checked="@(Model.customer_creditcard_status == "協商繳款中" ? true : false)" />
                                         <span class="label"></span>協商繳款中
                                     </label>
                                     <div class="d-flex align-items-center pt-2">
                                         <label for="bankStatus04" class="radio col-md-2 col-3" style="padding: 0;">
-                                            <input type="radio" name="customer_creditcard_status" id="bankStatus04" class="hidden" value="4" checked="@(Model.customer_creditcard_status == "4" ? true : false)" />
+                                            <input type="radio" name="customer_creditcard_status" id="bankStatus04" class="hidden" value="其他" checked="@(Model.customer_creditcard_status == "其他" ? true : false)" />
                                             <span class="label"></span>其他
                                         </label>
                                         <input class="form-control col" id="customer_creditcard_status_remark" name="customer_creditcard_status_remark" placeholder="銀行資料狀態說明" type="text" value="@Model.customer_creditcard_status_remark" />

@@ -100,27 +100,36 @@ namespace backendWeb.Controllers
         [CustomAuthorize]
         public ActionResult Index()
         {
-            viewModelBackendUser item = JsonConvert.DeserializeObject<viewModelBackendUser>(this.userInfo);
-            return View();
+            if (string.IsNullOrEmpty(this.userInfo))
+                return RedirectToAction("Login");
+            else
+                return View();
         }
 
         #endregion
         #region 選單
         public ContentResult BuildMenu()
         {
-            StringBuilder result = new StringBuilder();
-            viewModelBackendUser item = JsonConvert.DeserializeObject<viewModelBackendUser>(this.userInfo);
-            IList<viewModelBackendMenu> itemList = new backendMenuService().GetMenu(new viewModelBackendMenu { searchIn_role_group_code = item.role_group_codes });
-            #region 產生選單
-            foreach (viewModelBackendMenu menuItem in itemList.Where(o => o.func_layer == 1))
+            if (this.userInfo == null)
             {
-                
-                result.Append($"<div class=\"sidebar-heading\">{menuItem.func_name}</div>");
-                SubMenu(menuItem.app_id, menuItem.func_id, itemList, result);
-                result.Append("<hr class=\"sidebar-divider\">");
+                return Content("");
             }
-            #endregion
-            return Content(result.ToString());
+            else
+            {
+                StringBuilder result = new StringBuilder();
+                viewModelBackendUser item = JsonConvert.DeserializeObject<viewModelBackendUser>(this.userInfo);
+                IList<viewModelBackendMenu> itemList = new backendMenuService().GetMenu(new viewModelBackendMenu { searchIn_role_group_code = item.role_group_codes });
+                #region 產生選單
+                foreach (viewModelBackendMenu menuItem in itemList.Where(o => o.func_layer == 1))
+                {
+
+                    result.Append($"<div class=\"sidebar-heading\">{menuItem.func_name}</div>");
+                    SubMenu(menuItem.app_id, menuItem.func_id, itemList, result);
+                    result.Append("<hr class=\"sidebar-divider\">");
+                }
+                #endregion
+                return Content(result.ToString());
+            }
         }
         #endregion
         #region 錯誤

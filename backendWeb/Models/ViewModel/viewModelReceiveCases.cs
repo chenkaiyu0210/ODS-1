@@ -8,6 +8,7 @@ namespace backendWeb.Models.ViewModel
     public class viewModelReceiveCases : baseModel
     {
         #region Search
+        public bool isResend { get; set; }
         public string search_receive_id { get; set; }
         public string search_examine_no { get; set; }
         public bool search_isAppropriation { get; set; }

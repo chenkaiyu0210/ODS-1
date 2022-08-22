@@ -1,4 +1,17 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string action = ViewContext.RouteData.Values["Action"].ToString();
+    string controller = ViewContext.RouteData.Values["Controller"].ToString();
+    int SingOut = System.Web.HttpContext.Current.Session.Timeout;
+    HttpCookie cookie = this.Request.Cookies["ASP.NET_SessionId"];
+    string ValidTime = "";
+    if (cookie != null)
+    {
+        ValidTime = DateTime.Now.AddHours(-8).AddMinutes(SingOut).Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds.ToString();
+    }
+    int TotalMinutes = System.Web.HttpContext.Current.Session.Timeout;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -55,41 +68,49 @@
                         </form>*@
 
                     <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">@(Session["userAccount"] == null ? "" : Session["userAccount"].ToString())</span>
-                                <img class="img-profile rounded-circle"
-                                     src="/img/undraw_profile.svg">
+                <ul class="navbar-nav ml-auto">
+                    @if (cookie != null)
+                    {
+                        <li class="nav-item" >  
+                            <a class="nav-link" >
+                                剩餘時間登出:
+                                <label id="lb_time"></label>
                             </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                 aria-labelledby="userDropdown">
-                                @*<a class="dropdown-item" href="#">
-                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Profile
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Settings
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Activity Log
-                                    </a>*@
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
-                            </div>
                         </li>
+                    }
+                    <div class="topbar-divider d-none d-sm-block"></div>
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">@(Session["userAccount"] == null ? "" : Session["userAccount"].ToString())</span>
+                            <img class="img-profile rounded-circle"
+                                 src="/img/undraw_profile.svg">
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+                            @*<a class="dropdown-item" href="#">
+                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Profile
+                </a>
+                <a class="dropdown-item" href="#">
+                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Settings
+                </a>
+                <a class="dropdown-item" href="#">
+                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Activity Log
+                </a>*@
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </li>
 
-                    </ul>
+                </ul>
 
                 </nav>
                 <!-- End of Topbar -->
@@ -158,7 +179,38 @@
             if ($('input[name="successMsg"]').val() != '') {
                 $.notify($('input[name="successMsg"]').val(), { className: "warn", position: "top center" });
             }
+
+            var cookie = '@cookie';
+            if (isNaN(cookie)) {
+                minute = parseInt('@SingOut');
+                second = 0;
+                timedCount();
+            }
         });
+
+        function timedCount() {
+            if (new Date(parseFloat('@ValidTime')) < new Date() || (second == 0 && minute == 0)) {
+                window.location.href = '@Url.Action("Logout", "Home")';
+            }
+            if (second == 0 && minute == 10) {
+                $('#lb_time').text(paddingLeft(minute.toString(), 2) + ':' + paddingLeft(second.toString(), 2));
+
+                $.notify('提醒您，畫面已閒置' +@(TotalMinutes -10) +'分鐘。<br/>如果有未完成表單請盡速完成。<br />若需繼續使用請重新整理(畫面欄位值會被清空)', { className: "info", position: "top center" });
+                minute--;
+                second = 60;
+                second--;
+                t = setTimeout(timedCount, 1000)
+            }
+            else {
+                $('#lb_time').text(paddingLeft(minute.toString(),2) + ':' + paddingLeft(second.toString(),2));
+                if (second == 0) {
+                    minute--;
+                    second = 60;
+                }
+                second--;
+                t = setTimeout(timedCount, 1000)
+            }
+        }
     </script>
 </body>
 </html>

@@ -156,6 +156,35 @@
           <Property Name="sms_is_verify" Type="bit" />
           <Property Name="is_enable" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="notifyAppropriation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="dealerNo" Type="nvarchar" MaxLength="5" />
+          <Property Name="branchNo" Type="nvarchar" MaxLength="10" />
+          <Property Name="salesNo" Type="nvarchar" MaxLength="10" />
+          <Property Name="examineNo" Type="nvarchar" MaxLength="13" />
+          <Property Name="appropriationDate" Type="nvarchar" MaxLength="12" />
+          <Property Name="appropriationAmt" Type="int" />
+          <Property Name="repayKindName" Type="nvarchar" MaxLength="10" />
+          <Property Name="status" Type="nvarchar" MaxLength="4" />
+          <Property Name="souce" Type="nvarchar" MaxLength="10" />
+          <Property Name="QueryCaseStatus" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="notifyCaseStatus">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="dealerNo" Type="nvarchar" MaxLength="10" />
+          <Property Name="branchNo" Type="nvarchar" MaxLength="10" />
+          <Property Name="salesNo" Type="nvarchar" MaxLength="10" />
+          <Property Name="examineNo" Type="nvarchar" MaxLength="15" />
+          <Property Name="examStatusExplain" Type="nvarchar" MaxLength="5" />
+          <Property Name="ModifyTime" Type="nvarchar" MaxLength="14" />
+          <Property Name="QueryCaseStatus" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="postfile">
           <Key>
             <PropertyRef Name="zipcode" />
@@ -299,6 +328,8 @@
           <EntitySet Name="backendUser" EntityType="Self.backendUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="logJson" EntityType="Self.logJson" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="members" EntityType="Self.members" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="notifyAppropriation" EntityType="Self.notifyAppropriation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="notifyCaseStatus" EntityType="Self.notifyCaseStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="postfile" EntityType="Self.postfile" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="receiveCases" EntityType="Self.receiveCases" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SystemLog" EntityType="Self.SystemLog" Schema="dbo" store:Type="Tables" />
@@ -317,106 +348,23 @@
     <edmx:ConceptualModels>
       <Schema Namespace="RYMimoneyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="RYMimoneyEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="postfile" EntityType="RYMimoneyModel.postfile" />
-          <EntitySet Name="members" EntityType="RYMimoneyModel.members" />
-          <EntitySet Name="logJson" EntityType="RYMimoneyModel.logJson" />
-          <EntitySet Name="backendMenu" EntityType="RYMimoneyModel.backendMenu" />
-          <EntitySet Name="backendUser" EntityType="RYMimoneyModel.backendUser" />
-          <EntitySet Name="backendRoleGroup" EntityType="RYMimoneyModel.backendRoleGroup" />
           <EntitySet Name="backendBank" EntityType="RYMimoneyModel.backendBank" />
           <EntitySet Name="backendBankDetail" EntityType="RYMimoneyModel.backendBankDetail" />
           <EntitySet Name="backendBusType" EntityType="RYMimoneyModel.backendBusType" />
+          <EntitySet Name="backendMenu" EntityType="RYMimoneyModel.backendMenu" />
+          <EntitySet Name="backendProduct" EntityType="RYMimoneyModel.backendProduct" />
           <EntitySet Name="backendPromotion" EntityType="RYMimoneyModel.backendPromotion" />
           <EntitySet Name="backendSetConfig" EntityType="RYMimoneyModel.backendSetConfig" />
-          <EntitySet Name="backendProduct" EntityType="RYMimoneyModel.backendProduct" />
-          <EntitySet Name="SystemLog" EntityType="RYMimoneyModel.SystemLog" />
+          <EntitySet Name="backendUser" EntityType="RYMimoneyModel.backendUser" />
+          <EntitySet Name="logJson" EntityType="RYMimoneyModel.logJson" />
+          <EntitySet Name="members" EntityType="RYMimoneyModel.members" />
+          <EntitySet Name="postfile" EntityType="RYMimoneyModel.postfile" />
           <EntitySet Name="receiveCases" EntityType="RYMimoneyModel.receiveCases" />
+          <EntitySet Name="SystemLog" EntityType="RYMimoneyModel.SystemLog" />
+          <EntitySet Name="backendRoleGroup" EntityType="RYMimoneyModel.backendRoleGroup" />
+          <EntitySet Name="notifyAppropriation" EntityType="RYMimoneyModel.notifyAppropriation" />
+          <EntitySet Name="notifyCaseStatus" EntityType="RYMimoneyModel.notifyCaseStatus" />
         </EntityContainer>
-        <EntityType Name="postfile">
-          <Key>
-            <PropertyRef Name="zipcode" />
-            <PropertyRef Name="town_name" />
-          </Key>
-          <Property Name="zipcode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="city_name" Type="String" Nullable="false" MaxLength="28" FixedLength="false" Unicode="true" />
-          <Property Name="town_name" Type="String" Nullable="false" MaxLength="28" FixedLength="false" Unicode="true" />
-          <Property Name="import_time" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="members">
-          <Key>
-            <PropertyRef Name="customer_id" />
-          </Key>
-          <Property Name="customer_id" Type="Guid" Nullable="false" />
-          <Property Name="customer_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="customer_idcard_no" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="customer_email" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="customer_birthday" Type="DateTime" Precision="3" />
-          <Property Name="customer_mobile_phone" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="salt_key" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="register_time" Type="DateTime" Precision="3" />
-          <Property Name="sms_verify_code" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
-          <Property Name="sms_is_verify" Type="Boolean" />
-          <Property Name="is_enable" Type="Boolean" Nullable="false" />
-        </EntityType>
-        <EntityType Name="logJson">
-          <Key>
-            <PropertyRef Name="log_id" />
-          </Key>
-          <Property Name="log_id" Type="Guid" Nullable="false" />
-          <Property Name="company" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="source" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="request_json" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="request_time" Type="DateTime" Precision="3" />
-          <Property Name="response_json" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="response_time" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="backendMenu">
-          <Key>
-            <PropertyRef Name="app_id" />
-            <PropertyRef Name="func_id" />
-          </Key>
-          <Property Name="app_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="func_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="controller_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="view_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="func_layer" Type="Int32" />
-          <Property Name="func_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="func_url" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="is_display" Type="Boolean" />
-          <Property Name="sort_order" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="parent_func_id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="icon" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="authorize_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="backendUser">
-          <Key>
-            <PropertyRef Name="account" />
-          </Key>
-          <Property Name="account" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="salt_key" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="register_user" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="register_time" Type="DateTime" Precision="3" />
-          <Property Name="is_enable" Type="Boolean" />
-          <Property Name="disable_time" Type="DateTime" Precision="3" />
-          <Property Name="disable_user" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="role_group_codes" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="backendRoleGroup">
-          <Key>
-            <PropertyRef Name="role_group_code" />
-            <PropertyRef Name="role_group_name" />
-            <PropertyRef Name="authorize_codes" />
-            <PropertyRef Name="create_time" />
-          </Key>
-          <Property Name="role_group_code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="role_group_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="is_enable" Type="Boolean" />
-          <Property Name="authorize_codes" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="create_time" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
         <EntityType Name="backendBank">
           <Key>
             <PropertyRef Name="bank_code" />
@@ -449,6 +397,39 @@
           <Property Name="create_time" Type="DateTime" Precision="3" />
           <Property Name="modify_time" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="backendMenu">
+          <Key>
+            <PropertyRef Name="app_id" />
+            <PropertyRef Name="func_id" />
+          </Key>
+          <Property Name="app_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="func_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="controller_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="view_id" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="func_layer" Type="Int32" />
+          <Property Name="func_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="func_url" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="is_display" Type="Boolean" />
+          <Property Name="sort_order" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="parent_func_id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="icon" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="authorize_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="backendProduct">
+          <Key>
+            <PropertyRef Name="bus_type" />
+            <PropertyRef Name="product_brand" />
+            <PropertyRef Name="product_kind" />
+          </Key>
+          <Property Name="bus_type" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="product_brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="product_brand_name" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="product_kind" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="product_kind_name" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="is_enable" Type="Boolean" />
+          <Property Name="create_time" Type="DateTime" Precision="3" />
+          <Property Name="modify_time" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="backendPromotion">
           <Key>
             <PropertyRef Name="bus_type" />
@@ -476,29 +457,59 @@
           <Property Name="create_time" Type="DateTime" Precision="3" />
           <Property Name="modify_time" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="backendProduct">
+        <EntityType Name="backendUser">
           <Key>
-            <PropertyRef Name="bus_type" />
-            <PropertyRef Name="product_brand" />
-            <PropertyRef Name="product_kind" />
+            <PropertyRef Name="account" />
           </Key>
-          <Property Name="bus_type" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="true" />
-          <Property Name="product_brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="product_brand_name" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="product_kind" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="product_kind_name" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="account" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="salt_key" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="register_user" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="register_time" Type="DateTime" Precision="3" />
           <Property Name="is_enable" Type="Boolean" />
-          <Property Name="create_time" Type="DateTime" Precision="3" />
-          <Property Name="modify_time" Type="DateTime" Precision="3" />
+          <Property Name="disable_time" Type="DateTime" Precision="3" />
+          <Property Name="disable_user" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="role_group_codes" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="SystemLog">
+        <EntityType Name="logJson">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="log_id" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LogTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LogMethod" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="LogMessage" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="log_id" Type="Guid" Nullable="false" />
+          <Property Name="company" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="source" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="request_json" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="request_time" Type="DateTime" Precision="3" />
+          <Property Name="response_json" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="response_time" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="members">
+          <Key>
+            <PropertyRef Name="customer_id" />
+          </Key>
+          <Property Name="customer_id" Type="Guid" Nullable="false" />
+          <Property Name="customer_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="customer_idcard_no" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="customer_email" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="customer_birthday" Type="DateTime" Precision="3" />
+          <Property Name="customer_mobile_phone" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="salt_key" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="register_time" Type="DateTime" Precision="3" />
+          <Property Name="sms_verify_code" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="sms_is_verify" Type="Boolean" />
+          <Property Name="is_enable" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="postfile">
+          <Key>
+            <PropertyRef Name="zipcode" />
+            <PropertyRef Name="town_name" />
+          </Key>
+          <Property Name="zipcode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="city_name" Type="String" Nullable="false" MaxLength="28" FixedLength="false" Unicode="true" />
+          <Property Name="town_name" Type="String" Nullable="false" MaxLength="28" FixedLength="false" Unicode="true" />
+          <Property Name="import_time" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="receiveCases">
           <Key>
@@ -613,98 +624,63 @@
           <Property Name="receive_staff" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="is_delete" Type="Boolean" Nullable="false" />
         </EntityType>
-      </Schema>
+        <EntityType Name="SystemLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LogTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LogMethod" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LogMessage" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="backendRoleGroup">
+          <Key>
+            <PropertyRef Name="role_group_code" />
+            <PropertyRef Name="role_group_name" />
+            <PropertyRef Name="authorize_codes" />
+            <PropertyRef Name="create_time" />
+          </Key>
+          <Property Name="role_group_code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="role_group_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="is_enable" Type="Boolean" />
+          <Property Name="authorize_codes" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="create_time" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="notifyAppropriation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dealerNo" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="branchNo" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="salesNo" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="examineNo" Type="String" MaxLength="13" FixedLength="false" Unicode="true" />
+          <Property Name="appropriationDate" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="appropriationAmt" Type="Int32" />
+          <Property Name="repayKindName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="souce" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="QueryCaseStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="notifyCaseStatus">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dealerNo" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="branchNo" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="salesNo" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="examineNo" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="examStatusExplain" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyTime" Type="String" MaxLength="14" FixedLength="false" Unicode="true" />
+          <Property Name="QueryCaseStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="RYMimoneyModelStoreContainer" CdmEntityContainer="RYMimoneyEntities">
-          <EntitySetMapping Name="postfile">
-            <EntityTypeMapping TypeName="RYMimoneyModel.postfile">
-              <MappingFragment StoreEntitySet="postfile">
-                <ScalarProperty Name="import_time" ColumnName="import_time" />
-                <ScalarProperty Name="town_name" ColumnName="town_name" />
-                <ScalarProperty Name="city_name" ColumnName="city_name" />
-                <ScalarProperty Name="zipcode" ColumnName="zipcode" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="members">
-            <EntityTypeMapping TypeName="RYMimoneyModel.members">
-              <MappingFragment StoreEntitySet="members">
-                <ScalarProperty Name="is_enable" ColumnName="is_enable" />
-                <ScalarProperty Name="sms_is_verify" ColumnName="sms_is_verify" />
-                <ScalarProperty Name="sms_verify_code" ColumnName="sms_verify_code" />
-                <ScalarProperty Name="register_time" ColumnName="register_time" />
-                <ScalarProperty Name="salt_key" ColumnName="salt_key" />
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="customer_mobile_phone" ColumnName="customer_mobile_phone" />
-                <ScalarProperty Name="customer_birthday" ColumnName="customer_birthday" />
-                <ScalarProperty Name="customer_email" ColumnName="customer_email" />
-                <ScalarProperty Name="customer_idcard_no" ColumnName="customer_idcard_no" />
-                <ScalarProperty Name="customer_name" ColumnName="customer_name" />
-                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="logJson">
-            <EntityTypeMapping TypeName="RYMimoneyModel.logJson">
-              <MappingFragment StoreEntitySet="logJson">
-                <ScalarProperty Name="response_time" ColumnName="response_time" />
-                <ScalarProperty Name="response_json" ColumnName="response_json" />
-                <ScalarProperty Name="request_time" ColumnName="request_time" />
-                <ScalarProperty Name="request_json" ColumnName="request_json" />
-                <ScalarProperty Name="source" ColumnName="source" />
-                <ScalarProperty Name="company" ColumnName="company" />
-                <ScalarProperty Name="log_id" ColumnName="log_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="backendMenu">
-            <EntityTypeMapping TypeName="RYMimoneyModel.backendMenu">
-              <MappingFragment StoreEntitySet="backendMenu">
-                <ScalarProperty Name="authorize_code" ColumnName="authorize_code" />
-                <ScalarProperty Name="icon" ColumnName="icon" />
-                <ScalarProperty Name="parent_func_id" ColumnName="parent_func_id" />
-                <ScalarProperty Name="sort_order" ColumnName="sort_order" />
-                <ScalarProperty Name="is_display" ColumnName="is_display" />
-                <ScalarProperty Name="func_url" ColumnName="func_url" />
-                <ScalarProperty Name="func_name" ColumnName="func_name" />
-                <ScalarProperty Name="func_layer" ColumnName="func_layer" />
-                <ScalarProperty Name="view_id" ColumnName="view_id" />
-                <ScalarProperty Name="controller_id" ColumnName="controller_id" />
-                <ScalarProperty Name="func_id" ColumnName="func_id" />
-                <ScalarProperty Name="app_id" ColumnName="app_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="backendUser">
-            <EntityTypeMapping TypeName="RYMimoneyModel.backendUser">
-              <MappingFragment StoreEntitySet="backendUser">
-                <ScalarProperty Name="role_group_codes" ColumnName="role_group_codes" />
-                <ScalarProperty Name="disable_user" ColumnName="disable_user" />
-                <ScalarProperty Name="disable_time" ColumnName="disable_time" />
-                <ScalarProperty Name="is_enable" ColumnName="is_enable" />
-                <ScalarProperty Name="register_time" ColumnName="register_time" />
-                <ScalarProperty Name="register_user" ColumnName="register_user" />
-                <ScalarProperty Name="salt_key" ColumnName="salt_key" />
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="account" ColumnName="account" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="backendRoleGroup">
-            <EntityTypeMapping TypeName="RYMimoneyModel.backendRoleGroup">
-              <MappingFragment StoreEntitySet="backendRoleGroup">
-                <ScalarProperty Name="create_time" ColumnName="create_time" />
-                <ScalarProperty Name="authorize_codes" ColumnName="authorize_codes" />
-                <ScalarProperty Name="is_enable" ColumnName="is_enable" />
-                <ScalarProperty Name="role_group_name" ColumnName="role_group_name" />
-                <ScalarProperty Name="role_group_code" ColumnName="role_group_code" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="backendBank">
             <EntityTypeMapping TypeName="RYMimoneyModel.backendBank">
               <MappingFragment StoreEntitySet="backendBank">
@@ -739,6 +715,38 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="backendMenu">
+            <EntityTypeMapping TypeName="RYMimoneyModel.backendMenu">
+              <MappingFragment StoreEntitySet="backendMenu">
+                <ScalarProperty Name="authorize_code" ColumnName="authorize_code" />
+                <ScalarProperty Name="icon" ColumnName="icon" />
+                <ScalarProperty Name="parent_func_id" ColumnName="parent_func_id" />
+                <ScalarProperty Name="sort_order" ColumnName="sort_order" />
+                <ScalarProperty Name="is_display" ColumnName="is_display" />
+                <ScalarProperty Name="func_url" ColumnName="func_url" />
+                <ScalarProperty Name="func_name" ColumnName="func_name" />
+                <ScalarProperty Name="func_layer" ColumnName="func_layer" />
+                <ScalarProperty Name="view_id" ColumnName="view_id" />
+                <ScalarProperty Name="controller_id" ColumnName="controller_id" />
+                <ScalarProperty Name="func_id" ColumnName="func_id" />
+                <ScalarProperty Name="app_id" ColumnName="app_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="backendProduct">
+            <EntityTypeMapping TypeName="RYMimoneyModel.backendProduct">
+              <MappingFragment StoreEntitySet="backendProduct">
+                <ScalarProperty Name="modify_time" ColumnName="modify_time" />
+                <ScalarProperty Name="create_time" ColumnName="create_time" />
+                <ScalarProperty Name="is_enable" ColumnName="is_enable" />
+                <ScalarProperty Name="product_kind_name" ColumnName="product_kind_name" />
+                <ScalarProperty Name="product_kind" ColumnName="product_kind" />
+                <ScalarProperty Name="product_brand_name" ColumnName="product_brand_name" />
+                <ScalarProperty Name="product_brand" ColumnName="product_brand" />
+                <ScalarProperty Name="bus_type" ColumnName="bus_type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="backendPromotion">
             <EntityTypeMapping TypeName="RYMimoneyModel.backendPromotion">
               <MappingFragment StoreEntitySet="backendPromotion">
@@ -766,27 +774,60 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="backendProduct">
-            <EntityTypeMapping TypeName="RYMimoneyModel.backendProduct">
-              <MappingFragment StoreEntitySet="backendProduct">
-                <ScalarProperty Name="modify_time" ColumnName="modify_time" />
-                <ScalarProperty Name="create_time" ColumnName="create_time" />
+          <EntitySetMapping Name="backendUser">
+            <EntityTypeMapping TypeName="RYMimoneyModel.backendUser">
+              <MappingFragment StoreEntitySet="backendUser">
+                <ScalarProperty Name="role_group_codes" ColumnName="role_group_codes" />
+                <ScalarProperty Name="disable_user" ColumnName="disable_user" />
+                <ScalarProperty Name="disable_time" ColumnName="disable_time" />
                 <ScalarProperty Name="is_enable" ColumnName="is_enable" />
-                <ScalarProperty Name="product_kind_name" ColumnName="product_kind_name" />
-                <ScalarProperty Name="product_kind" ColumnName="product_kind" />
-                <ScalarProperty Name="product_brand_name" ColumnName="product_brand_name" />
-                <ScalarProperty Name="product_brand" ColumnName="product_brand" />
-                <ScalarProperty Name="bus_type" ColumnName="bus_type" />
+                <ScalarProperty Name="register_time" ColumnName="register_time" />
+                <ScalarProperty Name="register_user" ColumnName="register_user" />
+                <ScalarProperty Name="salt_key" ColumnName="salt_key" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="account" ColumnName="account" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SystemLog">
-            <EntityTypeMapping TypeName="RYMimoneyModel.SystemLog">
-              <MappingFragment StoreEntitySet="SystemLog">
-                <ScalarProperty Name="LogMessage" ColumnName="LogMessage" />
-                <ScalarProperty Name="LogMethod" ColumnName="LogMethod" />
-                <ScalarProperty Name="LogTime" ColumnName="LogTime" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
+          <EntitySetMapping Name="logJson">
+            <EntityTypeMapping TypeName="RYMimoneyModel.logJson">
+              <MappingFragment StoreEntitySet="logJson">
+                <ScalarProperty Name="response_time" ColumnName="response_time" />
+                <ScalarProperty Name="response_json" ColumnName="response_json" />
+                <ScalarProperty Name="request_time" ColumnName="request_time" />
+                <ScalarProperty Name="request_json" ColumnName="request_json" />
+                <ScalarProperty Name="source" ColumnName="source" />
+                <ScalarProperty Name="company" ColumnName="company" />
+                <ScalarProperty Name="log_id" ColumnName="log_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="members">
+            <EntityTypeMapping TypeName="RYMimoneyModel.members">
+              <MappingFragment StoreEntitySet="members">
+                <ScalarProperty Name="is_enable" ColumnName="is_enable" />
+                <ScalarProperty Name="sms_is_verify" ColumnName="sms_is_verify" />
+                <ScalarProperty Name="sms_verify_code" ColumnName="sms_verify_code" />
+                <ScalarProperty Name="register_time" ColumnName="register_time" />
+                <ScalarProperty Name="salt_key" ColumnName="salt_key" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="customer_mobile_phone" ColumnName="customer_mobile_phone" />
+                <ScalarProperty Name="customer_birthday" ColumnName="customer_birthday" />
+                <ScalarProperty Name="customer_email" ColumnName="customer_email" />
+                <ScalarProperty Name="customer_idcard_no" ColumnName="customer_idcard_no" />
+                <ScalarProperty Name="customer_name" ColumnName="customer_name" />
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="postfile">
+            <EntityTypeMapping TypeName="RYMimoneyModel.postfile">
+              <MappingFragment StoreEntitySet="postfile">
+                <ScalarProperty Name="import_time" ColumnName="import_time" />
+                <ScalarProperty Name="town_name" ColumnName="town_name" />
+                <ScalarProperty Name="city_name" ColumnName="city_name" />
+                <ScalarProperty Name="zipcode" ColumnName="zipcode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -904,7 +945,59 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="SystemLog">
+            <EntityTypeMapping TypeName="RYMimoneyModel.SystemLog">
+              <MappingFragment StoreEntitySet="SystemLog">
+                <ScalarProperty Name="LogMessage" ColumnName="LogMessage" />
+                <ScalarProperty Name="LogMethod" ColumnName="LogMethod" />
+                <ScalarProperty Name="LogTime" ColumnName="LogTime" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="backendRoleGroup">
+            <EntityTypeMapping TypeName="RYMimoneyModel.backendRoleGroup">
+              <MappingFragment StoreEntitySet="backendRoleGroup">
+                <ScalarProperty Name="create_time" ColumnName="create_time" />
+                <ScalarProperty Name="authorize_codes" ColumnName="authorize_codes" />
+                <ScalarProperty Name="is_enable" ColumnName="is_enable" />
+                <ScalarProperty Name="role_group_name" ColumnName="role_group_name" />
+                <ScalarProperty Name="role_group_code" ColumnName="role_group_code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="notifyAppropriation">
+            <EntityTypeMapping TypeName="RYMimoneyModel.notifyAppropriation">
+              <MappingFragment StoreEntitySet="notifyAppropriation">
+                <ScalarProperty Name="QueryCaseStatus" ColumnName="QueryCaseStatus" />
+                <ScalarProperty Name="souce" ColumnName="souce" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="repayKindName" ColumnName="repayKindName" />
+                <ScalarProperty Name="appropriationAmt" ColumnName="appropriationAmt" />
+                <ScalarProperty Name="appropriationDate" ColumnName="appropriationDate" />
+                <ScalarProperty Name="examineNo" ColumnName="examineNo" />
+                <ScalarProperty Name="salesNo" ColumnName="salesNo" />
+                <ScalarProperty Name="branchNo" ColumnName="branchNo" />
+                <ScalarProperty Name="dealerNo" ColumnName="dealerNo" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="notifyCaseStatus">
+            <EntityTypeMapping TypeName="RYMimoneyModel.notifyCaseStatus">
+              <MappingFragment StoreEntitySet="notifyCaseStatus">
+                <ScalarProperty Name="QueryCaseStatus" ColumnName="QueryCaseStatus" />
+                <ScalarProperty Name="ModifyTime" ColumnName="ModifyTime" />
+                <ScalarProperty Name="examStatusExplain" ColumnName="examStatusExplain" />
+                <ScalarProperty Name="examineNo" ColumnName="examineNo" />
+                <ScalarProperty Name="salesNo" ColumnName="salesNo" />
+                <ScalarProperty Name="branchNo" ColumnName="branchNo" />
+                <ScalarProperty Name="dealerNo" ColumnName="dealerNo" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

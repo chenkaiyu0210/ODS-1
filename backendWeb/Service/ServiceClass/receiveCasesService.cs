@@ -59,16 +59,21 @@ WHERE 1 = 1 and is_delete = 0" + Environment.NewLine);
                     builder.Append(" AND appropriation_status IS NOT NULL" + Environment.NewLine);
                 }
 
-                if (model.start.HasValue)
+                if (model.isResend)
                 {
-                    builder.Append(" ORDER BY receive_date DESC OFFSET @skip ROWS");
-                    parameters.Add(new SqlParameter("@skip", DbType.Int32) { Value = model.start.Value });
-                    if (model.length.HasValue)
-                    {
-                        builder.Append(" FETCH NEXT @take ROWS ONLY");
-                        parameters.Add(new SqlParameter("@take", DbType.Int32) { Value = model.length.Value });
-                    }
+                    builder.Append(" AND receive_status IN (N'待補', N'自退', N'核准', N'婉拒', N'附條件')" + Environment.NewLine);
                 }
+
+                //if (model.start.HasValue)
+                //{
+                //    builder.Append(" ORDER BY receive_date DESC OFFSET @skip ROWS");
+                //    parameters.Add(new SqlParameter("@skip", DbType.Int32) { Value = model.start.Value });
+                //    if (model.length.HasValue)
+                //    {
+                //        builder.Append(" FETCH NEXT @take ROWS ONLY");
+                //        parameters.Add(new SqlParameter("@take", DbType.Int32) { Value = model.length.Value });
+                //    }
+                //}
 
                 return new baseRepository<viewModelReceiveCases>(new List<string> { builder.ToString() }, new List<List<SqlParameter>> { parameters }).GetList().ToList();
             }

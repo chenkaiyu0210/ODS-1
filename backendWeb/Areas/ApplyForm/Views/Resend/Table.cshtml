@@ -1,0 +1,127 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+    <thead>
+        <tr>
+            @*<th>商品資訊</th>*@
+            <th>申請日期</th>
+            <th>審件編號</th>
+            <th>案件狀態</th>
+            <th>中文姓名</th>
+            @*<th>身份證字號</th>*@
+            <th>行動電話</th>
+            @*<th>辦理分期金額</th>*@
+            @*<th>進件人員</th>*@
+            <th>功能列</th>
+        </tr>
+    </thead>
+</table>
+
+<script>
+    $(function () {
+        $('#dataTable')
+            .on('preXhr.dt', function (e, settings, data) {
+                $.blockUI({ message: '<h1>資料讀取中...</h1>' });
+            })
+            .on('xhr.dt', function (e, settings, json, xhr) {
+                $.unblockUI();
+            }).DataTable({
+                searching: false,
+                columns: [
+                    //{ data: "bus_type", orderable: false },
+                    {
+                        data: "receive_date", orderable: false, render: function (data, type, row, meta) {
+                            //if (moment(data).isValid()) { return moment(data).format('YYYY/MM/DD HH:mm:ss'); } else { return ""; }
+                            return moment(data).isValid() ? moment(data).format('YYYY/MM/DD HH:mm:ss') : ""
+                        }
+                    },
+                    //{ data: "examine_no", orderable: false },
+                    {
+                        data: "examine_no", render: function (data) {
+                            return data = "<a  data-toggle='modal' data-target='#aa' style='text-decoration:underline;cursor:pointer;' onclick=\"History('" + data + "')\">" + data +"</a>";
+                        }
+                    },
+                    {
+                        data: "error_message", orderable: false,
+                        "render": function (data, type, row, meta) {
+                            return data == null || data == '' ? row.receive_status : row.receive_status + "<br />" + row.error_message
+                        }
+                    },
+                    { data: "customer_name", orderable: false },
+                    //{ data: "customer_idcard_no", orderable: false },
+                    { data: "customer_mobile_phone", orderable: false },
+                    //{
+                    //    data: "staging_amount", orderable: false, render: function (data, type, row, meta) {
+                    //        return data == null ? 0 : parseInt(data).currency()
+                    //    }
+                    //},
+                    //{ data: "receive_staff_name", orderable: false },
+                    {
+                        data: "receive_id", render: function (data, type, row, meta) {
+                            switch (row.receive_status) {
+                                case '待補':
+                                    return data =
+                                        "<a class='btn btn-success' style='margin: 0 5px 0 5px;' href='@Url.Action("RequestSupplement", "Resend", new { Area = "ApplyForm" })?id=" + data + "'>補件</a>" +
+                                        "<a class='btn btn-success' style='margin: 0 5px 0 5px;' href='@Url.Action("ReCallout", "Resend", new { Area = "ApplyForm" })?id=" + data + "'>重照</a>";
+                                    break;
+                                case '自退':
+                                case '核准':
+                                    return data =
+                                        "<a class='btn btn-success' style='margin: 0 5px 0 5px;' href='@Url.Action("RequestSupplement", "Resend", new { Area = "ApplyForm" })?id=" + data + "'>補件</a>";
+                                    break;
+                                case '婉拒':
+                                    return data =
+                                        "<a class='btn btn-success' style='margin: 0 5px 0 5px;' href='@Url.Action("RequestforExam", "Resend", new { Area = "ApplyForm" })?id=" + data + "'>申覆</a>";
+                                    break;
+                                case '附條件':
+                                    return data =
+                                        "<a class='btn btn-success' style='margin: 0 5px 0 5px;' href='@Url.Action("RequestSupplement", "Resend", new { Area = "ApplyForm" })?id=" + data + "'>補件</a>" +
+                                        "<a class='btn btn-success' style='margin: 0 5px 0 5px;' href='@Url.Action("RequestforExam", "Resend", new { Area = "ApplyForm" })?id=" + data + "'>申覆</a>";
+                                    break;
+                                default:
+                                    return data = "";
+                                    break;
+                            }
+                        }
+                    }
+                ],
+                //serverSide: true,
+                ajax: {
+                    method: "POST",
+                    url: "@Url.Action("Table", "Resend", new { Area = "ApplyForm" })",
+                    data: function (d) {
+                        d.receive_date = $("#receive_date").val();
+                        d.customer_idcard_no = $("#customer_idcard_no").val();
+                        d.receive_staff = $("#receive_staff").val();
+                        d.receive_status = $("#receive_status").val();
+                    }
+                },
+                oLanguage: dataTableSettings,
+                ordering: false,
+                orderMulti: false
+            });
+    });
+
+    function UudateStatus(examine_no) {
+        $.ajax({
+            url: '@Url.Action("UudateStatus", "Receive", new { Area = "ApplyForm" })',
+            data: { examine_no: examine_no },
+            type: 'POST',
+            success: function (data) {
+                if (data != '') {
+                    $.notify(data, {
+                        className: "warn",
+                        position: "top center"
+                    });
+
+                    GetTable();
+                }
+            }
+        })
+    }
+
+</script>

@@ -8,6 +8,7 @@ using backendWeb.Service.ServiceClass;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
@@ -41,13 +42,13 @@ namespace backendWeb.Areas.ApplyForm.Controllers
         public ActionResult Table(viewModelReceiveCases model) //int draw, int start, int length
         {
             IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
-            IList<viewModelReceiveCases> list = crudService.GetList(model);
+            IList<viewModelReceiveCases> list = crudService.GetList(model).OrderByDescending(x => x.receive_date).ToList();
             var returnObj =
                   new
                   {
-                      draw = model.draw,
-                      recordsTotal = list == null || list.Count == 0 ? 0 : list.Count,
-                      recordsFiltered = list == null || list.Count == 0 ? 0 : list.Count,
+                      //draw = model.draw,
+                      //recordsTotal = list == null || list.Count == 0 ? 0 : list.Count,
+                      //recordsFiltered = list == null || list.Count == 0 ? 0 : list.Count,
                       data = list == null ? new List<viewModelReceiveCases>() : list//分頁後的資料 
                   };
             return Json(returnObj);
@@ -59,7 +60,7 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             {
                 IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
                 item = crudService.GetOnly(new viewModelReceiveCases { search_receive_id = id });
-                item.customer_id_number_areacode = item.customer_id_number_areacode.Trim();
+                //item.customer_id_number_areacode = item.customer_id_number_areacode.Trim();
             }
 
             reBindModel(ref item);
@@ -93,7 +94,7 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                     version = "2.0",
                     transactionId = Guid.NewGuid().ToString()
                 };
-                HttpResponseMessage responseMessage = HttpHelpers.PostHttpClient(modelEncryption, "https://egateway.tac.com.tw/production/api/yrc/agent/QueryCaseStatus");
+                HttpResponseMessage responseMessage = HttpHelpers.PostHttpClient(modelEncryption, ConfigurationManager.AppSettings["API"].ToString() + "QueryCaseStatus");
                 if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     string result = responseMessage.Content.ReadAsStringAsync().Result;

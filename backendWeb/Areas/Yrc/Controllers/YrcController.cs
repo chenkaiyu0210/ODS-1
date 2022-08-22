@@ -1,13 +1,20 @@
-﻿using backendWeb.Models.ViewModel;
+﻿using backendWeb.Controllers;
+using backendWeb.Helpers;
+using backendWeb.Models.ApiModel;
+using backendWeb.Models.ViewModel;
 using backendWeb.Service.InterFace;
 using backendWeb.Service.ServiceClass;
 using Newtonsoft.Json;
-using System.Collections.Generic;
+using System;
+using System.Configuration;
+using System.Net.Http;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web.Http;
 
 namespace backendWeb.Areas.Yrc.Controllers
 {
-    public class YrcController : ApiController
+    public class YrcController : BaseApiController
     {
         LogUtil logUtil = new LogUtil();
         /// <summary>
@@ -21,6 +28,13 @@ namespace backendWeb.Areas.Yrc.Controllers
             Response response = new Response();
             try
             {
+                #region 儲存
+                IBaseCrudService<modelNotifyStatusReq> notifyStatusService = new notifyCaseStatusService();
+                RespQCS respQCS = QueryCaseStatus(model.examineNo);
+                model.QueryCaseStatus = $"{JsonConvert.SerializeObject(respQCS)}";
+                notifyStatusService.Save(model);
+                #endregion
+
                 response.code = "S001";
                 response.msg = "成功";
                 logUtil.OutputLog("API NotifyCaseStatus Log", $"{JsonConvert.SerializeObject(model)}");
@@ -38,7 +52,7 @@ namespace backendWeb.Areas.Yrc.Controllers
                     viewModelReceiveCases returnValue = crudService.Save(item);
 
                     if (returnValue.replyResult == null ||
-                        !returnValue.replyResult.Value)                    
+                        !returnValue.replyResult.Value)
                     {
                         logUtil.OutputLog("API NotifyCaseStatus 錯誤", "儲存更新狀態錯誤");
                         response.code = "F001";
@@ -63,7 +77,6 @@ namespace backendWeb.Areas.Yrc.Controllers
 
             return response;
         }
-
         /// <summary>
         /// 撥款通知
         /// </summary>
@@ -75,6 +88,13 @@ namespace backendWeb.Areas.Yrc.Controllers
             Response response = new Response();
             try
             {
+                #region 儲存
+                IBaseCrudService<modelAppropriationNotifyReq> appropriationNotify = new notifyAppropriationService();
+                RespQCS respQCS = QueryCaseStatus(model.examineNo);
+                model.QueryCaseStatus = $"{JsonConvert.SerializeObject(respQCS)}";
+                appropriationNotify.Save(model);
+                #endregion
+
                 response.code = "S001";
                 response.msg = "成功";
                 logUtil.OutputLog("API NotifyAppropriation Log", $"{JsonConvert.SerializeObject(model)}");
@@ -119,6 +139,47 @@ namespace backendWeb.Areas.Yrc.Controllers
             }
 
             return response;
+        }
+        /// <summary>
+        /// 取得案件狀態
+        /// </summary>
+        /// <param name="examine_no"></param>
+        /// <returns></returns>
+        [HttpPost, Route("api/Yrc/QueryCaseStatus")]
+        public RespQCS QueryCaseStatus(string examine_no)
+        {
+            RespQCS respQCS = new RespQCS();
+
+            try
+            {
+                ReqQCS reqQCS = new ReqQCS
+                {
+                    dealerNo = "OD01",
+                    branchNo = null,
+                    salesNo = null,
+                    examineNo = examine_no,
+                    source = "22"
+                };
+
+                EncryptionProcessor<RijndaelProcessor> encryption = new RijndaelProcessor(this.configSetting.apiSetting.apiKey.aesKey, this.configSetting.apiSetting.apiKey.aesIv, 256, 128, CipherMode.CBC, PaddingMode.PKCS7);
+                apiModelEncryption modelEncryption = new apiModelEncryption
+                {
+                    encryptEnterCase = Convert.ToBase64String(encryption.Encode(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(reqQCS)))),
+                    version = "2.0",
+                    transactionId = Guid.NewGuid().ToString()
+                };
+                HttpResponseMessage responseMessage = HttpHelpers.PostHttpClient(modelEncryption, ConfigurationManager.AppSettings["API"].ToString() + "QueryCaseStatus");
+                if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    string result = responseMessage.Content.ReadAsStringAsync().Result;
+                    respQCS = JsonConvert.DeserializeObject<RespQCS>(result);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return respQCS;
         }
     }
 
@@ -171,6 +232,16 @@ namespace backendWeb.Areas.Yrc.Controllers
         // 摘要:
         //     來源
         public string souce { get; set; }
+        /// <summary>
+        /// 回傳結果(True/False)
+        /// </summary>
+        public bool? replyResult { get; set; }
+        /// <summary>
+        /// 回傳訊息(True/False)
+        /// </summary>
+        public string replyMsg { get; set; }
+
+        public string QueryCaseStatus { get; set; }
     }
 
     //
@@ -207,6 +278,15 @@ namespace backendWeb.Areas.Yrc.Controllers
         // 摘要:
         //     異動時間
         public string ModifyTime { get; set; }
+        /// <summary>
+        /// 回傳結果(True/False)
+        /// </summary>
+        public bool? replyResult { get; set; }
+        /// <summary>
+        /// 回傳訊息(True/False)
+        /// </summary>
+        public string replyMsg { get; set; }
+        public string QueryCaseStatus { get; set; }
     }
 
     public class Response

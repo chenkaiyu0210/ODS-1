@@ -54,12 +54,26 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=6.0.6.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.6.0.6\lib\net462\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus.Interfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=a694d7f3b0907a61, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.Interfaces.6.0.0\lib\net452\EPPlus.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus.System.Drawing, Version=6.0.0.0, Culture=neutral, PublicKeyToken=2308d35469c9bac0, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.System.Drawing.6.0.0\lib\net452\EPPlus.System.Drawing.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=1.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IO.RecyclableMemoryStream.1.4.1\lib\net46\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -147,12 +161,17 @@
     <Compile Include="Areas\ApplyForm\ApplyFormAreaRegistration.cs" />
     <Compile Include="Areas\ApplyForm\Controllers\ReceiveController.cs" />
     <Compile Include="Areas\ApplyForm\Controllers\GrantController.cs" />
+    <Compile Include="Areas\ApplyForm\Controllers\ResendController.cs" />
     <Compile Include="Areas\Management\Controllers\GroupSettingController.cs" />
     <Compile Include="Areas\Management\Controllers\MenuSettingController.cs" />
     <Compile Include="Areas\Management\Controllers\UserSettingController.cs" />
     <Compile Include="Areas\Management\ManagementAreaRegistration.cs" />
+    <Compile Include="Areas\Report\Controllers\ContractController.cs" />
+    <Compile Include="Areas\Report\Controllers\ReceiveController.cs" />
+    <Compile Include="Areas\Report\ReportAreaRegistration.cs" />
     <Compile Include="Areas\Yrc\Controllers\YrcController.cs" />
     <Compile Include="Areas\Yrc\YrcAreaRegistration.cs" />
+    <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Filter\CustomAuthorizeAttribute.cs" />
@@ -168,7 +187,10 @@
     <Compile Include="Models\ApiModel\apiModelEncryption.cs" />
     <Compile Include="Models\ApiModel\apiModelQueryAppropriation.cs" />
     <Compile Include="Models\ApiModel\apiModelQueryCaseStatus.cs" />
+    <Compile Include="Models\ApiModel\apiModelReCallout.cs" />
     <Compile Include="Models\ApiModel\apiModelReceive.cs" />
+    <Compile Include="Models\ApiModel\apiModelRequestExam.cs" />
+    <Compile Include="Models\ApiModel\apiModelRequestSupplement.cs" />
     <Compile Include="Models\ApiModel\responseModel\apiResponseReceive.cs" />
     <Compile Include="Models\Repositories\backendBank.cs">
       <DependentUpon>rymimoney.tt</DependentUpon>
@@ -202,6 +224,12 @@
       <DependentUpon>rymimoney.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Repositories\members.cs">
+      <DependentUpon>rymimoney.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Repositories\notifyAppropriation.cs">
+      <DependentUpon>rymimoney.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Repositories\notifyCaseStatus.cs">
       <DependentUpon>rymimoney.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Repositories\postfile.cs">
@@ -240,7 +268,10 @@
     <Compile Include="Models\ViewModel\viewModelBackendSetConfig.cs" />
     <Compile Include="Models\ViewModel\viewModelBackendUser.cs" />
     <Compile Include="Models\ViewModel\viewModelPostfile.cs" />
+    <Compile Include="Models\ViewModel\viewModelReCallout.cs" />
     <Compile Include="Models\ViewModel\viewModelReceiveCases.cs" />
+    <Compile Include="Models\ViewModel\viewModelRequestforExam.cs" />
+    <Compile Include="Models\ViewModel\viewModelRequestSupplement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\InterFace\IBaseCrudService.cs" />
     <Compile Include="Service\ServiceClass\backendBankDetailService.cs" />
@@ -253,6 +284,8 @@
     <Compile Include="Service\ServiceClass\backendSetConfigService.cs" />
     <Compile Include="Service\ServiceClass\backendUserService.cs" />
     <Compile Include="Service\ServiceClass\LogUtil.cs" />
+    <Compile Include="Service\ServiceClass\notifyAppropriationService.cs" />
+    <Compile Include="Service\ServiceClass\notifyCaseStatusService.cs" />
     <Compile Include="Service\ServiceClass\postfileService.cs" />
     <Compile Include="Service\ServiceClass\receiveCasesService.cs" />
   </ItemGroup>
@@ -2153,8 +2186,12 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\ApplyForm\Data\" />
     <Folder Include="Areas\Management\Data\" />
+    <Folder Include="Areas\Report\Data\" />
+    <Folder Include="Areas\Report\Views\Shared\" />
     <Folder Include="Areas\Yrc\Data\" />
     <Folder Include="Areas\Yrc\Views\Shared\" />
+    <Folder Include="Views\BaseApi\" />
+    <Folder Include="Views\Receive\" />
     <Folder Include="Views\Yrc\" />
   </ItemGroup>
   <ItemGroup>
@@ -2188,6 +2225,17 @@
     <Content Include="Areas\ApplyForm\Views\Grant\Index.cshtml" />
     <Content Include="Areas\ApplyForm\Views\Grant\Edit.cshtml" />
     <Content Include="Areas\ApplyForm\Views\Grant\Table.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\Resend\Edit.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\Resend\Index.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\Resend\Table.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\Resend\RequestforExam.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\Resend\RequestSupplement.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\Resend\ReCallout.cshtml" />
+    <Content Include="Areas\ApplyForm\Views\Resend\History.cshtml" />
+    <Content Include="Areas\Report\Views\web.config" />
+    <Content Include="Areas\Report\Views\Receive\Index.cshtml" />
+    <Content Include="Areas\Report\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Report\Views\Contract\Index.cshtml" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\RYMimoneyBackend - Web Deploy.pubxml" />

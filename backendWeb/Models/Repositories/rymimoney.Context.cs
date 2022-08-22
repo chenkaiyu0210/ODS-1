@@ -25,19 +25,21 @@ namespace backendWeb.Models.Repositories
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<postfile> postfile { get; set; }
-        public virtual DbSet<members> members { get; set; }
-        public virtual DbSet<logJson> logJson { get; set; }
-        public virtual DbSet<backendMenu> backendMenu { get; set; }
-        public virtual DbSet<backendUser> backendUser { get; set; }
-        public virtual DbSet<backendRoleGroup> backendRoleGroup { get; set; }
         public virtual DbSet<backendBank> backendBank { get; set; }
         public virtual DbSet<backendBankDetail> backendBankDetail { get; set; }
         public virtual DbSet<backendBusType> backendBusType { get; set; }
+        public virtual DbSet<backendMenu> backendMenu { get; set; }
+        public virtual DbSet<backendProduct> backendProduct { get; set; }
         public virtual DbSet<backendPromotion> backendPromotion { get; set; }
         public virtual DbSet<backendSetConfig> backendSetConfig { get; set; }
-        public virtual DbSet<backendProduct> backendProduct { get; set; }
-        public virtual DbSet<SystemLog> SystemLog { get; set; }
+        public virtual DbSet<backendUser> backendUser { get; set; }
+        public virtual DbSet<logJson> logJson { get; set; }
+        public virtual DbSet<members> members { get; set; }
+        public virtual DbSet<postfile> postfile { get; set; }
         public virtual DbSet<receiveCases> receiveCases { get; set; }
+        public virtual DbSet<SystemLog> SystemLog { get; set; }
+        public virtual DbSet<backendRoleGroup> backendRoleGroup { get; set; }
+        public virtual DbSet<notifyAppropriation> notifyAppropriation { get; set; }
+        public virtual DbSet<notifyCaseStatus> notifyCaseStatus { get; set; }
     }
 }

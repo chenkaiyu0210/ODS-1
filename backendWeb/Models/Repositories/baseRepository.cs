@@ -1,6 +1,8 @@
 ﻿using backendWeb.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
@@ -40,6 +42,36 @@ namespace backendWeb.Models.Repositories
                 throw ex;
             }
         }
+
+        public DataTable DataTable()
+        {
+            using (var context = new RYMimoneyEntities())
+            {
+                DataTable dataTable = new DataTable();
+                DbConnection connection = context.Database.Connection;
+                DbProviderFactory dbFactory = DbProviderFactories.GetFactory(connection);
+                using (var cmd = dbFactory.CreateCommand())
+                {
+                    cmd.Connection = connection;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = sqlQuery[0];
+                    if (sqlPar[0] != null)
+                    {
+                        foreach (var item in sqlPar[0])
+                        {
+                            cmd.Parameters.Add(item);
+                        }
+                    }
+                    using (DbDataAdapter adapter = dbFactory.CreateDataAdapter())
+                    {
+                        adapter.SelectCommand = cmd;
+                        adapter.Fill(dataTable);
+                    }
+                }
+                return dataTable;
+            }
+        }
+
         /// <summary>
         /// Select One
         /// </summary>
