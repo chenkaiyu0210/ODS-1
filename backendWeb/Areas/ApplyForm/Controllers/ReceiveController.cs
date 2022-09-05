@@ -78,9 +78,9 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             {
                 ReqQCS reqQCS = new ReqQCS
                 {
-                    dealerNo = "OD01",
+                    dealerNo = "OO02",
                     branchNo = "0001",
-                    salesNo = "88021796",
+                    salesNo = "80659759",
                     examineNo = examine_no,
                     source = "22"
                 };
@@ -532,11 +532,11 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             apiModel.staging_total_price = staging_total_price;
             apiModel.product_category_id = item.product_brand;
             apiModel.product_id = item.product_kind;
-            apiModel.dealer_no = "OD01";
-            apiModel.dealer_name = "岳沐企業";
-            apiModel.dealer_id_no = "88021796";
+            apiModel.dealer_no = "OO02";
+            apiModel.dealer_name = "OOS中";
+            apiModel.dealer_id_no = "80659759";
             apiModel.dealer_branch_no = "0001";
-            apiModel.dealer_branch_name = "岳沐企業";
+            apiModel.dealer_branch_name = "陳家蓁";
             //apiModel.dealer_tel = "OD01";
             //apiModel.contact_id_no = "OD01";
             apiModel.contact_name = "陳家蓁";

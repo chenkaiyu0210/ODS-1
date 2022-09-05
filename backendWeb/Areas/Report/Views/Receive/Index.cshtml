@@ -30,20 +30,20 @@
                 <div class="col-md-6 col-12">
                     <div class="row">
                         <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
-                            <label class="" for="receive_date_start">
-                                申請日期(起)
+                            <label class="" for="start">
+                                進件日期(起)
                             </label>
-                            <input class="form-control" id="receive_date_start" name="receive_date_start" type="date" value="@DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd")" />
+                            <input class="form-control" id="start" name="start" type="date" value="@DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd")" />
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-12">
                     <div class="row">
                         <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
-                            <label class="" for="receive_date_end">
-                                申請日期(訖)
+                            <label class="" for="end">
+                                進件日期(訖)
                             </label>
-                            <input class="form-control" id="receive_date_end" name="receive_date_end" type="text" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <input class="form-control" id="end" name="end" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                         </div>
                     </div>
                 </div>

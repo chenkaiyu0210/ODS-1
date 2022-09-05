@@ -68,7 +68,7 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             //    respQCs.Add(JsonConvert.DeserializeObject<RespQCS>(a.QueryCaseStatus));
             //}
             //listNotifyStatus = listNotifyStatus.OrderByDescending(x => x.ModifyTime).ToList();
-            
+
             //foreach (modelNotifyStatusReq s in listNotifyStatus)
             //{
             //    respQCs.Add(JsonConvert.DeserializeObject<RespQCS>(s.QueryCaseStatus));
@@ -143,7 +143,7 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                     version = "2.0",
                     transactionId = Guid.NewGuid().ToString()
                 };
-                HttpResponseMessage responseMessage = HttpHelpers.PostHttpClient(modelEncryption, ConfigurationManager.AppSettings["API"].ToString()+"RequestforExam");
+                HttpResponseMessage responseMessage = HttpHelpers.PostHttpClient(modelEncryption, ConfigurationManager.AppSettings["API"].ToString() + "RequestforExam");
                 #endregion
 
                 if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
@@ -253,7 +253,7 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                             ViewData["successMsg"] = respRS.msg;
                         else
                             ViewData["errMsg"] = respRS.msg;
-                        
+
                     }
                     else
                         ViewData["errMsg"] = result;
