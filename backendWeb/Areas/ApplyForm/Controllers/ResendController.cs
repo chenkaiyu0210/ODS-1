@@ -7,10 +7,14 @@ using backendWeb.Models.ViewModel;
 using backendWeb.Service.InterFace;
 using backendWeb.Service.ServiceClass;
 using GateWay.Models;
+using iTextSharp.text.pdf.qrcode;
 using Newtonsoft.Json;
+using PrinterKit;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
@@ -103,9 +107,9 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                 #region 初始值
                 ReqRE reqRE = new ReqRE
                 {
-                    dealerNo = "OD01",
+                    dealerNo = "OO02",
                     branchNo = "0001",
-                    salesNo = "88021796",
+                    salesNo = "80659759",
                     examineNo = item.examine_no,
                     source = "22",
                     comment = item.comment,
@@ -183,6 +187,23 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                 IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
                 item.examine_no = crudService.GetOnly(new viewModelReceiveCases { search_receive_id = id }).examine_no;
             }
+
+            #region 郵遞地址
+            IBaseCrudService<viewModelPostfile> postfileService = new postfileService();
+            IList<viewModelPostfile> list = postfileService.GetList(new viewModelPostfile());
+            item.city_list = (from d in list
+                              orderby d.zipcode
+                              select new viewModelPostfile
+                              {
+                                  zipcode = d.zipcode.Substring(0, 1),
+                                  city_name = d.city_name,
+                              }).GroupBy(o => new
+                              {
+                                  o.zipcode,
+                                  o.city_name
+                              }).Select(o => new viewModelPostfile { zipcode = o.Key.zipcode, city_name = o.Key.city_name }).OrderBy(o => o.zipcode).ToList();
+            #endregion
+
             return View(item);
         }
         [HttpPost]
@@ -193,9 +214,9 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                 #region 初始值
                 ReqRS reqRE = new ReqRS
                 {
-                    dealerNo = "OD01",
+                    dealerNo = "OO02",
                     branchNo = "0001",
-                    salesNo = "88021796",
+                    salesNo = "80659759",
                     examineNo = item.examine_no,
                     source = "22"
                 };
@@ -223,6 +244,23 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                         }
                     }
                 }
+
+                Dictionary<string, string> dct = new Dictionary<string, string>();
+                dct.Add("examineNo", item.examine_no);
+                dct.Add("guarantor_name", item.guarantor_name);
+                dct.Add("guarantor_relation", item.guarantor_relation);
+                dct.Add("guarantor_idcard_no", item.guarantor_idcard_no);
+                dct.Add("guarantor_birthday", item.guarantor_birthdayYY + item.guarantor_birthdayMM + item.guarantor_birthdayDD);
+                dct.Add("guarantor_mobile_phone", item.guarantor_mobile_phone);
+                dct.Add("guarantor_resident_tel_num", item.guarantor_mobile_phone + item.guarantor_resident_tel_num);
+                dct.Add("guarantor_address", item.guarantor_postalcode + " " + item.guarantor_addcity + item.guarantor_addregion + item.guarantor_addregion + item.guarantor_address);
+                dct.Add("guarantor_company_name", item.guarantor_company_name);
+                dct.Add("guarantor_job_type", item.guarantor_job_type);
+                dct.Add("guarantor_company_tel_num", item.guarantor_company_tel_code + " " + item.guarantor_company_tel_num + " " + item.guarantor_company_tel_ext);
+                byte[] member_case = printpdf(dct, "guarantor.pdf");
+
+                dicFiles.Add("guarantor_file.pdf", new MemoryStream(member_case));
+
                 reqRE.attachmentFile = new List<ReqRSFile> {
                     new ReqRSFile {
                         file_index = "0",
@@ -253,7 +291,6 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                             ViewData["successMsg"] = respRS.msg;
                         else
                             ViewData["errMsg"] = respRS.msg;
-
                     }
                     else
                         ViewData["errMsg"] = result;
@@ -264,7 +301,83 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                 ViewData["errMsg"] = ex.Message;
             }
 
+            #region 郵遞地址
+            IBaseCrudService<viewModelPostfile> postfileService = new postfileService();
+            IList<viewModelPostfile> list = postfileService.GetList(new viewModelPostfile());
+            item.city_list = (from d in list
+                              orderby d.zipcode
+                              select new viewModelPostfile
+                              {
+                                  zipcode = d.zipcode.Substring(0, 1),
+                                  city_name = d.city_name,
+                              }).GroupBy(o => new
+                              {
+                                  o.zipcode,
+                                  o.city_name
+                              }).Select(o => new viewModelPostfile { zipcode = o.Key.zipcode, city_name = o.Key.city_name }).OrderBy(o => o.zipcode).ToList();
+            #endregion
+
             return View(item);
+        }
+
+        [HttpPost]
+        public JsonResult GetGuarantor(string guarantor_idcard_no)
+        {
+            viewModelReceiveCases viewModelReceiveCases = new viewModelReceiveCases();
+            IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
+            viewModelReceiveCases.guarantor_idcard_no = guarantor_idcard_no;
+            List<viewModelReceiveCases> list = crudService.GetList(viewModelReceiveCases)
+                 .OrderByDescending(x => x.receive_date).ToList();
+
+            viewModelReceiveCases g = list.FirstOrDefault();
+
+            viewModelReceiveCases returnValue = new viewModelReceiveCases();
+
+            if (g != null)
+            {
+                returnValue.guarantor_name = g.guarantor_name;
+                returnValue.guarantor_relation = g.guarantor_relation;
+                returnValue.guarantor_idcard_no = g.guarantor_idcard_no;
+                returnValue.guarantor_birthdayYY = g.guarantor_birthdayYY;
+                returnValue.guarantor_birthdayMM = g.guarantor_birthdayMM;
+                returnValue.guarantor_birthdayDD = g.guarantor_birthdayDD;
+                returnValue.guarantor_mobile_phone = g.guarantor_mobile_phone;
+                returnValue.guarantor_resident_tel_code = g.guarantor_resident_tel_code;
+                returnValue.guarantor_resident_tel_num = g.guarantor_resident_tel_num;
+                returnValue.guarantor_addcity = g.guarantor_addcity;
+                returnValue.guarantor_addregion = g.guarantor_addregion;
+                returnValue.guarantor_address = g.guarantor_address;
+                returnValue.guarantor_postalcode = g.guarantor_postalcode;
+                returnValue.guarantor_company_name = g.guarantor_company_name;
+                returnValue.guarantor_job_type = g.guarantor_job_type;
+                returnValue.guarantor_company_tel_code = g.guarantor_company_tel_code;
+                returnValue.guarantor_company_tel_num = g.guarantor_company_tel_num;
+                returnValue.guarantor_company_tel_ext = g.guarantor_company_tel_ext;
+            }
+
+            return g != null ? Json(returnValue) : Json(null);
+        }
+
+        private byte[] printpdf(Dictionary<string, string> dct, string docx_filename)
+        {
+            List<PdfItem> pdfI = new List<PdfItem>();
+            foreach (var d in dct)
+            {
+                pdfI.Add(new PdfItem() { Key = d.Key, Value = d.Value, Type = PdfItemType.Text });
+            }
+            PdfTemplate template = new PdfTemplate()
+            {
+                Pages = new List<PdfPage>() { new PdfPage() { Items = pdfI } },
+                FontPaths = new string[] { Server.MapPath("~/Service/PrinterKit/FileTemplate/msjh.ttc,1") },
+                FileName = docx_filename,
+                SourceFilePath = Server.MapPath("~/Service/PrinterKit/FileTemplate/"),
+                TargetFilePath = Server.MapPath("~/Service/PrinterKit/FileConvertTemp/")
+            };
+            byte[] pdf_byte = template.TemplateToPdf();
+
+            
+            //System.IO.File.Delete(tempFilePath);
+            return pdf_byte;
         }
 
         /// <summary>
@@ -291,9 +404,9 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             #region 初始值
             ReqRCO ReqRCO = new ReqRCO
             {
-                dealerNo = "OD01",
+                dealerNo = "OO02",
                 branchNo = "0001",
-                salesNo = "88021796",
+                salesNo = "80659759",
                 examineNo = item.examine_no,
                 source = "22",
                 calloutDate = item.calloutDate.ToString("yyyyMMddHHmmss"),

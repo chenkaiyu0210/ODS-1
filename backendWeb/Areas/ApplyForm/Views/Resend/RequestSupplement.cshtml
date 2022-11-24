@@ -10,7 +10,100 @@
     @Html.AntiForgeryToken()
     @Html.HiddenFor(o => o.examine_no)
     <div style="background-color: #fafafa;">
+
         <div class="container py-md-5 py-3">
+            <h5 class="product-form-title">保證人資料</h5>
+          
+            <div class="row pt-2">
+                <div class="form-group col-lg-6 col-12">
+                    <label for="guarantor_name">保證人姓名</label>
+                    <input class="form-control" id="guarantor_name" name="guarantor_name" type="text" value="@Model.guarantor_name" />
+                </div>
+                <div class="form-group col-lg-6 col-12">
+                    <label for="guarantor_relation">保證人關係</label>
+                    <input class="form-control" id="guarantor_relation" name="guarantor_relation" type="text" value="@Model.guarantor_relation" />
+                </div>
+                <div class="form-group col-lg-6 col-12">
+                    <label for="guarantor_idcard_no">保證人身份證字號</label>
+                    <input class="form-control" id="guarantor_idcard_no" maxlength="10" minlength="10" name="guarantor_idcard_no" type="text" value="@Model.guarantor_idcard_no" />
+                </div>
+                <div class="form-group col-lg-6 col-12">
+                    <br />
+                    <button type="button" onclick="GetGuarantor()" class="btn btn-opposite rounded-pill py-2 px-4 serv_bottom">查詢</button>
+                </div>
+                <div class="form-group col-12">
+                    <label for="guarantor_birthday">保證人出生日期</label>
+                    <div class="form-row">
+                        <div class="col-4">
+                            <input class="form-control" id="guarantor_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="guarantor_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="民國年" type="text" value="@Model.guarantor_birthdayYY" />
+                        </div>
+                        <div class="col-4">
+                            <input class="form-control" id="guarantor_birthdayMM" inputmode="numeric" maxlength="2" minlength="1" name="guarantor_birthdayMM" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="月" type="text" value="@Model.guarantor_birthdayMM" />
+                        </div>
+                        <div class="col-4">
+                            <input class="form-control" id="guarantor_birthdayDD" inputmode="numeric" maxlength="2" minlength="1" name="guarantor_birthdayDD" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="日" type="text" value="@Model.guarantor_birthdayDD" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-12">
+                    <label for="guarantor_mobile_phone">保證人行動電話</label>
+                    <input class="form-control" id="guarantor_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="guarantor_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,'')" type="text" value="@Model.guarantor_mobile_phone" />
+                </div>
+                <div class="form-group col-lg-6 col-12">
+                    <label>保證人住宅電話</label>
+                    <div class="form-row">
+                        <div class="col-4">
+                            <input class="form-control" id="guarantor_resident_tel_code" inputmode="tel" maxlength="4" name="guarantor_resident_tel_code" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="區碼" type="text" value="@Model.guarantor_resident_tel_code" />
+                        </div>
+                        <div class="col-8">
+                            <input class="form-control" id="guarantor_resident_tel_num" inputmode="tel" maxlength="8" name="guarantor_resident_tel_num" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" type="text" value="@Model.guarantor_resident_tel_num" />
+                        </div>
+                    </div>
+                </div>
+                <!-- 公司地址 -->
+                <div class="form-group col-12">
+                    <label for="customer_company_addcity">保證人地址</label>
+                    <div class="form-row">
+                        <input id="guarantor_postalcode" name="guarantor_postalcode" type="hidden" value="@Model.guarantor_postalcode" />
+                        <div class="col-lg-3 col-6">
+                            @Html.DropDownListFor(o => o.guarantor_addcity, new SelectList(Model.city_list, "city_name", "city_name"), "縣市別", new { @class = "form-control", @alertMsg = "保證人地址" })
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <select class="form-control" id="guarantor_addregion" name="guarantor_addregion" alertMsg="保證人地址">
+                                <option>鄉鎮市區</option>
+                            </select>
+                            @Html.Hidden("h_guarantor", Model.guarantor_addregion)
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <input alertMsg="保證人地址" class="form-control mt-lg-0 mt-2" id="guarantor_address" name="guarantor_address" type="text" value="@Model.guarantor_address" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-12">
+                    <label for="guarantor_company_name">保證人公司名稱</label>
+                    <input alertMsg="保證人公司名稱" class="form-control" id="guarantor_company_name" name="guarantor_company_name" type="text" value="@Model.guarantor_company_name" />
+                </div>
+                <div class="form-group col-lg-6 col-12">
+                    <label for="guarantor_job_type">保證人公司職稱</label>
+                    <input alertMsg="保證人公司名稱" class="form-control" id="guarantor_job_type" name="guarantor_job_type" type="text" value="@Model.guarantor_job_type" />
+                </div>
+                <div class="form-group col-12">
+                    <label>保證人公司電話</label>
+                    <div class="form-row">
+                        <div class="col-3">
+                            <input class="form-control" id="guarantor_company_tel_code" inputmode="tel" maxlength="4" name="guarantor_company_tel_code" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="區碼" type="text" value="@Model.guarantor_company_tel_code" />
+                        </div>
+                        <div class="col-6">
+                            <input class="form-control" id="guarantor_company_tel_num" inputmode="tel" maxlength="8" name="guarantor_company_tel_num" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="號碼" type="text" value="@Model.guarantor_company_tel_num" />
+                        </div>
+                        <div class="col-3">
+                            <input class="form-control" id="guarantor_company_tel_ext" inputmode="tel" name="guarantor_company_tel_ext" onkeyup="value = value.replace(/[^0-9]/g,'')" placeholder="分機" type="text" value="@Model.guarantor_company_tel_ext" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
             <h2 style="text-align:center;">補件</h2>
             <div id="fillInData" class="d-block">
                 <div>
@@ -113,13 +206,86 @@
 </form>
 @Html.Hidden("hid_action", action)
 <script>
+
+    function GetGuarantor() {
+        $.ajax({
+            url: '@Url.Action("GetGuarantor", "Resend", new { @Area = "ApplyForm" })',
+            data: {
+                guarantor_idcard_no: $('#guarantor_idcard_no').val()
+            },
+            type: 'POST',
+            async: false,
+            success: function (data) {
+                if (data != null) {
+                    $('#guarantor_name').val(data.guarantor_name);
+                    $('#guarantor_relation').val(data.guarantor_relation);
+                    //$('#guarantor_idcard_no').val(data.guarantor_idcard_no);
+                    $('#guarantor_birthdayYY').val(data.guarantor_birthdayYY);
+                    $('#guarantor_birthdayMM').val(data.guarantor_birthdayMM);
+                    $('#guarantor_birthdayDD').val(data.guarantor_birthdayDD);
+                    $('#guarantor_mobile_phone').val(data.guarantor_mobile_phone);
+                    $('#guarantor_resident_tel_code').val(data.guarantor_resident_tel_code);
+                    $('#guarantor_resident_tel_num').val(data.guarantor_resident_tel_num);
+                    $('#guarantor_addcity').val(data.guarantor_addcity);
+                    getcitycode($('#guarantor_addcity'), 'town');
+                    $('#guarantor_addregion').val(data.guarantor_addregion);
+                    $('#guarantor_postalcode').val(data.guarantor_postalcode);
+                    $('#guarantor_address').val(data.guarantor_address);
+                    $('#guarantor_company_name').val(data.guarantor_company_name);
+                    $('#guarantor_job_type').val(data.guarantor_job_type);
+                    $('#guarantor_company_tel_code').val(data.guarantor_company_tel_code);
+                    $('#guarantor_company_tel_num').val(data.guarantor_company_tel_num);
+                    $('#guarantor_company_tel_ext').val(data.guarantor_company_tel_ext);
+                } else {
+                    alert('查無保證人');
+
+                    $('#guarantor_name').val('');
+                    $('#guarantor_relation').val('');
+                    $('#guarantor_birthdayYY').val('');
+                    $('#guarantor_birthdayMM').val('');
+                    $('#guarantor_birthdayDD').val('');
+                    $('#guarantor_mobile_phone').val('');
+                    $('#guarantor_resident_tel_code').val('');
+                    $('#guarantor_resident_tel_num').val('');
+                    $('#guarantor_addcity').val('');
+                    $('#guarantor_addregion').val('');
+                    $('#guarantor_postalcode').val('');
+                    $('#guarantor_address').val('');
+                    $('#guarantor_company_name').val('');
+                    $('#guarantor_job_type').val('');
+                    $('#guarantor_company_tel_code').val('');
+                    $('#guarantor_company_tel_num').val('');
+                    $('#guarantor_company_tel_ext').val('');
+                }
+            },
+            error: function (errMsg) {
+                alert('查無保證人');
+
+                $('#guarantor_name').val('');
+                $('#guarantor_relation').val('');
+                $('#guarantor_birthdayYY').val('');
+                $('#guarantor_birthdayMM').val('');
+                $('#guarantor_birthdayDD').val('');
+                $('#guarantor_mobile_phone').val('');
+                $('#guarantor_resident_tel_code').val('');
+                $('#guarantor_resident_tel_num').val('');
+                $('#guarantor_addcity').val('');
+                $('#guarantor_addregion').val('');
+                $('#guarantor_postalcode').val('');
+                $('#guarantor_address').val('');
+                $('#guarantor_company_name').val('');
+                $('#guarantor_job_type').val('');
+                $('#guarantor_company_tel_code').val('');
+                $('#guarantor_company_tel_num').val('');
+                $('#guarantor_company_tel_ext').val('');
+            }
+        });
+    }
+
     $(function () {
-        //$(document).keydown(function (event) {
-        //    switch (event.keyCode) {
-        //        case 13://enter
-        //            return false;
-        //    }
-        //});
+        $('#guarantor_addcity').on('change', function () { getcitycode(this, 'town') });
+        $('#guarantor_addregion').on('change', function () { getcitycode(this, 'zipcode') });
+        getcitycode($('#guarantor_addcity'), 'town')
     });
     //上傳
     function readURL(input) {
@@ -158,5 +324,53 @@
         //$('.file-upload-input').replaceWith($('.file-upload-input').clone());
         //$('.file-upload-content').hide();
         //$('.image-upload-wrap').show();
+    }
+
+    function getcitycode(obj, query_type) {
+        if (query_type == 'town') {
+            var id = $(obj).attr('id').replace('_addcity', '');
+            var str = '';
+            if ($('#h_' + id).val() != '') {
+                str = $('#h_' + id).val();
+                $('#h_' + id).val('');
+            }
+            $('#' + id + '_postalcode').val('');
+            $('#' + id + '_addregion').find('option').remove();
+            $('#' + id + '_addregion').append($('<option></option>').val('').text('鄉鎮市區'));
+            if ($(obj).val() != '') {
+                $.ajax({
+                    url: '@Url.Action("searchPostfileCode", "Receive", new { @Area = "ApplyForm" })',
+                    data: { query_type: query_type, city_name: $(obj).val(), town_name: '' },
+                    type: 'POST',
+                    async: false,
+                    success: function (data) {
+                        if (data != null) {
+                            for (var i = 0; i < data.town_list.length; i++) {
+                                $('#' + id + '_addregion').append($('<option></option>').val(data.town_list[i].town_name).text(data.town_list[i].town_name));
+                            }
+                        }
+                    }
+                });
+            }
+            $('#' + id + '_addregion').val(str);
+            if (str != '') { getcitycode($('#' + id + '_addregion'), 'zipcode'); }
+        }
+        else {
+            var id = $(obj).attr('id').replace('_addregion', '');
+            if ($(obj).val() != '') {
+                $.ajax({
+
+                    url: '@Url.Action("searchPostfileCode", "Receive", new { @Area = "ApplyForm" })',
+                    data: { query_type: query_type, city_name: $('#' + id + '_addcity').val(), town_name: $(obj).val() },
+                    type: 'POST',
+                    async: false,
+                    success: function (data) {
+                        if (data != null) {
+                            $('#' + id + '_postalcode').val(data.zipcode);
+                        }
+                    }
+                });
+            }
+        }
     }
 </script>

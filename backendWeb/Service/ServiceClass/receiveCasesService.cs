@@ -64,6 +64,12 @@ WHERE 1 = 1 and is_delete = 0" + Environment.NewLine);
                     builder.Append(" AND receive_status IN (N'待補', N'自退', N'核准', N'婉拒', N'附條件')" + Environment.NewLine);
                 }
 
+                if (model.guarantor_idcard_no != null)
+                {
+                    builder.Append(" AND guarantor_idcard_no = @guarantor_idcard_no" + Environment.NewLine);
+                    parameters.Add(new SqlParameter { ParameterName = "guarantor_idcard_no", Value = model.guarantor_idcard_no });
+                }
+
                 //if (model.start.HasValue)
                 //{
                 //    builder.Append(" ORDER BY receive_date DESC OFFSET @skip ROWS");
