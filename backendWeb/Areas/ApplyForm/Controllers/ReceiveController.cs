@@ -541,6 +541,7 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             //apiModel.contact_id_no = "OD01";
             apiModel.contact_name = "陳家蓁";
             apiModel.contact_phone = "0903113735";
+            apiModel.dealer_note = item.note_remark;
 
             #region 壓縮檔案
             CompressHelpers compress = new DotNetZipHelpers();

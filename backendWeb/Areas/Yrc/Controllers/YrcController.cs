@@ -145,7 +145,7 @@ namespace backendWeb.Areas.Yrc.Controllers
         /// </summary>
         /// <param name="examine_no"></param>
         /// <returns></returns>
-        [HttpPost, Route("api/Yrc/QueryCaseStatus")]
+        //[HttpPost, Route("api/Yrc/QueryCaseStatus")]
         public RespQCS QueryCaseStatus(string examine_no)
         {
             RespQCS respQCS = new RespQCS();
@@ -154,7 +154,7 @@ namespace backendWeb.Areas.Yrc.Controllers
             {
                 ReqQCS reqQCS = new ReqQCS
                 {
-                    dealerNo = "OD01",
+                    dealerNo = "OO02",
                     branchNo = null,
                     salesNo = null,
                     examineNo = examine_no,
