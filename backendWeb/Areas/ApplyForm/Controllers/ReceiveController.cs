@@ -79,7 +79,7 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                 ReqQCS reqQCS = new ReqQCS
                 {
                     dealerNo = "OO02",
-                    branchNo = "0001",
+                    branchNo = null,
                     salesNo = "80659759",
                     examineNo = examine_no,
                     source = "22"
