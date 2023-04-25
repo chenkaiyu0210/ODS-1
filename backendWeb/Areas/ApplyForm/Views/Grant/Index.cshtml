@@ -4,7 +4,7 @@
 
     List<SelectListItem> UserList = TempData["UserList"] as List<SelectListItem>;
     List<SelectListItem> StatusList = new List<SelectListItem>
-    { 
+{
         new SelectListItem(){Text="全部", Value=""},
         new SelectListItem(){Text="收件", Value="收件"},
         new SelectListItem(){Text="核准", Value="核准"},
@@ -18,47 +18,62 @@
 }
 <div class="card mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">查詢</h6>
+        <h6 class="m-0 font-weight-bold text-primary">
+            查詢
+            <a style="color:red;margin-left:20px;font-size:small;font-weight:bold;">*點擊日期標題即可設為今日 雙擊清除</a>
+        </h6>
     </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-md-6 col-12">
-                <div class="row">
-                    <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
-                        <label class="" for="receive_date">
-                            申請日期
-                        </label>
-                        <input class="form-control" id="receive_date" name="receive_date" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        @using (Html.BeginForm("Download", "Grant", new { Area = "ApplyForm" }, FormMethod.Post))
+        {
+            <div class="row">
+                <div class="col-md-6 col-12">
+
+                    <div class="row">
+                        <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
+                            <label class="" for="receive_date" onclick="SetDate('receive_date');" ondblclick="ReSetDate('receive_date');">
+                                申請日期
+                            </label>
+                            <input class="form-control" id="receive_date" name="receive_date" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        </div>
+                        <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
+                            <label class="" for="customer_idcard_no">
+                                客戶ID
+                            </label>
+                            <input class="form-control" id="customer_idcard_no" name="customer_idcard_no" type="text" />
+                        </div>
+                        <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
+                            <label class="" for="examine_no">
+                                審件編號
+                            </label>
+                            <input class="form-control" id="examine_no" name="examine_no" type="text" />
+                        </div>
                     </div>
-                    <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
-                        <label class="" for="customer_idcard_no">
-                            客戶ID
-                        </label>
-                        <input class="form-control" id="customer_idcard_no" name="customer_idcard_no" type="text" />
+
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="row">
+                        <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
+                            <label class="" for="receive_staff">
+                                進件人員
+                            </label>
+                            @Html.DropDownList("receive_staff", UserList, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
+                            <label class="" for="receive_status">
+                                案件狀態
+                            </label>
+                            @Html.DropDownList("receive_status", StatusList, new { @class = "form-control" })
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-12">
-                <div class="row">
-                    <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
-                        <label class="" for="receive_staff">
-                            進件人員
-                        </label>
-                        @Html.DropDownList("receive_staff", UserList, new { @class = "form-control" })
-                    </div>
-                    <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
-                        <label class="" for="receive_status">
-                            案件狀態
-                        </label>
-                        @Html.DropDownList("receive_status", StatusList, new { @class = "form-control" })
-                    </div>
-                </div>
+            <div class="d-flex .justify-content-start pt-3">
+                <input id="btnSearch" type="button" class="btn btn-info btn-icon-split py-2 px-4" value="查詢" />
+                <input id="btnDownload" type="submit" class="btn btn-info btn-icon-split py-2 px-4" value="下載" style="margin-left:20px;" />
+                @*<a class='btn btn-info btn-icon-split py-2 px-4' style='margin: 0 5px 0 5px;' href='@Url.Action("Create", "Receive", new { Area = "ApplyForm",  })'>新增案件</a>*@
             </div>
-        </div>
-        <div class="d-flex .justify-content-start pt-3">
-            <input id="btnSearch" type="button" class="btn btn-info btn-icon-split py-2 px-4" value="查詢" />
-            @*<a class='btn btn-info btn-icon-split py-2 px-4' style='margin: 0 5px 0 5px;' href='@Url.Action("Create", "Receive", new { Area = "ApplyForm",  })'>新增案件</a>*@
-        </div>
+        }
     </div>
 </div>
 <div class="card shadow mb-4">
@@ -80,7 +95,15 @@
         })
 
         function GetTable() {
-            $('#dv_table').load('@Url.Action("Table", "Grant", new { Area = "ApplyForm" })');
+            if ($("#receive_date").val() == '' &&
+                $("#customer_idcard_no").val() == '' &&
+                $("#receive_staff").val() == '' &&
+                $("#receive_status").val() == '' &&
+                $("#examine_no").val() == '') {
+                $.notify('請輸入任一搜尋條件', { className: "Error", position: "top center" });
+            } else {
+                $('#dv_table').load('@Url.Action("Table", "Grant", new { Area = "ApplyForm" })');
+            }
         }
     </script>
 }

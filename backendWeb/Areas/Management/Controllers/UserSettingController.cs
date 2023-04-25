@@ -5,9 +5,7 @@ using backendWeb.Service.InterFace;
 using backendWeb.Service.ServiceClass;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
 
 namespace backendWeb.Areas.Management.Controllers
@@ -114,7 +112,7 @@ namespace backendWeb.Areas.Management.Controllers
                 model.password = Encoding.UTF8.GetString(sHA256Processor.Encode(Encoding.UTF8.GetBytes(model.inputPassword)));
                 model.salt_key = _salt;
             }
-            if (!model.is_enable.Value)
+            if (!model.is_enable)
             {
                 model.disable_user = this.userInfoMdoel.account;
             }
@@ -135,12 +133,12 @@ namespace backendWeb.Areas.Management.Controllers
         #endregion
         public StringBuilder chkData(viewModelBackendUser model)
         {
-            StringBuilder chk = new StringBuilder();            
+            StringBuilder chk = new StringBuilder();
             if (string.IsNullOrWhiteSpace(model.account)) { chk.Append("帳號欄位未填!"); return chk; }
             if (string.IsNullOrWhiteSpace(model.name)) { chk.Append("名稱欄位未填!"); return chk; }
             if (string.IsNullOrWhiteSpace(model.inputPassword) && model.saveAction == "Add") { chk.Append("密碼欄位未填!"); return chk; }
             //if (!model.is_enable.HasValue) { chk.Append("帳號啟用欄位未填!"); return chk; }
-            if (model.dlRoleCodes.Length == 0) { chk.Append("角色群組碼欄位未填!"); return chk; }           
+            if (model.dlRoleCodes.Length == 0) { chk.Append("角色群組碼欄位未填!"); return chk; }
             return chk;
         }
     }

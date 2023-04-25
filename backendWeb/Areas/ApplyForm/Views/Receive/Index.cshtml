@@ -4,7 +4,7 @@
 
     List<SelectListItem> UserList = TempData["UserList"] as List<SelectListItem>;
     List<SelectListItem> StatusList = new List<SelectListItem>
-     {
+{
         new SelectListItem(){Text="全部", Value=""},
         new SelectListItem(){Text="案件存檔", Value="案件存檔"},
         new SelectListItem(){Text="案件送出", Value="案件送出"},
@@ -22,14 +22,17 @@
 }
 <div class="card mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">查詢</h6>
+        <h6 class="m-0 font-weight-bold text-primary">
+            查詢
+            <a style="color:red;margin-left:20px;font-size:small;font-weight:bold;">*點擊日期標題即可設為今日 雙擊清除</a>
+        </h6>
     </div>
     <div class="card-body">
         <div class="row">
             <div class="col-md-6 col-12">
                 <div class="row">
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
-                        <label class="" for="receive_date">
+                        <label class="" for="receive_date" onclick="SetDate('receive_date');" ondblclick="ReSetDate('receive_date');">
                             申請日期
                         </label>
                         <input class="form-control" id="receive_date" name="receive_date" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
@@ -40,6 +43,12 @@
                         </label>
                         <input class="form-control" id="customer_idcard_no" name="customer_idcard_no" type="text" />
                     </div>
+                    <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
+                        <label class="" for="examine_no">
+                            審件編號
+                        </label>
+                        <input class="form-control" id="examine_no" name="examine_no" type="text" />
+                    </div>
                 </div>
             </div>
             <div class="col-md-6 col-12">
@@ -48,7 +57,7 @@
                         <label class="" for="receive_staff">
                             進件人員
                         </label>
-                        @Html.DropDownList("receive_staff", UserList, new {@class = "form-control"})
+                        @Html.DropDownList("receive_staff", UserList, new { @class = "form-control" })
                     </div>
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
                         <label class="" for="receive_status">
@@ -77,14 +86,22 @@
     <script type="text/javascript">
         $(function () {
             GetTable();
-        }); 
+        });
 
         $('#btnSearch').click(function () {
             GetTable();
         })
 
         function GetTable() {
-            $('#dv_table').load('@Url.Action("Table", "Receive", new { Area = "ApplyForm" })');
+            if ($("#receive_date").val() == '' &&
+                $("#customer_idcard_no").val() == '' &&
+                $("#receive_staff").val() == '' &&
+                $("#receive_status").val() == '' &&
+                $("#examine_no").val() == '') {
+                $.notify('請輸入任一搜尋條件', { className: "Error", position: "top center" });
+            } else {
+                $('#dv_table').load('@Url.Action("Table", "Receive", new { Area = "ApplyForm" })');
+            }
         }
     </script>
 }

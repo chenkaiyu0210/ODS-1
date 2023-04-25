@@ -4,6 +4,7 @@ using backendWeb.Service.InterFace;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -48,7 +49,7 @@ WHERE 1 = 1 and is_delete = 0" + Environment.NewLine);
                     parameters.Add(new SqlParameter { ParameterName = "receive_staff", Value = model.receive_staff });
                 }
 
-                if ( !string.IsNullOrWhiteSpace(model.receive_status))
+                if (!string.IsNullOrWhiteSpace(model.receive_status))
                 {
                     builder.Append(" AND receive_status = @receive_status" + Environment.NewLine);
                     parameters.Add(new SqlParameter { ParameterName = "receive_status", Value = model.receive_status });
@@ -70,6 +71,12 @@ WHERE 1 = 1 and is_delete = 0" + Environment.NewLine);
                     parameters.Add(new SqlParameter { ParameterName = "guarantor_idcard_no", Value = model.guarantor_idcard_no });
                 }
 
+                if (!string.IsNullOrWhiteSpace(model.examine_no))
+                {
+                    builder.Append(" AND examine_no = @examine_no" + Environment.NewLine);
+                    parameters.Add(new SqlParameter { ParameterName = "examine_no", Value = model.examine_no });
+                }
+
                 //if (model.start.HasValue)
                 //{
                 //    builder.Append(" ORDER BY receive_date DESC OFFSET @skip ROWS");
@@ -86,7 +93,7 @@ WHERE 1 = 1 and is_delete = 0" + Environment.NewLine);
             catch (Exception ex)
             {
                 throw ex;
-            }            
+            }
         }
 
         public viewModelReceiveCases GetOnly(viewModelReceiveCases model)
@@ -114,7 +121,7 @@ WHERE 1 = 1 and is_delete = 0" + Environment.NewLine);
             catch (Exception ex)
             {
                 throw ex;
-            }            
+            }
         }
 
         public viewModelReceiveCases Save(viewModelReceiveCases model)
@@ -122,7 +129,7 @@ WHERE 1 = 1 and is_delete = 0" + Environment.NewLine);
             try
             {
                 // 改用Entity，所以隨便傳入泛型
-                int result = new baseRepository<object>(null).SaveEntity<viewModelReceiveCases,receiveCases>(model, model.saveAction);
+                int result = new baseRepository<object>(null).SaveEntity<viewModelReceiveCases, receiveCases>(model, model.saveAction);
                 if (result > 0)
                 {
                     return new viewModelReceiveCases { replyResult = true };
@@ -131,6 +138,14 @@ WHERE 1 = 1 and is_delete = 0" + Environment.NewLine);
                 {
                     return new viewModelReceiveCases { replyResult = false, replyMsg = "存檔錯誤" };
                 }
+            }
+            catch (DbEntityValidationException ex)
+            {
+                return new viewModelReceiveCases
+                {
+                    replyResult = false,
+                    replyMsg = ex.EntityValidationErrors.FirstOrDefault().ValidationErrors.FirstOrDefault().ErrorMessage
+                };
             }
             catch (Exception ex)
             {

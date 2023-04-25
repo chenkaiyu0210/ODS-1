@@ -1,18 +1,21 @@
 ﻿using backendWeb.Controllers;
 using backendWeb.Helpers;
 using backendWeb.Models.ApiModel;
-using backendWeb.Models.ApiModel.responseModel;
 using backendWeb.Models.ViewModel;
 using backendWeb.Service.InterFace;
 using backendWeb.Service.ServiceClass;
 using Newtonsoft.Json;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 
 
@@ -40,6 +43,9 @@ namespace backendWeb.Areas.ApplyForm
         [HttpPost]
         public ActionResult Table(viewModelReceiveCases model) //int draw, int start, int length
         {
+            if (!this.userInfoMdoel.role_group_codes.Contains("system"))
+                model.receive_staff = this.userInfoMdoel.account;
+
             IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
             model.search_isAppropriation = true;
             IList<viewModelReceiveCases> list = crudService.GetList(model);
@@ -255,6 +261,66 @@ namespace backendWeb.Areas.ApplyForm
                     model.paymentInput.Add(new payment { num = numArr[i], num_amount = numAmountArr[i] });
                 }
             }
+        }
+
+        [HttpPost]
+        public ActionResult Download(viewModelReceiveCases model)
+        {
+            if (!this.userInfoMdoel.role_group_codes.Contains("system"))
+                model.receive_staff = this.userInfoMdoel.account;
+
+            IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
+            model.search_isAppropriation = true;
+            IList<viewModelReceiveCases> list = crudService.GetList(model);
+
+            return File(ExportExcel(list), MimeMapping.GetMimeMapping("撥款報表.xlsx"), DateTime.Now.ToString("yyyyMMdd") + "撥款報表.xlsx");
+        }
+
+        public static byte[] ExportExcel(IList<viewModelReceiveCases> dataTable)
+        {
+            byte[] result = null;
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                var d = dataTable.Select(i => new
+                {
+                    i.bus_type,
+                    V = i.receive_date.Value.ToString("yyyy-MM-dd HH:mm:ss"),
+                    i.examine_no,
+                    i.receive_status,
+                    i.appropriation_status,
+                    i.appropriationDate,
+                    i.appropriationAmt,
+                    i.repayKindName,
+                    i.customer_name,
+                    i.customer_idcard_no,
+                    i.customer_mobile_phone,
+                    i.staging_amount,
+                    i.receive_staff_name
+                });
+                ExcelWorksheet workSheet = package.Workbook.Worksheets.Add("進件報表");
+                workSheet.Cells.LoadFromCollection(d, true);
+
+                workSheet.Cells[1, 1].Value = "商品資訊";
+                workSheet.Cells[1, 2].Value = "申請日期";
+                workSheet.Cells[1, 3].Value = "審件編號";
+                workSheet.Cells[1, 4].Value = "案件狀態";
+                workSheet.Cells[1, 5].Value = "撥款狀態";
+                workSheet.Cells[1, 6].Value = "撥款時間";
+                workSheet.Cells[1, 7].Value = "撥款金額";
+                workSheet.Cells[1, 8].Value = "繳款方式";
+                workSheet.Cells[1, 9].Value = "中文姓名";
+                workSheet.Cells[1, 10].Value = "身份證字號";
+                workSheet.Cells[1, 11].Value = "行動電話";
+                workSheet.Cells[1, 12].Value = "辦理分期金額";
+                workSheet.Cells[1, 13].Value = "進件人員";
+
+                workSheet.Cells.AutoFitColumns();
+                workSheet.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                result = package.GetAsByteArray();
+            }
+            return result;
         }
     }
 }

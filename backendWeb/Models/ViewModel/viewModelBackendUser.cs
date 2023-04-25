@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace backendWeb.Models.ViewModel
 {
@@ -34,7 +32,7 @@ namespace backendWeb.Models.ViewModel
         /// <summary>
         /// 是否啟用
         /// </summary>
-        public Nullable<bool> is_enable { get; set; }
+        public bool is_enable { get; set; }
         /// <summary>
         /// 停用時間
         /// </summary>
@@ -60,7 +58,7 @@ namespace backendWeb.Models.ViewModel
         /// <summary>
         /// 是否啟用(查詢用)
         /// </summary>
-        public bool? search_enable { get; set; }                    
+        public bool? search_enable { get; set; }
         #endregion
         #region Other
         /// <summary>

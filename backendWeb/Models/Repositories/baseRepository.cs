@@ -7,6 +7,8 @@ using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Data.Entity.Validation;
+using System.Web.Http.Results;
 
 namespace backendWeb.Models.Repositories
 {
@@ -179,6 +181,12 @@ namespace backendWeb.Models.Repositories
                         context.SaveChanges();
                         dbContextTransaction.Commit();
                         Results = 1;
+                    }
+                    catch (DbEntityValidationException ex)
+                    {
+                        Results = 0;
+                        dbContextTransaction.Rollback();
+                        throw ex;
                     }
                     catch (SqlException ex)
                     {

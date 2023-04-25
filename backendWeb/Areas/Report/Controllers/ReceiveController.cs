@@ -1,16 +1,18 @@
-﻿using backendWeb.Models.Repositories;
+﻿using backendWeb.Controllers;
+using backendWeb.Models.Repositories;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Web;
 using System.Web.Mvc;
 using LicenseContext = OfficeOpenXml.LicenseContext;
 
 namespace backendWeb.Areas.Report.Controllers
 {
-    public class ReceiveController : Controller
+    public class ReceiveController : BaseController
     {
         // GET: Report/Receive
         public ActionResult Index()
@@ -22,6 +24,9 @@ namespace backendWeb.Areas.Report.Controllers
         public ActionResult Download(DateTime start, DateTime end)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
+
+            if (!this.userInfoMdoel.role_group_codes.Contains("system"))
+                parameters.Add(new SqlParameter { ParameterName = "receive_staff", Value = this.userInfoMdoel.account });
 
             parameters.Add(new SqlParameter { ParameterName = "start", Value = start.ToString("yyyy-MM-dd") });
             parameters.Add(new SqlParameter { ParameterName = "end", Value = end.ToString("yyyy-MM-dd") });
@@ -55,10 +60,14 @@ LEFT JOIN [dbo].[backendUser] U ON R.receive_staff = U.account
 WHERE is_delete = 0
 	AND CONVERT(DATE, receive_date) BETWEEN @start
 		AND @end
+	AND (
+		receive_staff = @receive_staff
+		OR @receive_staff = ''
+		)
 ORDER BY receive_date DESC
 " }, new List<List<SqlParameter>> { parameters }).DataTable();
 
-            return File(ExportExcel(s), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", DateTime.Now.ToString("yyyyMMdd") + "進件報表.xlsx");
+            return File(ExportExcel(s), MimeMapping.GetMimeMapping("進件報表.xlsx"), DateTime.Now.ToString("yyyyMMdd") + "進件報表.xlsx");
         }
 
         public static byte[] ExportExcel(DataTable dataTable)

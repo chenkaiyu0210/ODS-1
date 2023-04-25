@@ -2,16 +2,13 @@
 using backendWeb.Controllers;
 using backendWeb.Helpers;
 using backendWeb.Models.ApiModel;
-using backendWeb.Models.ApiModel.responseModel;
 using backendWeb.Models.ViewModel;
 using backendWeb.Service.InterFace;
 using backendWeb.Service.ServiceClass;
 using GateWay.Models;
-using iTextSharp.text.pdf.qrcode;
 using Newtonsoft.Json;
 using PrinterKit;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -45,6 +42,9 @@ namespace backendWeb.Areas.ApplyForm.Controllers
         [HttpPost]
         public ActionResult Table(viewModelReceiveCases model) //int draw, int start, int length
         {
+            if (!this.userInfoMdoel.role_group_codes.Contains("system"))
+                model.receive_staff = this.userInfoMdoel.account;
+
             IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
             model.isResend = true;
             IList<viewModelReceiveCases> list = crudService.GetList(model).OrderByDescending(x => x.receive_date).ToList();
@@ -375,7 +375,7 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             };
             byte[] pdf_byte = template.TemplateToPdf();
 
-            
+
             //System.IO.File.Delete(tempFilePath);
             return pdf_byte;
         }

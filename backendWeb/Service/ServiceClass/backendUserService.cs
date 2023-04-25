@@ -43,7 +43,7 @@ namespace backendWeb.Service.ServiceClass
             {
                 builder.Append(" AND is_enable = @is_enable" + Environment.NewLine);
                 builderCount.Append(" AND is_enable = @is_enable" + Environment.NewLine);
-                parameters.Add(new SqlParameter { ParameterName = "is_enable", DbType= DbType.Boolean, Value = model.search_enable.Value });
+                parameters.Add(new SqlParameter { ParameterName = "is_enable", DbType = DbType.Boolean, Value = model.search_enable.Value });
             }
             if (model.start.HasValue)
             {
@@ -110,7 +110,7 @@ namespace backendWeb.Service.ServiceClass
                     parameters.Add(new SqlParameter { ParameterName = "password", Value = model.password });
                     parameters.Add(new SqlParameter { ParameterName = "salt_key", Value = model.salt_key });
                     parameters.Add(new SqlParameter { ParameterName = "register_user", Value = model.register_user });
-                    parameters.Add(new SqlParameter { ParameterName = "is_enable", DbType = DbType.Boolean, Value = model.is_enable.HasValue ? model.is_enable.Value : false });
+                    parameters.Add(new SqlParameter { ParameterName = "is_enable", DbType = DbType.Boolean, Value = model.is_enable ? model.is_enable : false });
                     parameters.Add(new SqlParameter { ParameterName = "role_group_codes", Value = model.role_group_codes });
                     object i = new baseRepository<viewModelBackendUser>(new List<string> { builder.ToString() }, new List<List<SqlParameter>> { parameters }).Save();
                     int.TryParse(i.ToString(), out int result);
@@ -127,9 +127,9 @@ namespace backendWeb.Service.ServiceClass
                         parameters.Add(new SqlParameter { ParameterName = "password", Value = model.password });
                         parameters.Add(new SqlParameter { ParameterName = "salt_key", Value = model.salt_key });
                     }
-                    if (model.is_enable.HasValue)
+                    if (model.is_enable)
                     {
-                        builder.Append(@" ,[is_enable] = 1");                        
+                        builder.Append(@" ,[is_enable] = 1");
                     }
                     else
                     {

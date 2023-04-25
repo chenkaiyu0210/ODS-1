@@ -41,6 +41,9 @@ namespace backendWeb.Areas.ApplyForm.Controllers
         [HttpPost]
         public ActionResult Table(viewModelReceiveCases model) //int draw, int start, int length
         {
+            if (!this.userInfoMdoel.role_group_codes.Contains("system"))
+                model.receive_staff = this.userInfoMdoel.account;
+
             IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
             IList<viewModelReceiveCases> list = crudService.GetList(model).OrderByDescending(x => x.receive_date).ToList();
             var returnObj =
@@ -80,7 +83,7 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                 {
                     dealerNo = "OO02",
                     branchNo = null,
-                    salesNo = "80659759",
+                    salesNo = null,
                     examineNo = examine_no,
                     source = "22"
                 };

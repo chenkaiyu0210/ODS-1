@@ -47,25 +47,17 @@
                                         }
                                     </div>
                                     <div class="form-group col-lg-6 col-12">
-                                        <label class="" for="name">帳號啟用</label>
-                                        <input class="inp-cbx" id="enableMethod01" name="is_enable" type="checkbox" style="display: none;" value="true" checked="@(Model.is_enable.HasValue ? (Model.is_enable == true? true : false) : true)" />
+                                        <label for="is_enable">帳號啟用</label>
+                                        @Html.CheckBoxFor(o => o.is_enable)
+
+                                        @*<input class="inp-cbx" id="enableMethod01" name="is_enable" type="checkbox" style="display: none;" value="true" checked="@(Model.is_enable.HasValue ? (Model.is_enable == true? true : false) : true)" />
                                         <label class="cbx" for="enableMethod01">
                                             <span>
                                                 <svg width="12px" height="10px" viewbox="0 0 12 10">
                                                     <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
                                                 </svg>
                                             </span> 
-                                        </label>
-                                        @*<div class="cntr py-1">
-                                            <label for="enableMethod01" class="radio">
-                                                <input type="radio" name="is_enable" id="enableMethod01" class="hidden" value="1" checked="@(Model.is_enable.HasValue ? (Model.is_enable == true? true : false) : true)" />
-                                                <span class="label"></span>帳號啟用
-                                            </label>
-                                            <label for="enableMethod02" class="radio">
-                                                <input type="radio" name="is_enable" id="enableMethod02" class="hidden" value="0" checked="@(!Model.is_enable == true? true : false)" />
-                                                <span class="label"></span>帳號停用
-                                            </label>
-                                        </div>*@
+                                        </label>*@
                                     </div>
                                 </div>
                                 <!-- 申請人基本資料 -->
