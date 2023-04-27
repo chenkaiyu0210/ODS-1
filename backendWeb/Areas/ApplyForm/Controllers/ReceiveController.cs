@@ -271,52 +271,61 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                 }
                 else
                 {
-                    #region 呼叫YRC
-                    apiModelReceive apiModel = BindApiModel(model);
-                    EncryptionProcessor<RijndaelProcessor> encryption = new RijndaelProcessor(this.configSetting.apiSetting.apiKey.aesKey, this.configSetting.apiSetting.apiKey.aesIv, 256, 128, CipherMode.CBC, PaddingMode.PKCS7);
-                    apiModelEncryption modelEncryption = new apiModelEncryption
+                    if (returnValue.replyResult != null &&
+                        returnValue.replyResult.Value)
                     {
-                        encryptEnterCase = Convert.ToBase64String(encryption.Encode(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(apiModel)))),
-                        version = "2.0",
-                        transactionId = Guid.NewGuid().ToString()
-                    };
-                    HttpResponseMessage responseMessage = HttpHelpers.PostHttpClient(modelEncryption, this.configSetting.apiSetting.apiUrls.Where(o => o.func == "receive").FirstOrDefault().url);
-                    if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string result = responseMessage.Content.ReadAsStringAsync().Result;
-                        apiResponseReceive apiResponse = JsonConvert.DeserializeObject<apiResponseReceive>(result);
-                        if (apiResponse != null)
+                        #region 呼叫YRC
+                        apiModelReceive apiModel = BindApiModel(model);
+                        EncryptionProcessor<RijndaelProcessor> encryption = new RijndaelProcessor(this.configSetting.apiSetting.apiKey.aesKey, this.configSetting.apiSetting.apiKey.aesIv, 256, 128, CipherMode.CBC, PaddingMode.PKCS7);
+                        apiModelEncryption modelEncryption = new apiModelEncryption
                         {
-                            if (apiResponse.code == "1000" || apiResponse.code == "1001")
+                            encryptEnterCase = Convert.ToBase64String(encryption.Encode(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(apiModel)))),
+                            version = "2.0",
+                            transactionId = Guid.NewGuid().ToString()
+                        };
+                        HttpResponseMessage responseMessage = HttpHelpers.PostHttpClient(modelEncryption, this.configSetting.apiSetting.apiUrls.Where(o => o.func == "receive").FirstOrDefault().url);
+                        if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            string result = responseMessage.Content.ReadAsStringAsync().Result;
+                            apiResponseReceive apiResponse = JsonConvert.DeserializeObject<apiResponseReceive>(result);
+                            if (apiResponse != null)
                             {
-                                model.saveAction = "Modify";
-                                model.receive_status = "案件送出";
-                                model.error_message = "";
-                                model.examine_no = apiResponse.examineNo;
-                                crudService.Save(model);
-                                ViewData["successMsg"] = "案件送出完成";
+                                if (apiResponse.code == "1000" || apiResponse.code == "1001")
+                                {
+                                    model.saveAction = "Modify";
+                                    model.receive_status = "案件送出";
+                                    model.error_message = "";
+                                    model.examine_no = apiResponse.examineNo;
+                                    crudService.Save(model);
+                                    ViewData["successMsg"] = "案件送出完成";
+                                }
+                                else
+                                {
+                                    model.saveAction = "Modify";
+                                    model.receive_status = "案件送出失敗";
+                                    model.error_message = apiResponse.msg;
+                                    crudService.Save(model);
+                                    ViewData["errMsg"] = apiResponse.msg;
+                                    logUtil.OutputLog("案件送出失敗", apiResponse.msg);
+                                }
                             }
                             else
                             {
                                 model.saveAction = "Modify";
                                 model.receive_status = "案件送出失敗";
-                                model.error_message = apiResponse.msg;
+                                model.error_message = "案件送出失敗 API回傳NULL";
                                 crudService.Save(model);
-                                ViewData["errMsg"] = apiResponse.msg;
-                                logUtil.OutputLog("案件送出失敗", apiResponse.msg);
+                                ViewData["errMsg"] = result;
+                                logUtil.OutputLog("案件送出失敗", "API回傳NULL");
                             }
                         }
-                        else
-                        {
-                            model.saveAction = "Modify";
-                            model.receive_status = "案件送出失敗";
-                            model.error_message = "案件送出失敗 API回傳NULL";
-                            crudService.Save(model);
-                            ViewData["errMsg"] = result;
-                            logUtil.OutputLog("案件送出失敗", "API回傳NULL");
-                        }
+                        #endregion
                     }
-                    #endregion
+                    else
+                    {
+                        ViewData["errMsg"] = returnValue.replyMsg;
+                        logUtil.OutputLog("進件存檔失敗", returnValue.replyMsg);
+                    }
                 }
             }
             catch (Exception ex)
