@@ -25,8 +25,11 @@ namespace backendWeb.Areas.Report.Controllers
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
 
+            string receive_staff = string.Empty;
             if (!this.userInfoMdoel.role_group_codes.Contains("system"))
-                parameters.Add(new SqlParameter { ParameterName = "receive_staff", Value = this.userInfoMdoel.account });
+                receive_staff = this.userInfoMdoel.account;
+
+            parameters.Add(new SqlParameter { ParameterName = "receive_staff", Value = receive_staff });
 
             parameters.Add(new SqlParameter { ParameterName = "start", Value = start.ToString("yyyy-MM-dd") });
             parameters.Add(new SqlParameter { ParameterName = "end", Value = end.ToString("yyyy-MM-dd") });

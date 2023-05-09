@@ -71,7 +71,9 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             {
                 IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
                 item = crudService.GetOnly(new viewModelReceiveCases { search_receive_id = id });
-                //item.customer_id_number_areacode = item.customer_id_number_areacode.Trim();
+
+                if (item != null && !string.IsNullOrEmpty(item.customer_id_number_areacode))
+                    item.customer_id_number_areacode = item.customer_id_number_areacode.Trim();
             }
 
             reBindModel(ref item);

@@ -304,6 +304,7 @@
     <Content Include="fonts\webfonts\fa-regular-400.svg" />
     <Content Include="fonts\webfonts\fa-solid-900.svg" />
     <Content Include="Global.asax" />
+    <Content Include="img\LoginIcon.jpg" />
     <Content Include="ThirdParty\custom\Image\card-add.png" />
     <Content Include="ThirdParty\custom\Image\idcard-01.png" />
     <Content Include="ThirdParty\custom\Image\idcard-02.png" />

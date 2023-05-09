@@ -30,10 +30,16 @@ namespace backendWeb.Areas.ApplyForm
             IBaseCrudService<viewModelBackendUser> crudService = new backendUserService();
 
             IList<viewModelBackendUser> list = crudService.GetList(new viewModelBackendUser());
+            if (!this.userInfoMdoel.role_group_codes.Contains("system"))
+                list = list.Where(x => x.account == this.userInfoMdoel.account).ToList();
+
             List<SelectListItem> selectListItems = new SelectList(list, "account", "name").ToList();
-            selectListItems.Insert(0, (new SelectListItem { Text = "全部", Value = "" }));
+
+            if (this.userInfoMdoel.role_group_codes.Contains("system"))
+                selectListItems.Insert(0, (new SelectListItem { Text = "全部", Value = "" }));
 
             TempData["UserList"] = selectListItems;
+
             return View();
         }
         public ActionResult Table()
