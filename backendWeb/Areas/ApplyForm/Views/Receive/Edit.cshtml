@@ -160,16 +160,16 @@
                                 }
                                 else
                                 {
-                                    <input alertMsg="中文姓名" class="form-control" id="customer_name" name="customer_name" required="required" type="text" value="@Model.customer_name" readonly />
+                                    <input alertMsg="中文姓名" class="form-control" id="customer_name" name="customer_name" required="required" type="text" value="@Model.customer_name"  />
                                 }
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_idcard_no">身份證字號</label>
-                                <input alertMsg="身份證字號" class="form-control" id="customer_idcard_no" maxlength="10" minlength="10" name="customer_idcard_no" required="required" type="text" value="@Model.customer_idcard_no" readonly />
+                                <input alertMsg="身份證字號" class="form-control" id="customer_idcard_no" maxlength="10" minlength="10" name="customer_idcard_no" required="required" type="text" value="@Model.customer_idcard_no"  />
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_mobile_phone">行動電話</label>
-                                <input alertMsg="行動電話" class="form-control" id="customer_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="customer_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,'')" required="required" type="text" value="@Model.customer_mobile_phone" readonly />
+                                <input alertMsg="行動電話" class="form-control" id="customer_mobile_phone" inputmode="tel" maxlength="10" minlength="10" name="customer_mobile_phone" onkeyup="value = value.replace(/[^0-9]/g,'')" required="required" type="text" value="@Model.customer_mobile_phone"  />
                             </div>
                             <!-- 教育程度 -->
                             <div class="form-group col-lg-6 col-12">
@@ -236,14 +236,14 @@
                                 {
                                     <div class="form-row">
                                         <div class="col-4">
-                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="customer_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="民國年" required="required" type="text" value="@Model.customer_birthdayYY" readonly />
+                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayYY" inputmode="numeric" maxlength="3" minlength="2" name="customer_birthdayYY" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="民國年" required="required" type="text" value="@Model.customer_birthdayYY"  />
                                         </div>
                                         <div class="col-4">
-                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayMM" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayMM" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="月" required="required" type="text" value="@Model.customer_birthdayMM" readonly />
+                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayMM" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayMM" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="月" required="required" type="text" value="@Model.customer_birthdayMM"  />
 
                                         </div>
                                         <div class="col-4">
-                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayDD" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayDD" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="日" required="required" type="text" value="@Model.customer_birthdayDD" readonly />
+                                            <input alertMsg="出生日期" class="form-control" id="customer_birthdayDD" inputmode="numeric" maxlength="2" minlength="1" name="customer_birthdayDD" onkeyup="value=value.replace(/[^0-9]/g,'')" placeholder="日" required="required" type="text" value="@Model.customer_birthdayDD"  />
                                         </div>
                                     </div>
                                 }
@@ -446,7 +446,7 @@
                         <div class="row">
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_company_name">公司名稱</label>
-                                <input alertMsg="公司名稱" class="form-control" id="customer_company_name" name="customer_company_name" required="required" type="text" value="@Model.customer_company_name" />
+                                <input alertMsg="公司名稱" class="form-control" id="customer_company_name" name="customer_company_name" required="required" type="text" maxlength="20" value="@Model.customer_company_name" />
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="require-item" for="customer_job_type">工作職稱</label>
@@ -1014,21 +1014,21 @@
         });
 
         //判斷編輯或新增模式
-        switch ($('#hid_action').val()) {
-            case 'Create':
-                $('#customer_idcard_no').removeAttr('readonly');
-                $('#customer_mobile_phone').removeAttr('readonly');
-                break;
-            case 'Edit':
+        //switch ($('#hid_action').val()) {
+        //    case 'Create':
+        //        $('#customer_idcard_no').removeAttr('readonly');
+        //        $('#customer_mobile_phone').removeAttr('readonly');
+        //        break;
+        //    case 'Edit':
 
-                break;
-        }
+        //        break;
+        //}
 
-        if (!getUrlParameter('id')) {
-            $('#customer_idcard_no').removeAttr('readonly');
-            $('#customer_mobile_phone').removeAttr('readonly');
-            //$('#delete').hide();
-        }
+        //if (!getUrlParameter('id')) {
+        //    $('#customer_idcard_no').removeAttr('readonly');
+        //    $('#customer_mobile_phone').removeAttr('readonly');
+        //    //$('#delete').hide();
+        //}
 
         $('#customer_resident_addcity').on('change', function () { if ($('#sameAddress').prop('checked')) samAddressChecked(); getcitycode(this, 'town') });
         $('#customer_resident_addregion').on('change', function () { if ($('#sameAddress').prop('checked')) samAddressChecked(); getcitycode(this, 'zipcode') });

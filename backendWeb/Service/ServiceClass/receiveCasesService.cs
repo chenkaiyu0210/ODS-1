@@ -42,6 +42,11 @@ WHERE 1 = 1 and is_delete = 0" + Environment.NewLine);
                     builder.Append(" AND customer_idcard_no = @customer_idcard_no" + Environment.NewLine);
                     parameters.Add(new SqlParameter { ParameterName = "customer_idcard_no", Value = model.customer_idcard_no });
                 }
+                if (!string.IsNullOrWhiteSpace(model.customer_name))
+                {
+                    builder.Append(" AND customer_name = @customer_name" + Environment.NewLine);
+                    parameters.Add(new SqlParameter { ParameterName = "customer_name", Value = model.customer_name });
+                }
 
                 if (!string.IsNullOrWhiteSpace(model.receive_staff))
                 {

@@ -175,6 +175,7 @@ namespace backendWeb.Areas.ApplyForm.Controllers
         public ActionResult Edit(string action, viewModelReceiveCases model)
         {
             IBaseCrudService<viewModelReceiveCases> crudService = new receiveCasesService();
+            bool isSend = false;
 
             try
             {
@@ -273,6 +274,7 @@ namespace backendWeb.Areas.ApplyForm.Controllers
                 }
                 else
                 {
+                    isSend = true;
                     if (returnValue.replyResult != null &&
                         returnValue.replyResult.Value)
                     {
@@ -343,7 +345,11 @@ namespace backendWeb.Areas.ApplyForm.Controllers
             {
                 reBindModel(ref model);
             }
-            return View(model);
+
+            if (isSend && ViewData["errMsg"] == null)
+                return RedirectToAction("Create", "Receive");
+            else
+                return View(model);
         }
         [HttpPost]
         public ActionResult Delete(string receive_id)

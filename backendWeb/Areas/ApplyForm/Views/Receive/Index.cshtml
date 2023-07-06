@@ -35,7 +35,7 @@
                         <label class="" for="receive_date" onclick="SetDate('receive_date');" ondblclick="ReSetDate('receive_date');">
                             申請日期
                         </label>
-                        <input class="form-control" id="receive_date" name="receive_date" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        <input class="form-control" id="receive_date" name="receive_date" type="date" @*value="@DateTime.Now.ToString("yyyy-MM-dd")"*@ />
                     </div>
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
                         <label class="" for="customer_idcard_no">
@@ -58,6 +58,12 @@
                             進件人員
                         </label>
                         @Html.DropDownList("receive_staff", UserList, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
+                        <label class="" for="examine_no">
+                            客戶姓名
+                        </label>
+                        <input class="form-control" id="customer_name" name="customer_name" type="text" />
                     </div>
                     <div class="form-group col-md-12 col-lg-12 col-sm-12 col-12">
                         <label class="" for="receive_status">
@@ -95,6 +101,7 @@
         function GetTable() {
             if ($("#receive_date").val() == '' &&
                 $("#customer_idcard_no").val() == '' &&
+                $("#customer_name").val() == '' &&
                 $("#receive_staff").val() == '' &&
                 $("#receive_status").val() == '' &&
                 $("#examine_no").val() == '') {
